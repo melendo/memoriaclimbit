@@ -1,55 +1,169 @@
 \chapter{Introducción}
 \label{cap:introduccion}
 
-\chapterquote{Frase célebre dicha por alguien inteligente}{Autor}
+En este capítulo se presenta el contexto del proyecto, centrado en la escalada en
+rocódromo y en el uso de técnicas de gamificación aplicadas al deporte. A partir de
+este marco, se justifica la motivación del trabajo, se definen sus objetivos y se
+resume la estructura de la memoria.
 
-Según la normativa  para Trabajos de Fin de Grado\footnote{\url{https://informatica.ucm.es/file/normativatfg-2021-2022?ver} (ver versión actualizada para cada curso académico)}, la memoria incluirá una portada normalizada con la siguiente información: título en castellano, título en inglés, autores, profesor director, codirector si es el caso, curso
-académico e identificación de la asignatura (Trabajo de fin de grado del Grado en -
-nombre del grado correspondiente-, Facultad de Informática, Universidad Complutense de Madrid). Los datos referentes al título y director (y codirector en su caso) deben corresponder a los publicados en la página web de TFG.
 
-La memoria debe incluir la descripción detallada de la propuesta hardware/software realizada y ha de contener:
+\section{Contexto de la escalada en rocódromo}
+
+\subsection{Cómo funciona la escalada en rocódromo}
+
+Un rocódromo es una instalación deportiva que simula la escalada en roca natural
+mediante muros artificiales equipados con presas (agarres) de diferentes formas,
+tamaños y colores. El objetivo del escalador es ascender por una ruta predefinida
+utilizando exclusivamente las presas asignadas a dicha ruta.
+
+Las rutas se identifican visualmente, habitualmente por el color de las presas. Cada
+ruta tiene un punto de inicio marcado y un punto final o \textit{top} (última presa
+que se debe controlar con ambas manos para dar el intento por válido). Cuando una
+ruta se completa en el primer intento, se denomina \textit{flash}.
+
+\subsection{Modalidades de escalada en rocódromo}
+
+Las principales modalidades practicadas en rocódromo son la escalada de bloque
+(\textit{búlder}) y la escalada deportiva (vía):
+
 \begin{enumerate}
-\renewcommand{\theenumi}{\alph{enumi}}
-	\item un índice,
-	\item un resumen y una lista de no más de 10 palabras clave para su búsqueda bibliográfica, ambos en castellano e inglés,
-	\item una introducción con los antecedentes, objetivos y plan de trabajo,
-	\item resultados y discusión crítica y razonada de los mismos, con sus conclusiones,
-	\item bibliografía.
+	\item \textbf{Escalada de bloque (búlder).} Se practica en muros de baja altura,
+	normalmente de hasta 4 o 5 metros. El objetivo es resolver problemas o secuencias
+	de movimientos cortos e intensos. Para la seguridad se emplean colchonetas
+	(\textit{crash pads}) que amortiguan las caídas.
+
+	\item \textbf{Escalada deportiva (vía).} Se realiza en muros de mayor altura y
+	requiere completar recorridos largos donde predominan la resistencia y la gestión
+	del esfuerzo. Es necesario usar cuerda, arnés y sistema de aseguramiento. Durante
+	el ascenso, el escalador chapa la cuerda en anclajes intermedios y el asegurador,
+	desde el suelo, controla la cuerda para detener posibles caídas.
 \end{enumerate}
-Para facilitar la escritura de la memoria siguiendo esta estructura, el estudiante podrá usar las plantillas en LaTeX o Word preparadas al efecto y publicadas en la página web de TFG.
 
-La memoria constará de un mínimo de 25 páginas para los proyectos realizados por un único estudiante, y de al menos 5 páginas más por cada integrante adicional del grupo. En este número de páginas solo se tiene en cuenta el contenido correspondiente a los apartados c y d del punto anterior.
+\subsection{Dificultad y progreso}
 
-La memoria puede estar escrita en castellano o inglés, pero en el primer caso la introducción y las conclusiones deben aparecer también en inglés. Las memorias de los TFG matriculados en el grupo I deberán estar escritas íntegramente en inglés, excepto por lo especificado en los puntos 1 y 2 anteriores (título, resumen y lista de palabras clave).
+Cada ruta, tanto de bloque como de vía, tiene asignado un grado de dificultad que
+permite estimar el nivel exigido, seleccionar desafíos adecuados y hacer seguimiento
+del progreso. Este grado suele aparecer en la etiqueta de inicio.
 
-En caso de trabajos no unipersonales, cada participante indicará en la memoria su contribución al proyecto con una extensión de al menos dos páginas por cada uno de los participantes.
+En bloque se utilizan, entre otras, la escala de Fontainebleau (por ejemplo, 6A,
+7A) y la \textit{V-Scale} (por ejemplo, V3, V6). En vía son frecuentes la escala
+francesa (por ejemplo, 6a+, 7b) y la YDS (por ejemplo, 5.10a, 5.11c). Una explicación
+detallada de estas escalas y sus conversiones puede consultarse en\footnote{\url{https://www.lacrux.com/es/escalar/Escalas-de-escalada-explicadas-UIAA-Fontainebleau-V-Grado-CO/}}.
 
-Todo el material no original, ya sea texto o figuras, deberá ser convenientemente citado y referenciado. En el caso de material complementario se deben respetar las licencias y \emph{copyrights} asociados al software y hardware que se emplee. En caso contrario no se autorizará la defensa, sin menoscabo de otras acciones que correspondan.
+Además, muchos rocódromos emplean sistemas internos basados en colores para asociar
+rangos de dificultad a cada ruta. Estos sistemas facilitan la lectura del nivel y
+pueden actuar como elemento motivador al permitir visualizar avances. Existen también
+análisis estadísticos de ascensos que aportan referencias de progresión, aunque no
+siempre son totalmente representativos de la población general de escaladores\footnote{\url{https://www.alessandromasullo.com/blog/analysis-of-4-million-climbing-ascents/}}.
+
+
+\section{Contexto de la gamificación en deportes}
+
+La gamificación consiste en aplicar principios y elementos propios de los juegos en
+contextos no lúdicos, como el entrenamiento deportivo. Su finalidad es incrementar la
+motivación, mejorar la retención de usuarios y favorecer la adherencia a la práctica
+deportiva.
+
+\subsection{Psicología: modelo RAMP}
+
+Una base habitual para diseñar experiencias gamificadas es el modelo RAMP
+(\textit{Relatedness, Autonomy, Mastery, Purpose}), alineado con teorías de
+motivación intrínseca. Este modelo destaca cuatro necesidades principales:
+
+\begin{itemize}
+	\item \textbf{Relatedness (vinculación):} necesidad de conexión social,
+	reconocimiento y pertenencia a una comunidad.
+	\item \textbf{Autonomy (autonomía):} necesidad de control sobre las decisiones y
+	la forma de progresar.
+	\item \textbf{Mastery (maestría):} necesidad de mejora continua mediante retos
+	alcanzables y progresivos.
+	\item \textbf{Purpose (finalidad):} necesidad de que el esfuerzo tenga un
+	significado más allá de la tarea inmediata.
+\end{itemize}
+
+Más información sobre motivación y gamificación puede consultarse en\footnote{\url{https://playmotiv.com/gamificacion-y-motivacion/}}.
+
+\subsection{Sistema PBL (\textit{Points, Badges, Leaderboards})}
+
+El sistema PBL es una implementación clásica de gamificación y se compone de tres
+elementos:
+
+\begin{itemize}
+	\item \textbf{Points (puntos):} recompensan el esfuerzo o rendimiento del usuario
+	(por ejemplo, dificultad encadenada, número de intentos o constancia).
+	\item \textbf{Badges (insignias):} representan logros alcanzados y visualizan la
+	evolución del deportista.
+	\item \textbf{Leaderboards (clasificaciones):} comparan resultados entre usuarios,
+	incentivando una competitividad sana y el sentido de comunidad.
+\end{itemize}
+
+Una introducción al modelo PBL se describe en\footnote{\url{https://www.adrformacion.com/knowledge/educacion-y-formacion/la_gamificacion_y_la_triada_pbl.html}}.
+
+\subsection{Beneficios de la gamificación deportiva}
+
+La integración de mecánicas gamificadas en aplicaciones deportivas aporta beneficios
+relevantes:
+
+\begin{itemize}
+	\item \textbf{Mayor retención:} la retroalimentación constante reduce el abandono
+	y mejora la adherencia al entrenamiento.
+	\item \textbf{Visualización del progreso:} el registro de datos permite observar
+	evolución objetiva mediante métricas y logros.
+	\item \textbf{Refuerzo de comunidad:} la interacción social y la comparación
+	amistosa aumentan la implicación de los usuarios.
+\end{itemize}
+
+En un deporte como la escalada, donde el progreso puede ser lento y existen fases de
+estancamiento, estas mecánicas resultan especialmente útiles para mantener la
+motivación.
 
 
 \section{Motivación}
-Introducción al tema del TFG.
+
+La escalada es un deporte eminentemente individual en el que el seguimiento del
+progreso suele realizarse de forma manual y poco sistemática (libretas, memoria o
+aplicaciones externas no integradas en el propio rocódromo). La motivación principal
+de este proyecto es digitalizar dicha experiencia mediante una herramienta
+centralizada, pensada para el contexto real de uso en rocódromo.
+
+La aplicación propuesta permite registrar rutas completadas y conservar un historial
+de actividad que facilite analizar la evolución del usuario. Además, incorpora
+elementos de gamificación (puntos, logros, clasificaciones y retos) para transformar
+el entrenamiento en una experiencia más participativa, social y motivadora,
+favoreciendo la constancia y una competitividad saludable.
 
 
 \section{Objetivos}
-Descripción de los objetivos del trabajo.
+
+\subsection{Objetivo general}
+
+Desarrollar una aplicación compatible con dispositivos móviles que permita a los
+usuarios de un rocódromo registrar su actividad de escalada (bloque y vía) y que,
+mediante técnicas de gamificación, fomente la motivación y la constancia en el
+entrenamiento.
+
+\subsection{Objetivos específicos}
+
+\begin{enumerate}
+	\item Implementar un sistema de gestión de usuarios que cubra registro,
+	autenticación y perfil personal con consulta de rutas y estadísticas.
+	\item Desarrollar un módulo de registro de escaladas que permita marcar rutas como
+	\textit{flash}, completadas o proyecto.
+	\item Incorporar mecánicas de gamificación orientadas a mejorar la motivación del
+	usuario.
+	\item Implementar funcionalidades sociales (amistades, comparación de progreso y
+	estadísticas) para fomentar comunidad y competencia amistosa.
+	\item Diseñar una interfaz y una experiencia de usuario claras, intuitivas y
+	eficientes, adecuadas a escaladores con distintos niveles tecnológicos.
+\end{enumerate}
 
 
-\section{Plan de trabajo}
-Aquí se describe el plan de trabajo a seguir para la consecución de los objetivos descritos en el apartado anterior.
+\section{Estructura del documento}
 
-
-
-\section{Explicaciones adicionales sobre el uso de esta plantilla}
-Si quieres cambiar el \textbf{estilo del título} de los capítulos del documento, edita el fichero \verb|TeXiS\TeXiS_pream.tex| y comenta la línea \verb|\usepackage[Lenny]{fncychap}| para dejar el estilo básico de \LaTeX.
-
-Si no te gusta que no haya \textbf{espacios entre párrafos} y quieres dejar un pequeño espacio en blanco, no metas saltos de línea (\verb|\\|) al final de los párrafos. En su lugar, busca el comando  \verb|\setlength{\parskip}{0.2ex}| en \verb|TeXiS\TeXiS_pream.tex| y aumenta el valor de $0.2ex$ a, por ejemplo, $1ex$.
-
-TFGTeXiS se ha elaborado a partir de la plantilla de TeXiS\footnote{\url{http://gaia.fdi.ucm.es/research/texis/}}, creada por Marco Antonio y Pedro Pablo Gómez Martín para escribir su tesis doctoral. Para explicaciones más extensas y detalladas sobre cómo usar esta plantilla, recomendamos la lectura del documento \texttt{TeXiS-Manual-1.0.pdf} que acompaña a esta plantilla.
-
-El siguiente texto se genera con el comando \verb|\lipsum[2-20]| que viene a continuación en el fichero .tex. El único propósito es mostrar el aspecto de las páginas usando esta plantilla. Quita este comando y, si quieres, comenta o elimina el paquete \textit{lipsum} al final de \verb|TeXiS\TeXiS_pream.tex|
-
-\subsection{Texto de prueba}
-
-
-\lipsum[2-20]
+La memoria se organiza de la siguiente forma. En el Capítulo~\ref{cap:introduccion}
+se presenta el contexto, la motivación y los objetivos del proyecto. En el capítulo de
+estado de la cuestión se revisan antecedentes y trabajos relacionados. A continuación,
+el capítulo de descripción del trabajo detalla el análisis, diseño e implementación de
+la solución propuesta. Posteriormente, el capítulo de conclusiones recoge los
+resultados alcanzados y las líneas de trabajo futuro. Finalmente, se incluyen las
+contribuciones personales, la bibliografía y los apéndices con material complementario.
