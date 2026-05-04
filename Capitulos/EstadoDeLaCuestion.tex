@@ -1,16 +1,61 @@
-\chapter{Estado de la Cuestión}
-\label{cap:estadoDeLaCuestion}
+\chapter{Estado del Arte}
+\label{cap:estadoDelArte}
 
-En el estado de la cuestión es donde aparecen gran parte de las referencias bibliográficas del trabajo. Una de las formas más cómodas de gestionar la bibliografía en {\LaTeX} es utilizando \textbf{bibtex}. Las entradas bibliográficas deben estar en un fichero con extensión \textit{.bib} (con esta plantilla se proporciona el fichero biblio.bib, donde están las entradas referenciadas más abajo). Cada entrada bibliográfica tiene una clave que permite referenciarla desde cualquier parte del texto con los siguiente comandos:
+Como se ha comentado previamente, el objetivo general de este trabajo es fomentar y promover la práctica de la escalada en rocódromo mediante mecánicas de gamificación que incentiven la competencia sana entre deportistas. En este capítulo se analiza el trasfondo y el estado del arte en dos áreas clave: aplicaciones específicas de escalada y mecánicas de gamificación aplicadas en otros deportes y aplicaciones de fitness.
 
-\begin{itemize}
-\item Referencia bibliografica con cite: \cite{ldesc2e}
-\item Referencia bibliográfica con citep: \citep{notsoshort}
-\item Referencia bibliográfica con citet: \citet{latexAPrimer}
-\end{itemize}
+Se presenta primero un análisis del panorama tecnológico actual en el ámbito de la escalada y el fitness digital, examinando aplicaciones relevantes, sus funcionalidades y debilidades. A continuación se extraen principios de diseño y mecánicas de gamificación que resultan aplicables a la propuesta de este trabajo.
 
-Es posible citar más de una fuente, como por ejemplo \citep{latexCompanion,LaTeXLamport,texKnuth}
+\section{Análisis de aplicaciones de escalada}
 
-Después, \LaTeX se ocupa de rellenar la sección de bibliografía con las entradas \textbf{que hayan sido citadas} (es decir, no con todas las entradas que hay en el .bib, sino sólo con aquellas que se hayan citado en alguna parte del texto).
+En esta sección se evalúan las principales aplicaciones que los escaladores emplean para registrar su actividad. Las aplicaciones se han agrupado según su enfoque estratégico para facilitar la comparación.
 
-Bibtex es un programa separado de latex, pdflatex o cualquier otra cosa que se use para compilar los .tex, de manera que para que se rellene correctamente la sección de bibliografía es necesario compilar primero el trabajo (a veces es necesario compilarlo dos veces), compilar después con bibtex, y volver a compilar otra vez el trabajo (de nuevo, puede ser necesario compilarlo dos veces). 
+\subsection{Aplicaciones integradas con el rocódromo}
+
+Estas aplicaciones mantienen una integración estrecha con centros de escalada, actuando como extensión de la experiencia in situ.
+
+\paragraph{TopLogger}
+TopLogger permite registrar las pistas de los rocódromos asociados y facilita la identificación de rutas por ubicación, color y grado mediante mapas interactivos del centro \citep{TopLogger}. Su capa de gamificación se apoya en retos y clasificaciones que motivan a completar rutas y competir en rankings. Entre sus limitaciones están problemas de usabilidad en ciertas vistas (por ejemplo, carga de perfil), su adopción limitada en España por falta de integración con centros locales, y la existencia de funcionalidades condicionadas a versiones de pago para rocódromos.
+
+\paragraph{WeClimb}
+WeClimb presenta funcionalidades similares a TopLogger, con registro de pistas y soporte para que rocódromos anuncien eventos \citep{WeClimb}. Su despliegue está centrado en Francia, y actualmente carece de una capa de gamificación profunda, lo que limita su potencial motivador fuera del ámbito informativo.
+
+\subsection{Aplicaciones centradas en la comunidad}
+
+Estas aplicaciones priorizan la conexión entre escaladores y funcionan como redes sociales especializadas en registrar la actividad como contenido principal.
+
+\paragraph{KAYA}
+KAYA se posiciona como una red social para escaladores (especialmente orientada a escalada en roca natural), centrada en compartir ascensos, obtener feedback y seguir la progresión de otros usuarios \citep{KAYA}. La gamificación surge de la interacción social y de desafíos periódicos que incentivan la participación, pero su foco en escalada al aire libre hace que algunas funcionalidades no encajen perfectamente con la dinámica de un rocódromo interior.
+
+\subsection{Aplicaciones con hardware específico}
+
+Algunas soluciones combinan software con elementos físicos del rocódromo para crear experiencias de entrenamiento más interactivas.
+
+\paragraph{MoonBoard}
+MoonBoard es un sistema estandarizado que combina un muro con una configuración fija de presas y una aplicación que permite acceder a una base de datos global de problemas creados por la comunidad \citep{MoonBoard}. La gamificación se apoya en la interacción directa con el muro (LEDs que iluminan rutas) y en la comunidad de problemas compartidos.
+
+\paragraph{BoardClimbs}
+BoardClimbs usa técnicas de visión y IA para reconocer la disposición de presas en muros tipo "spraywall", permitiendo a los usuarios crear, registrar y compartir problemas a partir de una fotografía \citep{BoardClimbs}. Este enfoque facilita la creación de rutas por parte de los escaladores y amplía la capacidad de generación de contenido del propio rocódromo.
+
+\section{Análisis de aplicaciones de otros deportes}
+
+En esta sección se examinan mecánicas de gamificación probadas en otras disciplinas y aplicaciones de fitness con el objetivo de identificar ideas transferibles al contexto del rocódromo.
+
+\subsection{Competiciones y ranking por segmentos (Strava)}
+
+Strava ha popularizado los "segmentos", tramos de recorrido en los que los usuarios compiten por el mejor tiempo generando clasificaciones dinámicas \citep{Strava}. Esta mecánica fomenta la competitividad y la repetición orientada a la mejora. Es directamente extrapolable a la escalada: cada ruta (o sección de ruta) puede tratarse como un "segmento" con métricas como intentos, completados, tiempo o número de repeticiones.
+
+\subsection{Narrativa inmersiva y progresión (Zombies, Run! y Fantasy Hike)}
+
+Aplicaciones como Zombies, Run! y Fantasy Hike usan la narrativa para transformar la actividad física en una experiencia con propósito, donde cada sesión contribuye al avance de una historia \citep{ZombiesRun,FantasyHike}. En escalada esta aproximación puede traducirse en "expediciones virtuales" o desafíos narrativos donde la consecución de rutas alimenta una progresión temática a largo plazo.
+
+\subsection{Retos sociales y coleccionismo de logros (Fitbit y Pokémon GO)}
+
+Plataformas como Fitbit fomentan la competencia social mediante desafíos entre amigos, y juegos como Pokémon GO incentivan el coleccionismo ligado a la actividad física \citep{Fitbit,PokemonGO}. En el contexto de la escalada, estas mecánicas se traducen bien en sistemas de logros, medallas y retos personalizables que los usuarios puedan compartir o aceptar en grupo.
+
+\section{Conclusiones del Estado del Arte e identificación de la oportunidad}
+
+El análisis muestra que las aplicaciones existentes tienden a especializarse en uno de estos ejes: integración con el rocódromo (TopLogger, WeClimb), o creación de comunidades globales de escalada (KAYA). Las soluciones con hardware aportan experiencias muy ricas, pero requieren inversión física y estandarización del muro. A su vez, el mercado de aplicaciones deportivas ofrece mecánicas de gamificación maduras —segmentos, narrativa, retos sociales y coleccionismo— que resultan valiosas para potenciar la motivación.
+
+No existe hoy una solución que combine de forma equilibrada una integración nativa con las rutas de un rocódromo específico y una capa de gamificación profunda y variada que vaya más allá de rankings básicos. Muchas aplicaciones fuerzan el registro manual o carecen de mecanicas avanzadas, lo que abre una oportunidad clara: desarrollar una aplicación que integre rutas del centro, ofrezca una interfaz clara y ligera, y adopte un sistema PBL (Points, Badges, Leaderboards) enriquecido con retos sociales, segmentos análogos a Strava y opciones narrativas para mantener la motivación a largo plazo.
+
+Esta oportunidad justifica el desarrollo y la investigación presentados en los capítulos siguientes.
