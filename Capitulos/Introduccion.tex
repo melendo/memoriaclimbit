@@ -1,169 +1,174 @@
 \chapter{Introducción}
 \label{cap:introduccion}
 
-En este capítulo se presenta el contexto del proyecto, centrado en la escalada en
-rocódromo y en el uso de técnicas de gamificación aplicadas al deporte. A partir de
-este marco, se justifica la motivación del trabajo, se definen sus objetivos y se
-resume la estructura de la memoria.
-
+En este capítulo se introducen los conceptos básicos del proyecto, centradonos en la escalada en
+rocódromo y en el uso de técnicas de gamificación aplicadas al deporte. Posteriormente se justifican los la motivación y objetvios de
+este preoyecto y se  resume la estructura de la memoria.
 
 \section{Contexto de la escalada en rocódromo}
 
-\subsection{Cómo funciona la escalada en rocódromo}
+La escalada es un deporte con numerosas modalidades de las cuales nos centraremos en la "indoor"
+que se practica en rocódromos. A continuación se detalla su funcionamiento, tipos de ruta y 
+el sistema de dificultad.
 
-Un rocódromo es una instalación deportiva que simula la escalada en roca natural
+\subsection{Funcioamiento de la escalada en rocódromo}
+
+Un rocódromo es una instalación deportiva que emula la escalada en roca natural
 mediante muros artificiales equipados con presas (agarres) de diferentes formas,
 tamaños y colores. El objetivo del escalador es ascender por una ruta predefinida
-utilizando exclusivamente las presas asignadas a dicha ruta.
+usando exclusivamente las presas designadas a esta ruta.
 
-Las rutas se identifican visualmente, habitualmente por el color de las presas. Cada
-ruta tiene un punto de inicio marcado y un punto final o \textit{top} (última presa
-que se debe controlar con ambas manos para dar el intento por válido). Cuando una
+Las rutas se identifican mediante un mismo color de presas. Cada
+ruta tiene un punto de inicio y un punto final o \textit{top} (última presa
+que se debe agarrar con ambas manos para completar el ascenso). Cuando una
 ruta se completa en el primer intento, se denomina \textit{flash}.
 
-\subsection{Modalidades de escalada en rocódromo}
+A diferencia de la escalda en roca natural, las rutas de los rocódromos son dinámicas.
+Con el objetivo de dar variedad y nuevos desafios a los escaladores las rutas se van renovando
+periódicamente. Esta labor es llevada a cabo por los \textit{route setter} (o equipadores), profesionales
+encargados de diseñar y montar los nuevos bloques y vías.
+
+\subsection{Tipos de rutas en rocódromos}
 
 Las principales modalidades practicadas en rocódromo son la escalada de bloque
 (\textit{búlder}) y la escalada deportiva (vía):
 
 \begin{enumerate}
 	\item \textbf{Escalada de bloque (búlder).} Se practica en muros de baja altura,
-	normalmente de hasta 4 o 5 metros. El objetivo es resolver problemas o secuencias
-	de movimientos cortos e intensos. Para la seguridad se emplean colchonetas
-	(\textit{crash pads}) que amortiguan las caídas.
+	normalmente de hasta 4 o 5 metros con colchonetas para la seguridad. El objetivo 
+	de este tipo de rutas es buscar una solución para problemas con secuencias de 
+	movimientos cortos e intensos.
 
-	\item \textbf{Escalada deportiva (vía).} Se realiza en muros de mayor altura y
-	requiere completar recorridos largos donde predominan la resistencia y la gestión
-	del esfuerzo. Es necesario usar cuerda, arnés y sistema de aseguramiento. Durante
-	el ascenso, el escalador chapa la cuerda en anclajes intermedios y el asegurador,
+	\item \textbf{Escalada deportiva (vía).} Se realiza en muros de mayor altura por lo
+	que se necesita material de seguridad como cuerda, arnés y sistema de aseguramiento.
+	En estos tipos de ruta se requiere completar recorridos largos donde predominan la 
+	resistencia y la gestión del esfuerzo. Durante el ascenso, el escalador engancha l
+	a cuerda en anclajes intermedios y el asegurador,
 	desde el suelo, controla la cuerda para detener posibles caídas.
 \end{enumerate}
 
 \subsection{Dificultad y progreso}
 
-Cada ruta, tanto de bloque como de vía, tiene asignado un grado de dificultad que
-permite estimar el nivel exigido, seleccionar desafíos adecuados y hacer seguimiento
-del progreso. Este grado suele aparecer en la etiqueta de inicio.
+Cada ruta, tanto de bloque como de vía, suele tener asignado un grado de dificultad que
+permite estimar el nivel exigido para completarlo. Este grado suele aparecer en la etiqueta de inicio.
 
-En bloque se utilizan, entre otras, la escala de Fontainebleau (por ejemplo, 6A,
-7A) y la \textit{V-Scale} (por ejemplo, V3, V6). En vía son frecuentes la escala
-francesa (por ejemplo, 6a+, 7b) y la YDS (por ejemplo, 5.10a, 5.11c). Una explicación
+En bloque se utilizan, entre otras, la escala de Fontainebleau (por ejemplo, 6A+,
+7B) y la \textit{V-Scale} (por ejemplo, V4, V6). En cambio en vía son frecuentes la escala
+francesa similar a Fontainebleau en notación y la YDS (por ejemplo, 5.10a, 5.11c). Una explicación
 detallada de estas escalas y sus conversiones puede consultarse en\footnote{\url{https://www.lacrux.com/es/escalar/Escalas-de-escalada-explicadas-UIAA-Fontainebleau-V-Grado-CO/}}.
-
-Además, muchos rocódromos emplean sistemas internos basados en colores para asociar
-rangos de dificultad a cada ruta. Estos sistemas facilitan la lectura del nivel y
-pueden actuar como elemento motivador al permitir visualizar avances. Existen también
+Existen también
 análisis estadísticos de ascensos que aportan referencias de progresión, aunque no
-siempre son totalmente representativos de la población general de escaladores\footnote{\url{https://www.alessandromasullo.com/blog/analysis-of-4-million-climbing-ascents/}}.
+siempre son totalmente representativos \footnote{\url{https://www.alessandromasullo.com/blog/analysis-of-4-million-climbing-ascents/}}.
+
+Además de estas escalas, muchos rocódromos emplean sistemas internos basados en colores para asociar
+rangos de dificultad a cada ruta. Estos sistemas facilitan la lectura del nivel y
+pueden servir como elemento de motivación al permitir visualizar avances. 
 
 
 \section{Contexto de la gamificación en deportes}
 
-La gamificación consiste en aplicar principios y elementos propios de los juegos en
-contextos no lúdicos, como el entrenamiento deportivo. Su finalidad es incrementar la
-motivación, mejorar la retención de usuarios y favorecer la adherencia a la práctica
-deportiva.
+La gamificación consiste en aplicar principios y componentes propios de los juegos en
+contextos no lúdicos, entrenamiento deportivo. El objetivo es incrementar la
+motivación, mejorar la retención de usuarios y favorecer la adherencia al deporte.
 
-\subsection{Psicología: modelo RAMP}
+\subsection{Modelo psicológico RAMP}
 
-Una base habitual para diseñar experiencias gamificadas es el modelo RAMP
+Una de las bases principales para diseñar experiencias gamificadas es el modelo psicológico RAMP
 (\textit{Relatedness, Autonomy, Mastery, Purpose}), alineado con teorías de
-motivación intrínseca. Este modelo destaca cuatro necesidades principales:
+motivación intrínseca. En este modelo se destacan cuatro necesidades principales de los usuarios:
 
 \begin{itemize}
-	\item \textbf{Relatedness (vinculación):} necesidad de conexión social,
+	\item \textbf{Relatedness (vinculación):} necesidad del usuario de tener conexiónes sociales,
 	reconocimiento y pertenencia a una comunidad.
-	\item \textbf{Autonomy (autonomía):} necesidad de control sobre las decisiones y
-	la forma de progresar.
-	\item \textbf{Mastery (maestría):} necesidad de mejora continua mediante retos
+	\item \textbf{Autonomy (autonomía):} necesidad del usuario de sentir que el tiene el control y 
+	toma decisiones para progresar.
+	\item \textbf{Mastery (maestría):} necesidad de sentir una mejora continua mediante objetivos
 	alcanzables y progresivos.
-	\item \textbf{Purpose (finalidad):} necesidad de que el esfuerzo tenga un
-	significado más allá de la tarea inmediata.
+	\item \textbf{Purpose (finalidad):} necesidad de sentir que el esfuerzo tenga un proposito más 
+	alla de la tarea inmediata.
 \end{itemize}
 
 Más información sobre motivación y gamificación puede consultarse en\footnote{\url{https://playmotiv.com/gamificacion-y-motivacion/}}.
 
-\subsection{Sistema PBL (\textit{Points, Badges, Leaderboards})}
+\subsection{El sistema PBL (\textit{Points, Badges, Leaderboards})}
 
-El sistema PBL es una implementación clásica de gamificación y se compone de tres
-elementos:
+Basado en el modelo RAMP surge el sistema PBL. Este es una implementación clásica de gamificación 
+y se compone de tres elementos principales:
 
 \begin{itemize}
-	\item \textbf{Points (puntos):} recompensan el esfuerzo o rendimiento del usuario
+	\item \textbf{Points (puntos):} representan el esfuerzo o rendimiento del usuario
 	(por ejemplo, dificultad encadenada, número de intentos o constancia).
 	\item \textbf{Badges (insignias):} representan logros alcanzados y visualizan la
-	evolución del deportista.
+	evolución del deportista (por ejemplo, completar 100 rutas o lograr tu primera ruta de dificultad 7a).
 	\item \textbf{Leaderboards (clasificaciones):} comparan resultados entre usuarios,
 	incentivando una competitividad sana y el sentido de comunidad.
 \end{itemize}
 
-Una introducción al modelo PBL se describe en\footnote{\url{https://www.adrformacion.com/knowledge/educacion-y-formacion/la_gamificacion_y_la_triada_pbl.html}}.
+Una explicación más detallada del modelo PBL se describe en\footnote{\url{https://www.adrformacion.com/knowledge/educacion-y-formacion/la_gamificacion_y_la_triada_pbl.html}}.
 
-\subsection{Beneficios de la gamificación deportiva}
+\subsection{Beneficios de la gamificación en el deporte}
 
-La integración de mecánicas gamificadas en aplicaciones deportivas aporta beneficios
+La integración de mecánicas de gamificación en aplicaciones deportivas aporta beneficios
 relevantes:
 
 \begin{itemize}
 	\item \textbf{Mayor retención:} la retroalimentación constante reduce el abandono
-	y mejora la adherencia al entrenamiento.
-	\item \textbf{Visualización del progreso:} el registro de datos permite observar
-	evolución objetiva mediante métricas y logros.
-	\item \textbf{Refuerzo de comunidad:} la interacción social y la comparación
-	amistosa aumentan la implicación de los usuarios.
+	y mejora la constancia del entrenamiento.
+	\item \textbf{Visualización del progreso:} el registro de datos permite visualizar la 
+	evolución mediante métricas y logros.
+	\item \textbf{Refuerzo de comunidad:} la interacción social aumentan la implicación de los usuarios 
+	con el deporte y su comunidad.
 \end{itemize}
 
-En un deporte como la escalada, donde el progreso puede ser lento y existen fases de
+En un deporte individual como la escalada, donde el progreso puede ser lento y hay mucho
 estancamiento, estas mecánicas resultan especialmente útiles para mantener la
-motivación.
+motivación y constancia en el deporte.
 
 
 \section{Motivación}
 
-La escalada es un deporte eminentemente individual en el que el seguimiento del
-progreso suele realizarse de forma manual y poco sistemática (libretas, memoria o
+La escalada es un deporte unipersonal en el que el seguimiento del
+progreso suele realizarse de forma manual (libretas, memoria o
 aplicaciones externas no integradas en el propio rocódromo). La motivación principal
-de este proyecto es digitalizar dicha experiencia mediante una herramienta
-centralizada, pensada para el contexto real de uso en rocódromo.
+de este proyecto es digitalizar el deporte en ciertos centros mediante una aplicación
+centralizada.
 
-La aplicación propuesta permite registrar rutas completadas y conservar un historial
-de actividad que facilite analizar la evolución del usuario. Además, incorpora
-elementos de gamificación (puntos, logros, clasificaciones y retos) para transformar
-el entrenamiento en una experiencia más participativa, social y motivadora,
-favoreciendo la constancia y una competitividad saludable.
+La aplicación permite registrar rutas completadas específicas de cada rocódromo, conservando
+el registro de actividad para analizar la evolución del usuario. Además, incorpora
+elementos de gamificación como estadísticas o Leaderboards para transformar
+el entrenamiento en una experiencia más social y motivadora,
+favoreciendo la constancia y una competitividad saludable entre la comunidad de escalada.
 
 
 \section{Objetivos}
+En esta sección se definene los objetivos que guían el desarrllo del proyecto, haciendo una 
+distincion entre la meta global y los hitos tecnicos necesarios.
 
 \subsection{Objetivo general}
 
 Desarrollar una aplicación compatible con dispositivos móviles que permita a los
 usuarios de un rocódromo registrar su actividad de escalada (bloque y vía) y que,
-mediante técnicas de gamificación, fomente la motivación y la constancia en el
+mediante técnicas de gamificación, fomente la motivación y la constancia del
 entrenamiento.
 
-\subsection{Objetivos específicos}
+\subsection{Hitos específicos}
 
 \begin{enumerate}
 	\item Implementar un sistema de gestión de usuarios que cubra registro,
-	autenticación y perfil personal con consulta de rutas y estadísticas.
-	\item Desarrollar un módulo de registro de escaladas que permita marcar rutas como
+	autenticación y perfil personal con información de sus datos y estadísticas.
+	\item Desarrollar un sistema para escaladores de registro del estado de rutas que permita cambiar entre
 	\textit{flash}, completadas o proyecto.
+	\item Desarrrollar un sistema de gestión de rutas para los \textit{route setters} de manera que se reduzca
+	al mínimo el esfuerzo necesario para registrar los cambios en el rocódromo.
 	\item Incorporar mecánicas de gamificación orientadas a mejorar la motivación del
 	usuario.
 	\item Implementar funcionalidades sociales (amistades, comparación de progreso y
-	estadísticas) para fomentar comunidad y competencia amistosa.
-	\item Diseñar una interfaz y una experiencia de usuario claras, intuitivas y
-	eficientes, adecuadas a escaladores con distintos niveles tecnológicos.
+	estadísticas) para fomentar la competitividad sana en la comunidad.
+	\item Diseñar una interfaz y una experiencia de usuario simples, intuitivas y
+	eficientes, preparadas para usuarios con distintos niveles tecnológicos.
 \end{enumerate}
 
 
 \section{Estructura del documento}
 
-La memoria se organiza de la siguiente forma. En el Capítulo~\ref{cap:introduccion}
-se presenta el contexto, la motivación y los objetivos del proyecto. En el capítulo de
-estado de la cuestión se revisan antecedentes y trabajos relacionados. A continuación,
-el capítulo de descripción del trabajo detalla el análisis, diseño e implementación de
-la solución propuesta. Posteriormente, el capítulo de conclusiones recoge los
-resultados alcanzados y las líneas de trabajo futuro. Finalmente, se incluyen las
-contribuciones personales, la bibliografía y los apéndices con material complementario.
+(por definir)
