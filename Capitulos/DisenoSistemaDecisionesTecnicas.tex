@@ -1,17 +1,84 @@
 \chapter{Diseño del Sistema y Decisiones Técnicas}
 \label{cap:disenoSistema}
 
-En este capítulo se justifican las decisiones técnicas adoptadas y se presenta la arquitectura general de la solución.
+En este capítulo se detallan las decisiones técnicas adoptadas para la implementación de Climbit
+así como la justificación de dichas elecciones frente a las alternativas actuales del mercado. 
+También se detallarán las arquitecturas del frontend y del backend y los patrones de diseño 
+utilizados.
 
 \section{Decisiones de Diseño y Stack Tecnológico}
 
-Se resume la selección de tecnologías y el criterio seguido para escogerlas.
+Para ClimbIt surgieron varias opciones de diseño para el sistema, pero al final optamos por 
+una separción de responsabilidades para ceder la lógica de negocio y la persistencia de los datos 
+al backend y un frontend SPA (Single Page Application) simple y de facil navegación 
+que comsuma esos datos a través de una API. 
+Desde el comienzo sabíamos que el alcance de esta aplicación era notablemente amplio, por lo que 
+la decisión sobre que arquitectura utilizar fue previamente meditada. Valoramos tres opciones de 
+diseño para el backend: una arquitectura monolítica, una arquitectura hexagonal y 
+una arquitectura de microservicios. 
+
+Para la elección tuvimos en cuenta tres factores principales: la escalabilidad, la mantenibilidad y la complejidad 
+de desarrollo. Una arquitectura monolítica podría haber sido más sencilla de implementar inicialmente, pero a 
+medida que el proyecto creciese, podría habernos llevado a un codigo difícil de mantener y escalar. Por otro lado, 
+una arquitectura de microservicios nos habría ofrecido grandes ventajas en cuanto a la escalabilidad, pero la curva de 
+aprendizaje y la dificualtad que añadía al desarrollo y la necesidad de gestionar multiples servicios nos 
+hizo descartarla, por el momento, para este proyecto. Al final decidimos que la arquitectura hexagonal nos daba 
+el equilibrio entre dificultad de desarrollo, mantenibilidad y escalabilidad que buscábamos para ClimbIt, permitiendonos
+desacoplar toda la lógica de negocio de factores externos como la base de datos y el frontend,quedando así un sistema 
+más modular y fácil de mantener a largo plazo.
+
+En cuanto al stack tecnológico, para el backend decidimos usar Node.js con Express debido a su popularidad, fiabilidad, 
+facilidad de uso y su amplio ecosistema de librerías. Decidimos trabajar directamente con JavaScript y en formato ESModules 
+y no con TypeScript princialmente por la velocidad de desarrollo y porque Node.js no tiene un soporte nativo para TypeScript.
+Para la base de datos, descartamos desde el principio las bases 
+de datos no relacionales, ya que la naturaleza de los datos de ClimbIt, con relaciones claras entre escaladores, 
+rocódromos y rutas se adaptaba mejor a un modelo relacional. Ambos habíamos trabajado previamente con bases de datos 
+como MariaDB y MySQL, pero debido a su rendimiento, escalabilidad y su más que creciente popularidad y ecosistema 
+decidimos que para nuestro proyecto, y para las ideas que queremos llegar a implemetar en el futuro, PostgreSQL 
+era la mejor opción. Para la comunicación entre el backend y la base de datos, optamos por usar un ORM 
+(Object-Relational Mapping) para facilitar el desarrollo, así como una capa extra de seguridad. Después de evaluar varias
+opciones decidimos que Sequelize, debido a su diseño nativo para JavaScript, era la opción más indicada. Otros ORMs como 
+TypeORM o Prisma también eran opciones válidas, pero al estar más orientados a TypeScript y no podríamos aprovechar al máximo 
+sus características, decidimos que Squelize era la mejor opción para nuestro proyecto.
+
+Para el frontend sabíamos que queríamos una aplicación web, pero que fuera PWA (Progressive Web App), para que los usuarios 
+de cualquier dispositivo pudiera acceder a ella y descargarla sin la necesidad de tener que crear una aplicación nativa para 
+cada plataforma. Desde el principio fuimos reticentescon al uso de frameworks frontend. Después de valorar las ventajas que 
+nos ofrecían frente la curva de aprendije y la complejidad añadida que suponían, decidimos optar por una solución más ligera 
+y sencilla: utilizar HTML, CSS y JavaScript puro, ayudados de Bootstrap para mantener un diseño consistente. Esto nos permitió 
+tener un control total sobre el código y una velocidad inicial de desarrollo mucho mayor, ya que los dos habíamos desarrollado 
+previamente con estas tecnologías. Por otro lado, si nos supuso un reto la implementción de ciertas funcionalidades, en 
+concreto el enrutamiendo de las vistas o la implementación manual de componentes personalizados, que es algo que los 
+frameworks manejan de forma nativa y que nosotros tuvimos que implementar desde cero, pero al final creemos que fue la decisión 
+correcta para el proyecto. 
+
 
 \section{Diseño de la Arquitectura}
 
 \subsection{Backend}
 
-Se define la responsabilidad del backend dentro de la solución y su relación con el resto de componentes.
+Una vez elegida la arquitectura hexagonal para el backend, se diseñó la estructura del proyecto siguiendo los principios de 
+esta arquitectura y aplcando una serie de patrones de diseño que nos permitieran mantener un código limpio, sencillo y modular, 
+completamente independiente entre las diferentes capas. La arquitectura hexagonal organiza el código en capas definidas, 
+donde cada una tiene una responsabilidad clara. La capa de dominio se encarga de la lógica de negocio y las reglas del sistema, 
+donde se definen todos los contratos y validaciones sobre los objetos que se procesan. La capa de infraestructura se encarga
+de la comunicación con la base de datos, que nosotros gestionamos a través de Sequelize, así como los modelos que representan
+las entidades del sistema, las migraciones y las seeds. La capa de aplicación se encarga de definir la lógica de los use 
+cases, orquestando la interacción entre la capa de dominio y la capa de infraestructura. Por último, la capa de presentación, 
+que nosotros hemos llamado interfaz, se encarga de la comunicación con el frontend a través de una API REST, definiendo los 
+endpoints, los controladores que gestionan las peticiones y respuestas y los middlewares que nos ayudan a la autenticación 
+de tokens, formatos de datos y validaciones tanto de datos como de archivos.
+
+{Diagrama de la arquitectura hexagonal del backend con ejemplo de ClimbIt}
+
+Para la comunicación con la base de datos hemos aplicado el patrón de diseño Repository, 
+que se compone de una interfaz y una implementación concreta. La interfaz define los métodos que se pueden utilizar
+para interactuar con el modelo de datos (CRUDs básicos, consultas específicas, combinaciones de datos, etc.) y la implementación 
+concreta se encarga de realizar las operaciones utilizando Sequelize.
+
+{Aquí un diagrama del patron con ejemplo de ClimbIt}
+
+-- Más patrones de diseño aplicados en el backend --
 
 \subsection{Frontend}
 
