@@ -1,24 +1,120 @@
 \chapter{Metodología de Desarrollo y Planificación}
 \label{cap:metodologiaDesarrollo}
 
-En este capítulo se resume el enfoque de trabajo seguido para construir la solución, desde la planificación inicial hasta el apoyo utilizado durante el desarrollo.
+Uno de los factores más importantes en el desarrollo de un proyecto es el plan y metodología que se va a llevar a cabo para su desarrollo.
+En este capítulo detallamos cómo se ha definido la metodología de nuestra aplicación llamada \textit{ClimbIt} para lograr un 
+flujo de trabajo funcional con sus herramientas específicas para la gestión y organización que permite ir avanzar eficientemente en las 
+diferentes fases del proyecto.
 
 \section{Metodología de trabajo: Scrumban}
 
-El desarrollo se organiza con una mezcla de Scrum y Kanban para combinar planificación iterativa con un flujo continuo de tareas.
+Como metodología de trabajo nos decantamos por utilizar \textbf{Scrumban} debido a que consideramos que aplicar Scrum puro podía resultar 
+demasiado estricto especialmente para un equipo de dos personas y en Kanban echamos en falta peridos de trabajo definidos para tener la eficiencia  
+el trabajo con presión de fechas de entrega.   
+
+De Scrum nos quedamos con el concepto de \textit{sprints} (iteraciones temporales de desarrollo) de dos semanas aproximadamente y de las técnicas
+de especificación de requisitos mediante \textit{Hisotiras de usuario} y \textit{Epics} (estructuras para la definición de casos de uso). 
+Por otro lado, de Kanban en lugar de preasignar tareas de forma estricta trabajamos con un sistema \textit{pull} de forma que cada miembro 
+del equipo selecciona la tarea a realizar de la columna \textit{To Do} .
+
+% [Imagen del tablero de trabajo]
+
+\section{Proceso de Captura de Requisitos y Definición del Producto}
+
+Antes de iniciar la fase de desarrollo e implementación, determinamos que era fundamental comprender en profundidad los 
+problemas a resolver, de manera que no cometiéramos el error de basar la programación en suposiciones no contrastadas. Por lo que 
+dedicamos una fase inicial a la definición estratégica del producto, apoyándonos en herramientas de diseño ágil.
+
+\subsection{Lienzo de Propuesta de Valor (Value Proposition Canvas)}
+
+Con el objetivo de empatizar de manera efectiva con el usuario final, construimos un Value Proposition Canvas, 
+siendo esta una herramienta que nos permite adoptar la perspectiva del escalador y analizar su contexto dividiéndolo en dos 
+bloques principales, el Perfil de cliente y Mapa de valor.
+
+\paragraph{Perfil del cliente}
+: Se enfoca exclusivamente en entender al usuario. Te pones en su situación y describes sus 
+"trabajos" (lo que intenta resolver), sus "dolores" o frustraciones (los obstáculos y emociones negativas que encuentra) 
+y sus "alegrías" o ganancias (los resultados y beneficios que desea obtener).
+
+Se identificó que el usuario escalador busca cumplir "trabajos" funcionales (registrar sesiones, ver pistas), 
+sociales (compartir logros) y emocionales (sentirse motivado). Sus principales "frustraciones" (Pains) giran en torno a 
+la dificultad del registro manual, la falta de una plataforma centralizada y la desmotivación por no visualizar su progreso. 
+Por otro lado, sus "alegrías" (Gains) deseadas son la facilidad para seguir su evolución, recibir feedback y sentirse parte de una 
+comunidad competitiva y sana.
+
+\paragraph{Mapa de Valor}
+Se enfoca en cómo un producto o servicio crea valor en base a los datos del pefil de cliente. Aquí se describen los 
+"productos y servicios" alivian los "dolores" de tus clientes (Pain Relivers) y cómo generan las 
+"alegrías" que ellos buscan (Gain creators).
+
+Para responder a este perfil, se determino que los Pain Relievers se enfocan en ofrecer una 
+interfaz intuitiva, un registro de progreso automatizado y una plataforma segura y centralizada. Finalmente, sus "creadores de alegrías" 
+(Gain Creators) se centran en proporcionar estadísticas detalladas, un sistema de logros motivador y una comparativa social que impulse 
+al usuario a mejorar e interactuar con sus compañeros.
+
+% [Imagen de VPC]
+
+\subsection{Visualización del viaje: User Story Map}
+
+A partir de la propuesta de valor, se construyó un User Story Map para visualizar el "viaje" completo del usuario dentro de la aplicación, 
+utilizando la plataforma Mural.  Un USR (Mapa de Historias de Usuario) es una técnica visual utilizada en la gestión ágil de proyectos para 
+organizar y priorizar las historias de  usuario. Este enfoque facilita la comprensión del flujo de trabajo y las interacciones del usuario 
+con el sistema, ayudando a definir y planificar las funcionalidades del producto de manera efectiva.
+
+Este mapa visual resulto muy importante ya que nos ayudó a dividir el proyecto. Trazando líneas horizontales sobre el mapa, 
+pudimos decidir qué funcionalidades eran vitales para el primer prototipo, cuáles entrarían en el Producto Mínimo Viable (MVP) y qué ideas 
+quedaban relegadas a versiones futuras.
+
+%[Captura del USM]
 
 \section{Herramientas de gestión y seguimiento}
 
-Se describen las herramientas empleadas para planificar, registrar y revisar el avance del proyecto.
+Para la gestión del proyecto tomamos la decisión de tener las herramientas lo más cercanas posibles para reducir el rozamiento de su uso.
+ Descartamos usar plataformas externas tipo Jira o Trello y centralizamos toda la gestión directamente en \textbf{GitHub Projects}, 
+ manteniendo los requisitos vinculados al código fuente y las herramientas de despliegue. 
 
-\section{Proceso de Captura de Requisitos}
+El \textit{Product Backlog} se fue rellenando progresivamente con las tareas extraídas del User Story Map. Cada requisito, ya fuera una Historia 
+de Usuario (HU) funcional o una tarea técnica (como configurar la base de datos), se tradujo en una \textit{Issue} dentro del repositorio 
+con información suficiente para no perder contexto.
 
-Se explica cómo se recogieron y refinaron las necesidades funcionales y no funcionales a partir de la información disponible y de las iteraciones de diseño.
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|p{10cm}|}
+\hline
+\textbf{Atributo} & \textbf{Descripción y uso en el proyecto} \\ \hline
+\textbf{Estado} & Columna del tablero Kanban (\textit{Backlog, To Do, In Progress, Review, Done}). \\ \hline
+\textbf{Labels} & Categorización visual (\textit{bug, backend, frontend, documentación, epic, HU...}). \\ \hline
+\textbf{Estimación} & Tamaño (\textit{Size}) desde XS hasta XL para medir el esfuerzo relativo. \\ \hline
+\textbf{Prioridad} & Nivel de urgencia (\textit{P0, P1, P2}), marcando P0 las tareas críticas de bloqueo. \\ \hline
+\textbf{Milestone} & Vinculación directa al \textit{sprint} actual para seguimiento temporal. \\ \hline
+\textbf{Criterios} & Listado de condiciones exactas para considerar la tarea como finalizada. \\ \hline
+\end{tabular}
+\caption{Anatomía de configuración de una \textit{Issue} en GitHub Projects.}
+\label{tab:config_issues}
+\end{table}
+
+Además, el seguimiento de los cuatro \textit{sprints} se apoyó en un \textit{Roadmap} visual y en gráficos de \textit{Burndown}, 
+que nos permitía visualizar el progreso y detectar si habíamos sobrestimado nuestra capacidad de desarrollo.
+
+% [capturas de roadmap, y de un burdown chart]
 
 \section{Gestión de la Configuración y Control de Versiones}
 
-Se documenta la estrategia seguida para organizar el código, controlar cambios y mantener trazabilidad sobre las distintas versiones.
+Implementamos un flujo de trabajo basado en \textbf{Git Flow}, estableciendo reglas claras sobre cómo se integra el 
+trabajo de cada desarrollador.
+
+En el repositorio existen dos ramas principales protegidas. La rama \texttt{main} se reservó exclusivamente para las 
+versiones estables y liberadas del producto de manera que todo el código de esta rama se subia a producción, mientras que \texttt{develop} 
+actuaba como el entorno de preproducción para los nuevos casos de uso. Cada \textit{Issue} del tablero requería la creación de una rama 
+específcia (\textit{feature branch}). Al finalizar el desarrollo, esta rama se integraba en \texttt{develop} mediante una estrategia de 
+\textit{squash and merge}. Esto nos permitió agrupar decenas de pequeños \textit{commits} en un solo bloque semántico, manteniendo el 
+historial del proyecto limpio y legible.
+
+En paralelo a los ciclos de \textit{sprint}, el despliegue de versiones se gestionó a través de la herramienta de \textit{Releases} 
+de GitHub. Adoptamos el versionado semántico clásico (X.Y.Z) y mantenemos la trazabilidad de los cambios mediante un  
+archivo \texttt{CHANGELOG.md} que sigue los estándares de \textit{Keep a Changelog}. Además para mantener la buena praxis el repositorio 
+cuenta desde el inicio con archivos `.gitignore` configurados para el \textit{stack} tecnológico y una guía de instalación en el `README.md`.
 
 \section{Uso de Inteligencia Artificial como Apoyo al Desarrollo}
 
-Se recoge el papel de las herramientas de inteligencia artificial como apoyo puntual para ideación, revisión y aceleración de tareas repetitivas.
+(por hacer)
