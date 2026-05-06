@@ -38,8 +38,10 @@ decidimos que para nuestro proyecto, y para las ideas que queremos llegar a impl
 era la mejor opción. Para la comunicación entre el backend y la base de datos, optamos por usar un ORM 
 (Object-Relational Mapping) para facilitar el desarrollo, así como una capa extra de seguridad. Después de evaluar varias
 opciones decidimos que Sequelize, debido a su diseño nativo para JavaScript, era la opción más indicada. Otros ORMs como 
-TypeORM o Prisma también eran opciones válidas, pero al estar más orientados a TypeScript y no podríamos aprovechar al máximo 
-sus características, decidimos que Squelize era la mejor opción para nuestro proyecto.
+TypeORM o Prisma también eran opciones válidas, pero al estar más orientados a TypeScript no podríamos aprovechar al máximo 
+sus características, así que decidimos que Sequelize era la mejor opción para nuestro proyecto.
+
+--Falta hablar del uso de tokens y de ffmpeg para la conversión a webp
 
 Para el frontend sabíamos que queríamos una aplicación web, pero que fuera PWA (Progressive Web App), para que los usuarios 
 de cualquier dispositivo pudiera acceder a ella y descargarla sin la necesidad de tener que crear una aplicación nativa para 
@@ -71,14 +73,57 @@ de tokens, formatos de datos y validaciones tanto de datos como de archivos.
 
 {Diagrama de la arquitectura hexagonal del backend con ejemplo de ClimbIt}
 
-Para la comunicación con la base de datos hemos aplicado el patrón de diseño Repository, 
-que se compone de una interfaz y una implementación concreta. La interfaz define los métodos que se pueden utilizar
-para interactuar con el modelo de datos (CRUDs básicos, consultas específicas, combinaciones de datos, etc.) y la implementación 
-concreta se encarga de realizar las operaciones utilizando Sequelize.
+A lo largo del desarrollo nos encontramos con diversas situaciones que nos llevaron a aplicar diferentes patrones de diseño que 
+nos ayudaron a obtener un código más limpio, modular y fácil de mantener. Los patrones de diseño que hemos utilizado son los siguientes:
 
-{Aquí un diagrama del patron con ejemplo de ClimbIt}
+- Patrón Repository: Este patrón propuesto por Martin Fowler consiste en crear una interfaz entre la lógica de negocio y la capa
+de persistencia, en nuestro caso, nuestra base de datos PostgreSQL a través de Sequelize, de manera que nos permite desacoplar el negocio
+de la infraestructura, manteniendo así un código más manteinible en el tiempo. En nuestro caso, como se puede ver en la Figurra XX,
+la capa de dominio define la interfaz del repositorio en la que se establecen los métodos que se necesitán para realizar las diferentes operaciones
+y la capa de infraestrucura implementa dicha interfaz con la que hablar con la base de datos. De esta manera, la capa de aplicación
+solo se encarga de definir la lógica de los distintos casos de uso.
 
--- Más patrones de diseño aplicados en el backend --
+{Figura del diagrama de patrón repository}
+
+- Patrón Data Mapper: También definido por Martin Fowler, el patrón Data Mapper  se encarga de mapear los objetos del dominio a 
+los objetos de la base de datos y viceversa. Es útil cuando el dominio y la base de datos tienen estructuras similares pero no idénticas.
+En nuestro caso, aunque la estructura de los objetos del dominio y los modelos son prácticamente idénticos, al transformar datos no tipados
+por estar definidos en JavaScript y al trabjar con PostgreSQL, que añade ciertos campos automáticamente, como los campos de CreatedAt y UpdatedAt,
+decidimos implementar este patrón pero solo para mapear los objetos recibidos por el modelo al dominio. De esta manera nos aseguramos que no se 
+producían errores al trabajar con objetos con campos inesperados.
+
+- Patrón Adapter: El patrón Adapter es uno de los patrones clasicos introducidos por Erich Gamma, Richard Helm, Ralph Johnson y John Vlissides, 
+también conocidos como los "Gang of Four" y se encarga de adaptar distintras interfaces para que puedan trabajar entre ellas. En nuestro caso,
+lo hemos utilizado para adaptar distintos errores que pueden surgir en las diferentes capas, como se puede observar en la Figura XX, para 
+centralizar el manejo de estos errores en un único lugar, permitiendonos así mantener una consistencia a la hora de tratarlos distintos 
+errores que pueden surgir.
+
+{Figura del diagrama de patrón adapter}
+
+- Patrón Singleton: Introducido también por "The Gang of Four" en su libro "Design Patterns: Elements of Reusable Object-Oriented Software", 
+el patrón Singleton sirve para garantizar que una clase tenga únicamente una instancia al mismo tiempo a lo largo de la ejecución de la aplicación. 
+En nuestro caso, lo hemos utilizado, por ejemplo, para mantener una única conexión a la base de datos, evitando así posibles problemas y errores relacionados
+con múltiples conexiones abiertas, pero también lo hemos utilizado en otros puntos que detallaremos más adelante en la implementacón de la aplicación.
+
+La inversión de control se basa en el principio de que los objetos no deben crear sus propias dependencias, sino que deben recibirlas desde 
+el exterior. Esto permite un mayor desacoplamiento entre los componentes del sistema, facilitando la mantenibilidad y la escalabilidad. La inyección 
+de dependencias es una técnica para implementar la inversión de control, donde las dependencias se proporcionan a un objeto en lugar de ser creadas 
+por el propio objeto. Esto se puede lograr a través de diferentes métodos, como la inyección por constructor, la inyección por setter o la inyección 
+por interfaz. En nuestro proyecto, hemos utilizado principalmente la inyección por constructor para proporcionar las dependencias necesarias a nuestros 
+objetos, lo que nos ha permitido mantener un código más limpio y modular.
+
+Inyección de dependencias e Inversión de control: La inversión de control es un principio abtracto popularizado por Robert C. Martin, también conocido 
+como "Uncle Bob", pero ideada inicialmente por Martin Fowler, que viene a referir que los objetos no deben crear sus propias dependencias, sino que le tienen
+que venir dadas de fuera. Por otro lado, la inyección de dependencias una de las tecnicas para implementar este principio. En nuestra aplicación hemos
+hemos utilizado la inyección de dependencias a través de la inyección por constructor transversalmente en toda la aplicaión. El controlador recibe por inyección
+los casos de uso que necesita para gestionar las peticiones, los casos de uso reciben por inyección los repositorios que necesitan para realizar sus operaciones 
+y los repositorios reciben por inyección los modelos que necesitan para hablar con la base de datos. De esta manera, hemos conseguido un código completamente desacoplado
+muy en la linea de la filosofía de la arquitectura hexagonal.
+
+- Patrón Comando (falta)
+
+
+- Patron Fachada (falta)
 
 \subsection{Frontend}
 
