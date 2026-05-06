@@ -1,7 +1,7 @@
 \chapter{Diseño del Sistema y Decisiones Técnicas}
 \label{cap:disenoSistema}
 
-En este capítulo se detallan las decisiones técnicas adoptadas para la implementación de Climbit
+En este capítulo se detallan las decisiones técnicas adoptadas para la implementación de ClimbIt
 así como la justificación de dichas elecciones frente a las alternativas actuales del mercado. 
 También se detallarán las arquitecturas del frontend y del backend y los patrones de diseño 
 utilizados.
@@ -9,48 +9,61 @@ utilizados.
 \section{Decisiones de Diseño y Stack Tecnológico}
 
 Para ClimbIt surgieron varias opciones de diseño para el sistema, pero al final optamos por 
-una separción de responsabilidades para ceder la lógica de negocio y la persistencia de los datos 
-al backend y un frontend SPA (Single Page Application) simple y de facil navegación 
-que comsuma esos datos a través de una API. 
+una separación de responsabilidades para ceder la lógica de negocio y la persistencia de los datos 
+al backend y un frontend SPA (\textit{Single Page Application}) simple y de fácil navegación 
+que consuma esos datos a través de una API. 
 Desde el comienzo sabíamos que el alcance de esta aplicación era notablemente amplio, por lo que 
-la decisión sobre que arquitectura utilizar fue previamente meditada. Valoramos tres opciones de 
+la decisión sobre qué arquitectura utilizar fue previamente meditada. Valoramos tres opciones de 
 diseño para el backend: una arquitectura monolítica, una arquitectura hexagonal y 
 una arquitectura de microservicios. 
 
 Para la elección tuvimos en cuenta tres factores principales: la escalabilidad, la mantenibilidad y la complejidad 
 de desarrollo. Una arquitectura monolítica podría haber sido más sencilla de implementar inicialmente, pero a 
-medida que el proyecto creciese, podría habernos llevado a un codigo difícil de mantener y escalar. Por otro lado, 
+medida que el proyecto creciese, podría habernos llevado a un código difícil de mantener y escalar. Por otro lado, 
 una arquitectura de microservicios nos habría ofrecido grandes ventajas en cuanto a la escalabilidad, pero la curva de 
-aprendizaje y la dificualtad que añadía al desarrollo y la necesidad de gestionar multiples servicios nos 
+aprendizaje y la dificultad que añadía al desarrollo y la necesidad de gestionar múltiples servicios nos 
 hizo descartarla, por el momento, para este proyecto. Al final decidimos que la arquitectura hexagonal nos daba 
-el equilibrio entre dificultad de desarrollo, mantenibilidad y escalabilidad que buscábamos para ClimbIt, permitiendonos
-desacoplar toda la lógica de negocio de factores externos como la base de datos y el frontend,quedando así un sistema 
+el equilibrio entre dificultad de desarrollo, mantenibilidad y escalabilidad que buscábamos para ClimbIt, permitiéndonos
+desacoplar toda la lógica de negocio de factores externos como la base de datos y el frontend, quedando así un sistema 
 más modular y fácil de mantener a largo plazo.
 
-En cuanto al stack tecnológico, para el backend decidimos usar Node.js con Express debido a su popularidad, fiabilidad, 
-facilidad de uso y su amplio ecosistema de librerías. Decidimos trabajar directamente con JavaScript y en formato ESModules 
-y no con TypeScript princialmente por la velocidad de desarrollo y porque Node.js no tiene un soporte nativo para TypeScript.
+En cuanto al stack tecnológico, para el backend optamos por usar Node.js con Express debido a su popularidad, fiabilidad, 
+facilidad de uso y su amplio ecosistema de librerías. Elegimos trabajar directamente con JavaScript y en formato ESModules 
+y no con TypeScript principalmente por la velocidad de desarrollo y porque Node.js no tiene un soporte nativo para TypeScript.
 Para la base de datos, descartamos desde el principio las bases 
 de datos no relacionales, ya que la naturaleza de los datos de ClimbIt, con relaciones claras entre escaladores, 
 rocódromos y rutas se adaptaba mejor a un modelo relacional. Ambos habíamos trabajado previamente con bases de datos 
 como MariaDB y MySQL, pero debido a su rendimiento, escalabilidad y su más que creciente popularidad y ecosistema 
-decidimos que para nuestro proyecto, y para las ideas que queremos llegar a implemetar en el futuro, PostgreSQL 
+decidimos que para nuestro proyecto, y para las ideas que queremos llegar a implementar en el futuro, PostgreSQL 
 era la mejor opción. Para la comunicación entre el backend y la base de datos, optamos por usar un ORM 
-(Object-Relational Mapping) para facilitar el desarrollo, así como una capa extra de seguridad. Después de evaluar varias
-opciones decidimos que Sequelize, debido a su diseño nativo para JavaScript, era la opción más indicada. Otros ORMs como 
+(\textit{Object-Relational Mapping}) para facilitar el desarrollo, así como una capa extra de seguridad. Después de evaluar varias
+opciones elegimos que Sequelize, debido a su diseño nativo para JavaScript, era la opción más indicada. Otros ORMs como 
 TypeORM o Prisma también eran opciones válidas, pero al estar más orientados a TypeScript no podríamos aprovechar al máximo 
-sus características, así que decidimos que Sequelize era la mejor opción para nuestro proyecto.
+sus características, por lo que Sequelize era la mejor opción para nuestro proyecto.
 
---Falta hablar del uso de tokens y de ffmpeg para la conversión a webp
+A la hora de servir imágenes al frontend, llegamos a la conclusión de que tener imágenes sin procesar
+en el servidor jugaría en nuestra contra a la hora de tener un buen rendimiento, por lo que decidimos generalizar el uso
+del formato webp en todas las imágenes que se subieran a la aplicación, exceptuando los mapas de las zonas, 
+que se mantendrían en formato svg. Obligar a que los usuarios subieran las imágenes en un único formato generaría 
+una gran fricción a la hora de usar la app; la solución más óptima era permitir una amplia gama de formatos para las imágenes
+y convertirlas a webp en el servidor antes de guardarlas. Para ello decidimos usar la librería ffmpeg, una de 
+las librerías más populares y potentes para el procesamiento de imágenes que ya habíamos utilizado previamente en otro proyecto.
 
-Para el frontend sabíamos que queríamos una aplicación web, pero que fuera PWA (Progressive Web App), para que los usuarios 
-de cualquier dispositivo pudiera acceder a ella y descargarla sin la necesidad de tener que crear una aplicación nativa para 
-cada plataforma. Desde el principio fuimos reticentescon al uso de frameworks frontend. Después de valorar las ventajas que 
-nos ofrecían frente la curva de aprendije y la complejidad añadida que suponían, decidimos optar por una solución más ligera 
+En cuanto a la gestión de sesiones, optamos por JWT (\textit{JSON Web Tokens}) por su 
+ligereza y capacidad de escala futura. Los tokens contienen la información necesaria sobre 
+permisos e identidad del usuario, eliminando la necesidad de realizar validaciones completas con cada petición 
+y mejorando así los tiempos de respuesta y el rendimiento. Además, al estar firmados con una clave secreta, garantizamos 
+que los datos no pueden ser manipulados, proporcionando una capa adicional de seguridad sin 
+sobrecargar el servidor con sesiones almacenadas.
+
+Para el frontend sabíamos que queríamos una aplicación web, pero que fuera PWA (\textit{Progressive Web App}), para que los usuarios 
+de cualquier dispositivo pudieran acceder a ella y descargarla sin la necesidad de tener que crear una aplicación nativa para 
+cada plataforma. Desde el principio fuimos reticentes con el uso de frameworks frontend. Después de valorar las ventajas que 
+nos ofrecían frente a la curva de aprendizaje y la complejidad añadida que suponían, decidimos optar por una solución más ligera 
 y sencilla: utilizar HTML, CSS y JavaScript puro, ayudados de Bootstrap para mantener un diseño consistente. Esto nos permitió 
 tener un control total sobre el código y una velocidad inicial de desarrollo mucho mayor, ya que los dos habíamos desarrollado 
-previamente con estas tecnologías. Por otro lado, si nos supuso un reto la implementción de ciertas funcionalidades, en 
-concreto el enrutamiendo de las vistas o la implementación manual de componentes personalizados, que es algo que los 
+previamente con estas tecnologías. Por otro lado, sí nos supuso un reto la implementación de ciertas funcionalidades, en 
+concreto el enrutamiento de las vistas o la implementación manual de componentes personalizados, que es algo que los 
 frameworks manejan de forma nativa y que nosotros tuvimos que implementar desde cero, pero al final creemos que fue la decisión 
 correcta para el proyecto. 
 
@@ -60,7 +73,7 @@ correcta para el proyecto.
 \subsection{Backend}
 
 Una vez elegida la arquitectura hexagonal para el backend, se diseñó la estructura del proyecto siguiendo los principios de 
-esta arquitectura y aplcando una serie de patrones de diseño que nos permitieran mantener un código limpio, sencillo y modular, 
+esta arquitectura y aplicando una serie de patrones de diseño que nos permitieran mantener un código limpio, sencillo y modular, 
 completamente independiente entre las diferentes capas. La arquitectura hexagonal organiza el código en capas definidas, 
 donde cada una tiene una responsabilidad clara. La capa de dominio se encarga de la lógica de negocio y las reglas del sistema, 
 donde se definen todos los contratos y validaciones sobre los objetos que se procesan. La capa de infraestructura se encarga
@@ -76,54 +89,35 @@ de tokens, formatos de datos y validaciones tanto de datos como de archivos.
 A lo largo del desarrollo nos encontramos con diversas situaciones que nos llevaron a aplicar diferentes patrones de diseño que 
 nos ayudaron a obtener un código más limpio, modular y fácil de mantener. Los patrones de diseño que hemos utilizado son los siguientes:
 
-- Patrón Repository: Este patrón propuesto por Martin Fowler consiste en crear una interfaz entre la lógica de negocio y la capa
+\paragraph{Patrón Repository:} Este patrón propuesto por Martin Fowler consiste en crear una interfaz entre la lógica de negocio y la capa
 de persistencia, en nuestro caso, nuestra base de datos PostgreSQL a través de Sequelize, de manera que nos permite desacoplar el negocio
-de la infraestructura, manteniendo así un código más manteinible en el tiempo. En nuestro caso, como se puede ver en la Figurra XX,
-la capa de dominio define la interfaz del repositorio en la que se establecen los métodos que se necesitán para realizar las diferentes operaciones
-y la capa de infraestrucura implementa dicha interfaz con la que hablar con la base de datos. De esta manera, la capa de aplicación
+de la infraestructura, manteniendo así un código más mantenible en el tiempo. En nuestro caso, como se puede ver en la Figura XX,
+la capa de dominio define la interfaz del repositorio en la que se establecen los métodos que se necesitan para realizar las diferentes operaciones
+y la capa de infraestructura implementa dicha interfaz con la que hablar con la base de datos. De esta manera, la capa de aplicación
 solo se encarga de definir la lógica de los distintos casos de uso.
 
 {Figura del diagrama de patrón repository}
 
-- Patrón Data Mapper: También definido por Martin Fowler, el patrón Data Mapper  se encarga de mapear los objetos del dominio a 
-los objetos de la base de datos y viceversa. Es útil cuando el dominio y la base de datos tienen estructuras similares pero no idénticas.
-En nuestro caso, aunque la estructura de los objetos del dominio y los modelos son prácticamente idénticos, al transformar datos no tipados
-por estar definidos en JavaScript y al trabjar con PostgreSQL, que añade ciertos campos automáticamente, como los campos de CreatedAt y UpdatedAt,
-decidimos implementar este patrón pero solo para mapear los objetos recibidos por el modelo al dominio. De esta manera nos aseguramos que no se 
-producían errores al trabajar con objetos con campos inesperados.
-
-- Patrón Adapter: El patrón Adapter es uno de los patrones clasicos introducidos por Erich Gamma, Richard Helm, Ralph Johnson y John Vlissides, 
-también conocidos como los "Gang of Four" y se encarga de adaptar distintras interfaces para que puedan trabajar entre ellas. En nuestro caso,
+\paragraph{Patrón Adapter:} El patrón Adapter es uno de los patrones clásicos introducidos por Erich Gamma, Richard Helm, Ralph Johnson y John Vlissides, 
+también conocidos como los ``Gang of Four'' y se encarga de adaptar distintas interfaces para que puedan trabajar entre ellas. En nuestro caso,
 lo hemos utilizado para adaptar distintos errores que pueden surgir en las diferentes capas, como se puede observar en la Figura XX, para 
-centralizar el manejo de estos errores en un único lugar, permitiendonos así mantener una consistencia a la hora de tratarlos distintos 
+centralizar el manejo de estos errores en un único lugar, permitiéndonos así mantener una consistencia a la hora de tratar los distintos 
 errores que pueden surgir.
 
 {Figura del diagrama de patrón adapter}
 
-- Patrón Singleton: Introducido también por "The Gang of Four" en su libro "Design Patterns: Elements of Reusable Object-Oriented Software", 
+\paragraph{Patrón Singleton:} Introducido también por ``The Gang of Four'' en su libro ``Design Patterns: Elements of Reusable Object-Oriented Software'', 
 el patrón Singleton sirve para garantizar que una clase tenga únicamente una instancia al mismo tiempo a lo largo de la ejecución de la aplicación. 
 En nuestro caso, lo hemos utilizado, por ejemplo, para mantener una única conexión a la base de datos, evitando así posibles problemas y errores relacionados
-con múltiples conexiones abiertas, pero también lo hemos utilizado en otros puntos que detallaremos más adelante en la implementacón de la aplicación.
+con múltiples conexiones abiertas, pero también lo hemos utilizado en otros puntos que detallaremos más adelante en la implementación de la aplicación.
 
-La inversión de control se basa en el principio de que los objetos no deben crear sus propias dependencias, sino que deben recibirlas desde 
-el exterior. Esto permite un mayor desacoplamiento entre los componentes del sistema, facilitando la mantenibilidad y la escalabilidad. La inyección 
-de dependencias es una técnica para implementar la inversión de control, donde las dependencias se proporcionan a un objeto en lugar de ser creadas 
-por el propio objeto. Esto se puede lograr a través de diferentes métodos, como la inyección por constructor, la inyección por setter o la inyección 
-por interfaz. En nuestro proyecto, hemos utilizado principalmente la inyección por constructor para proporcionar las dependencias necesarias a nuestros 
-objetos, lo que nos ha permitido mantener un código más limpio y modular.
-
-Inyección de dependencias e Inversión de control: La inversión de control es un principio abtracto popularizado por Robert C. Martin, también conocido 
-como "Uncle Bob", pero ideada inicialmente por Martin Fowler, que viene a referir que los objetos no deben crear sus propias dependencias, sino que le tienen
-que venir dadas de fuera. Por otro lado, la inyección de dependencias una de las tecnicas para implementar este principio. En nuestra aplicación hemos
-hemos utilizado la inyección de dependencias a través de la inyección por constructor transversalmente en toda la aplicaión. El controlador recibe por inyección
-los casos de uso que necesita para gestionar las peticiones, los casos de uso reciben por inyección los repositorios que necesitan para realizar sus operaciones 
+\paragraph{Inyección de dependencias e Inversión de control:} La inversión de control es un principio abstracto popularizado por Robert C. Martin, también conocido 
+como ``Uncle Bob'', pero ideada inicialmente por Martin Fowler, que viene a referir que los objetos no deben crear sus propias dependencias, sino que le tienen
+que venir dadas de fuera. Por otro lado, la inyección de dependencias es una de las técnicas para implementar este principio. En nuestra aplicación hemos
+utilizado la inyección de dependencias a través de la inyección por constructor transversalmente en toda la aplicación. El controlador recibe por inyección
+los casos de uso que necesita para gestionar las peticiones, los use cases reciben por inyección los repositorios que necesitan para realizar sus operaciones 
 y los repositorios reciben por inyección los modelos que necesitan para hablar con la base de datos. De esta manera, hemos conseguido un código completamente desacoplado
-muy en la linea de la filosofía de la arquitectura hexagonal.
-
-- Patrón Comando (falta)
-
-
-- Patron Fachada (falta)
+alineado con la filosofía de la arquitectura hexagonal.
 
 \subsection{Frontend}
 
