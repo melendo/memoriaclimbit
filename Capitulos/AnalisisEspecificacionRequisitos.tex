@@ -1,38 +1,238 @@
 \chapter{Análisis y Especificación de Requisitos}
 \label{cap:analisisRequisitos}
 
-Este capítulo detalla a quién va dirigida la aplicación, qué roles intervienen y qué funcionalidades y restricciones debe cubrir la solución.
+En este capítulo se detalla a quién va dirigida la aplicación junto con los roles que intervienen y las funcionalidades y 
+restricciones debe cubrir. Para ello, primero se definen los perfiles de usuario clave (\textit{Personas}) para entender 
+sus motivaciones y necesidades. A continuación, definimos los requistos funcionales y no funcionales. Por último, 
+se establece el alcance de cada versión del proyecto.
 
 \section{Personas}
 
+A continuación, se presentan dos perfiles de usuario o \textit{Personas}, que representan los dos roles principales de la aplicación: 
+el escalador y gestor del rocódromo.
+
 \subsection{Persona 1: Klaudia, Escaladora Constante}
 
-Perfil de referencia para representar a una usuaria frecuente de rocódromo que necesita registrar su progreso y mantener la motivación.
+Se presenta de un perfil ficticio para representar a una escaladora que frecuenta el rocódromo y quiere registrar su 
+progreso y mantenerse motivada.
+
+\begin{itemize}
+    \item \textbf{Perfil:} Klaudia, Escaladora habitual, 24 años.
+    \item \textbf{Nivel de escalada:} Intermedio (6a - 6c).
+    \item \textbf{Frecuencia:} Va al rocódromo 2-3 veces por semana.
+    \item \textbf{Biografía:} Klaudia se inicio en la escalada hace un par de años y se ha convertido en su principal pasatiempo. 
+    No se considera una profesional, pero se toma en serio su progreso y va al rocódromo varias veces por semana, con su grupo de 
+    amigos o si hace falta sola. Conoce bien las instalaciones y se da cuenta de que las rutas de los muros van cambiando cada semana. 
+    Le encanta la sensación de completar bloques por encima de su nivel, pero le frustra no ver de forma clara su progreso.
+    \item \textbf{Metas y Motivaciones:}
+    \begin{itemize}
+        \item Quiere poder visualizar las rutas que ha completado para ver su progreso.
+        \item Disfruta del componente social de la escalada y le gusta picarse con sus amigos.
+        \item Busca una forma de poder competir con sus amigos para esforzarse más en cada sesión de escalada.
+    \end{itemize}
+    \item \textbf{Frustraciones y Puntos de Dolor:}
+    \begin{itemize}
+        \item Le resulta molesto tener que llevar un registro de sus ascensos en una libreta o de memoria.
+        \item A menudo se olvida qué rutas ha completado en sesiones anteriores.
+        \item Se siente estancada porque no tiene datos para analizar sus puntos fuertes y débiles.
+        \item No existe una forma fácil de compararse con sus amigos.
+    \end{itemize}
+    \item \textbf{Relación con la aplicación (\textit{ClimbIt}):} Klaudia es un usuario ideal para la aplicación ya que
+    la usaría en cada sesión para registrar sus rutas completadas, seguir las estadísticas de su perfil y participar 
+    en los rankings. La gamificación y los retos sociales serían una fuente de motivación para dar más de si misma.
+\end{itemize}
+
+\subsection{Persona 2: Victor, Gestor del Rocódromo}
+
+Se presenta el perfil para representar al gestor de las instalaciones que busca satisfacer a los escaladores y 
+gestionar eficientemente su muro.
+
+\begin{itemize}
+    \item \textbf{Perfil:} Victor, \textit{Route-Setter} principal, 42 años.
+    \item \textbf{Rol:} Responsable de la renovación de las rutas.
+    \item \textbf{Biografía:} Victor es el dueño del rocódromo y lleva más de una década gestionando el centro y es 
+    el principal encargado de diseñar y montar las nuevas rutas. Su objetivo es mantener el rocódromo vivo y desafiante 
+    para escaladores de todos los niveles de manera que cada semana, cambia una sección del muro para que los escaladores 
+    habituales siempre encuentren nuevos retos.
+    \item \textbf{Metas y Motivaciones:}
+    \begin{itemize}
+        \item Quiere ofrecer la mejor experiencia posible a todos los escaladores de su rocódromo.
+        \item Le interesa recibir \textit{feedback} de los usuarios sobre la dificultad y calidad de sus rutas.
+        \item Quiere crear una comunidad unida en su centro para que los escaladores quieran volver y recomendarlo a otros.
+    \end{itemize}
+    \item \textbf{Frustraciones y Puntos de Dolor:}
+    \begin{itemize}
+        \item No tiene una forma de saber qué rutas son las más populares o cuáles no han gustado.
+        \item Le gustaría tener una forma más directa para interactuar con la comunidad de su rocódromo.
+        \item Gestionar cientos de rutas activas puede ser un proceso manual y desorganizado.
+    \end{itemize}
+    \item \textbf{Relación con la aplicación (\textit{ClimbIt}):} Victor podra utilizar el panel de gestión de la aplicación 
+    para gestionar todas las rutas del rocódromo. Para él, la app es una herramienta de gestión y marketing que le permite 
+    mantener a los escaladores informados, obtener datos valiosos sobre sus rutas y potenciar la comunidad, 
+    diferenciando a su rocódromo de la competencia.
+\end{itemize}
 
 \section{Roles}
 
-\subsection{Escalador}
+Para gestionar todas las funcionalidades de la aplicación, se ha definido un modelo permisos basado en 
+cuatro roles principales. Cada rol cuenta con un nivel de privilegios y funcionalidades específicas dentro de la 
+plataforma:
 
-Rol principal orientado al uso diario de la aplicación para registrar actividad, consultar estadísticas y participar en la gamificación.
+\subsection{Escalador}
+Es el rol del usuario final de la aplicación. Su objetivo principal es registrar sus estados con las rutas y participar en 
+la comunidad. Tiene permisos de lectura sobre la información pública de los rocódromos y permisos de escritura 
+sobre su información. Sus funciones clave incluyen son la gestión de su perfil personal, la interacción social con amigos, 
+el registro de sus ascensos y la consutla de estadísticas y clasificaciones (\textit{leaderboards}).
 
 \subsection{Gestor de Rocódromo}
+Se trata de un rol organizativo asignado a los trabajadores o \textit{route-setters} de un centro de escalada específico. 
+Tienen además de los permisos de un escalador, los de gestión de rutas de sus rocódromos y sus funciones principales abarcan 
+la gestión de las rutas (crear, modificar, actualizar estados y eliminar las rutas disponibles).
 
-Rol encargado de administrar información del centro, rutas y elementos de seguimiento asociados al rocódromo.
+\subsection{Propietario}
+Es el administrador principal de un centro de escalada en la plataforma y hereda todos los permisos del rol de Gestor de 
+Rocódromo (gestión de rutas), pero cuenta además con permisos de administración sobre el rocódromo. Puede 
+modificar la información del centro, como la ubicación, los horarios de apertura y el logotipo.
 
-\section{Especificación de funcionalidades (Historias de Usuario / Casos de Uso)}
+\subsection{Administrador}
+Es el rol de máximo nivel reservado para los desarrolladores (\textit{Superusuario}). Cuenta con acceso 
+total y control absoluto sobre la plataforma donde se puede gestionar, crear, modificar y eliminar cualquier entidad de la aplicación, 
+incluyendo usuarios, zonas, rocódromo y rutas.
 
-Se agrupan aquí las funcionalidades que la aplicación debe ofrecer, redactadas como historias de usuario o como casos de uso según convenga al nivel de detalle.
+\section{Especificación de funcionalidades (Historias de Usuario)}
 
+Las funcionalidades que se han implementado se han obtenido del \textit{Product Backlog} y se han listado agrupadas según la temática
+dentro del proyecto. Unicamente se muestra el identificador y su título. Para más detalles se puede consultar en el apendice \ref{Appendix:Key1}.
+
+
+\subsection{Autenticación y Gestión de Perfil}
+Historias de usuario relacionadas con el acceso al sistema y la personalización de la cuenta del escalador:
+\begin{itemize}
+    \item \textbf{CI-1:} Iniciar sesión con correo y contraseña.
+    \item \textbf{CI-2:} Cerrar sesión.
+    \item \textbf{CI-10:} Registro con correo electrónico.
+    \item \textbf{CI-47:} Tutorial al registrarse (\textit{Onboarding}).
+    \item \textbf{CI-3:} Mostrar información básica del perfil.
+    \item \textbf{CI-21:} Modificar descripción del perfil.
+    \item \textbf{CI-22:} Cambiar foto de perfil entre predefinidas.
+    \item \textbf{CI-23:} Mostrar estadísticas básicas del perfil.
+    \item \textbf{CI-24:} Cambiar apodo.
+    \item \textbf{CI-25:} Mostrar descripción del perfil.
+    \item \textbf{CI-45:} Estadísticas de escalador en rocódromo específico.
+\end{itemize}
+
+\subsection{Social y Comunidad}
+Historias de usuario centradas en la interacción entre los usuarios :
+\begin{itemize}
+    \item \textbf{CI-13:} Buscar usuario por apodo.
+    \item \textbf{CI-14:} Enviar Solicitud de Amistad.
+    \item \textbf{CI-15:} Gestión de Solicitudes Recibidas.
+    \item \textbf{CI-16:} Mostrar listado de Amigos.
+    \item \textbf{CI-17:} Eliminar Amigo.
+    \item \textbf{CI-44:} Ver perfil de amigo.
+    \item \textbf{CI-46:} \textit{Leaderboard} de rutas del mes actual escaladas entre amigos.
+    \item \textbf{CI-28:} Crear grupo de escaladores.
+    \item \textbf{CI-29:} Enviar Invitación a grupo.
+    \item \textbf{CI-30:} Gestionar invitación de unión a grupo.
+    \item \textbf{CI-32:} Visualizar estadísticas de miembros de grupo.
+\end{itemize}
+
+\subsection{Rocódromos}
+Historias de usuario orientadas a la exploración de centros por parte del escalador y a la administración general 
+de los rocódromos por parte del gestor:
+\begin{itemize}
+    \item \textbf{CI-8:} Escalador se suscribe a Rocódromo.
+    \item \textbf{CI-9:} Escalador se desuscribe de Rocódromo.
+    \item \textbf{CI-11:} Mostrar listado de ``Mis rocódromos''.
+    \item \textbf{CI-12:} Buscador de rocódromos básico.
+    \item \textbf{CI-18:} Modificar información básica de rocódromo.
+    \item \textbf{CI-26:} Añadir tipos de dificultad del rocódromo.
+    \item \textbf{CI-37:} Mostrar Información básica de Rocódromo.
+\end{itemize}
+
+\subsection{Zonas}
+Historias de usuario relacionadas con la visualización y gestión de los diferentes zonas dentro de un rocódromo:
+\begin{itemize}
+    \item \textbf{CI-4:} Mostrar Mapa de Zonas de Rocódromo básico.
+    \item \textbf{CI-38:} Mostrar Zonas con porcentaje de completado.
+    \item \textbf{CI-39:} Mostrar mapa dinámico de zona.
+\end{itemize}
+
+\subsection{Rutas }
+Historias de usuario relacionadas con la interacción con las rutas de escalada, tanto para el escalador como para el 
+gestor del rocódromo:
+\begin{itemize}
+    \item \textbf{CI-5:} Mostrar Mapa de Rutas de Zona básico.
+    \item \textbf{CI-6:} Mostrar Rutas básico.
+    \item \textbf{CI-7:} Cambiar estado de Ruta.
+    \item \textbf{CI-19:} Añadir ruta al rocódromo.
+    \item \textbf{CI-20:} Modificar una ruta.
+    \item \textbf{CI-27:} Eliminar una ruta del rocódromo.
+    \item \textbf{CI-40:} Añadir filtros de búsqueda por dificultad en zona.
+    \item \textbf{CI-41:} Mostrar información avanzada de ruta.
+    \item \textbf{CI-42:} Valorar ruta en formato de estrellas.
+    \item \textbf{CI-43:} Porcentaje Acotado por dificultad.
+\end{itemize}
 \section{Requisitos no funcionales}
 
-Se incluyen las expectativas relativas a rendimiento, seguridad, mantenibilidad, usabilidad y compatibilidad.
+Además de las requisitos funcionales, el sistema debe cumplir una serie de requisitos no funcionales que garantizan 
+la viabilidad, rendimiento y una correcta experiencia de usuario:
+
+\begin{itemize}
+    \item \textbf{Usabilidad:} La interfaz debe ser altamente intuitiva, permitiendo que un escalador registrar rutas en 
+    poco tiempo para reducir la fricción con el dispositivo móvil durante su sesión de escalada.
+    \item \textbf{Rendimiento y Eficiencia:} La carga de los mapas de las zonas del rocódromo y las listas de rutas 
+    debe ser fluida para evitar frustraciones.
+    \item \textbf{Seguridad y Privacidad:} Debe haber un sistema de autenticación robusto y garantizar la correcta 
+    separación de datos para proteger la información personal de los escaladores.
+    \item \textbf{Compatibilidad:} La aplicación debe ofrecer un diseño \textit{responsive} orientado a dispositivos móviles 
+    (\textit{Mobile First}), asegurando la correcta visualización en diferentes tamaños de pantalla y sistemas operativos.
+    \item \textbf{Mantenibilidad:} El código debe estructurarse siguiendo patrones establecidos y siguiendo buenas prácticas, 
+    para facilitar futuras modificaciones y corrección de errores.
+\end{itemize}
 
 \section{Alcance de las versiones}
 
+En este apartado definimos las funcionalidades implementadas en cada iteración del proyecto, reflejando la evolución de la aplicación desde su primer prototipo hasta su fase de mantenimiento post-lanzamiento, de acuerdo con el registro de cambios (\textit{changelog}) establecido.
+
 \subsection{Requisitos del prototipo (v.0.1.0)}
 
-Se describen las capacidades mínimas del primer prototipo funcional.
+Esta primera versión estableció la base funcional y arquitectónica del sistema, permitiendo un flujo de uso básico y testeable para el usuario escalador, junto con la preparación de la infraestructura técnica:
 
-\subsection{Requisito del MVP (v.1.0.0)}
+\begin{itemize}
+    \item \textbf{Autenticación y Perfil:} Implementación del inicio y cierre de sesión, registro mediante correo electrónico y visualización de la información básica del usuario.
+    \item \textbf{Gestión de Rocódromos:} Desarrollo de un buscador global de centros, gestión de suscripciones (suscribirse y desuscribirse), listado rápido de ``Mis Rocódromos'' y navegación básica por las zonas del muro.
+    \item \textbf{Interacción con Rutas:} Capacidad para listar rutas por zona, consultar su información detallada y actualizar el estado de escalada (flash, completado y proyecto).
+    \item \textbf{Infraestructura Técnica:} Configuración de un entorno robusto mediante contenedores (Docker), despliegue continuo (CI/CD) con GitHub Actions y creación de entornos aislados para desarrollo y producción.
+\end{itemize}
 
-Se detallan las capacidades que debe alcanzar la primera versión estable y utilizable del producto.
+\subsection{Evolución iterativa y versiones intermedias (v.0.2.0 - v.0.2.2)}
+
+Durante estas iteraciones intermedias, el desarrollo se centró en asentar las herramientas para el rol de Gestor de Rocódromo, enriquecer la experiencia de usuario y optimizar el rendimiento en dispositivos móviles:
+
+\begin{itemize}
+    \item \textbf{Personalización y Estadísticas:} Se habilitó la edición avanzada del perfil (apodo, descripción y selección de avatar desde una galería). Además, se implementó un sistema de visualización de estadísticas que incluye el resumen global, actividad mensual con mapas de calor y distribución por tipos de ruta y dificultad.
+    \item \textbf{Herramientas para Gestores:} Se dotó de la capacidad para subir y actualizar la información del rocódromo, así como definir sus escalas de dificultad.
+    \item \textbf{Gestión Dinámica de Rutas:} Se integraron mapas dinámicos interactivos por zona. Para las rutas, se completaron las operaciones de creación, edición y borrado lógico, incorporando validaciones de coordenadas, soporte para captura o subida de imágenes y un sistema de valoración por estrellas.
+    \item \textbf{Optimización Móvil (PWA):} Se configuró la aplicación como \textit{Progressive Web App} (PWA) instalable, optimizando la carga diferida de imágenes e implementando modos de lectura sin conexión y una interfaz táctil adaptada (\textit{Mobile First}).
+\end{itemize}
+
+\subsection{Requisitos del MVP (v.1.0.0)}
+
+El Producto Mínimo Viable (MVP) consolidó la plataforma integrando el factor social, fundamental para la retención, y refactorizando el sistema para garantizar la accesibilidad en entornos de baja conectividad:
+
+\begin{itemize}
+    \item \textbf{Funcionalidades Sociales:} Incorporación de un sistema de amistades que permite buscar usuarios, enviar o recibir solicitudes y gestionar la lista de amigos. Se habilitó la visualización de perfiles públicos y se integró un \textit{Leaderboard} (tabla de clasificación) basado en rutas completadas y días de actividad mensual.
+    \item \textbf{Usabilidad y Retención:} Implementación de un tutorial interactivo de \textit{onboarding} tras el registro, validación en tiempo real para correos y apodos, y visualización de fotografías de las rutas a pantalla completa.
+    \item \textbf{Arquitectura \textit{Offline-First}:} Reestructuración de la base de la aplicación para priorizar el funcionamiento sin conexión, asegurando que los escaladores puedan registrar su progreso en rocódromos con mala cobertura de red.
+\end{itemize}
+
+\subsection{Mantenimiento y mejoras post-lanzamiento (v.1.0.1)}
+
+Tras el despliegue del MVP, se publicó un parche menor centrado en solventar errores críticos, añadir políticas legales y mejorar detalles específicos de la interfaz:
+
+\begin{itemize}
+    \item \textbf{Correcciones Funcionales:} Solución de bloqueos en la interfaz táctil de mapas dinámicos en dispositivos iOS y reparación del fallo que impedía la correcta actualización de las listas de amigos y solicitudes sociales.
+    \item \textbf{Transparencia:} Inclusión de una sección de Política de Privacidad accesible directamente desde el perfil del usuario.
+    \item \textbf{Ajustes Visuales:} Inclusión de nuevos colores para el etiquetado de rutas (azul celeste) y rediseño de las tarjetas del \textit{Leaderboard} para una visualización más clara de las métricas competitivas.
+\end{itemize}
