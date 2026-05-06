@@ -17,7 +17,7 @@ se han agrupado en base a su proposito definido.
 
 Estas aplicaciones tienen una integración estrecha con los rocódromos, actuando como una herramienta para el registro de rutas y sesiones.
 
-\paragraph{TopLogger}:
+\paragraph{TopLogger}\citep{TopLogger}:
 TopLogger es una aplicación móvil que permite registrar el estado con las rutas de los rocódromos asociados y facilita la identificación de estas por 
 ubicación, color y grado. Para determinar las posiciones de las rutas en un rocódromo realiza a través de un mapa cenital que permite moverte 
 y seleccionar las rutas deseadas rápidamente. En el perfil se pueden visualizar numerosas estadísticas sobre datos de las sesiones de escalada y para 
@@ -28,7 +28,7 @@ poco accesible la aplicación para pefiles con un nivel tecnólogico bajo. En cu
 engañar a la aplicación y posicionarte primero, consiguiendo el efecto adverso de motivación para los escaladores legítimos. Además de esto, cuenta con poca 
 integración con los rocódromos en España y con una capa de pago si tu rocodromo cuenta con muchos escaladores habituales.
 
-\paragraph{WeClimb}:
+\paragraph{WeClimb}\citep{WeClimb}:
 WeClimb presenta funcionalidades similares a TopLogger, incluyendo un registro de rutas por color y grado pero difiriendo en la posición de las rutas.
 En esta aplicación para seleccionar la ruta usa un sistema de tarjetas de manera que seleccionando una sección de un mapa, se muestra 
 una serie de tarjetas con las fotos de cada ruta facilitando el reconocimiento visual. En las imagenes de las rutas existe un mecanismo 
@@ -46,7 +46,7 @@ de estas.
 En este grupo se prioriza la conexión entre escaladores frente al registro de todos los ascensos. Funcionan como redes sociales especializadas 
 para compartir los ascensos más importantes.
 
-\paragraph{KAYA}
+\paragraph{KAYA\citep{KAYA}}
 KAYA se posiciona como una red social para escaladores (especialmente orientada a escalada en roca natural), centrada en compartir 
 ascensos con formato de publicaciones, interactuar con usuarios y seguir la progresión de otros. Las publicaciones pueden ser registros de 
 una ruta, registro de una sesión de escalada o subir un video corto en formato vertical de una solución. En cuanto a elementos gamificación 
@@ -60,10 +60,7 @@ de toda su actividad. Además, la aplicación esta principalmente centrada en es
 
 Existen soluciones que combinan software con elementos físicos del rocódromo para crear experiencias de entrenamiento más interactivas.
 
-\paragraph{MoonBoard}
-MoonBoard es un sistema estandarizado que combina un muro con una configuración fija de presas y una aplicación que permite acceder 
-a una base de datos global de problemas creados por la comunidad \citep{MoonBoard}. La gamificación se apoya en la interacción directa 
-con el muro (LEDs que iluminan rutas) y en la comunidad de problemas compartidos.
+\paragraph{MoonBoard\citep{MoonBoard}}
 
 MoonBoard es una instalación física de entrenamiento que combina un muro de escalada con una aplicación. La particularidad de este sistema reside
 en que la posición de las presas y la inclinación del muro son identicas en todas sus instalaciones, permitiendo así una experiencia común en cualquier
@@ -82,7 +79,7 @@ identificar ideas transferibles al contexto del rocódromo.
 
 \subsection{Competiciones y ranking por segmentos (Strava)}
 
-\paragraph{Strava}
+\paragraph{Strava\citep{Strava}}
 
 Strava es una aplicación de registro de sesiones de corredores y ciclistas. Parte de su exito viene de su concepto de segmentos, que son tramos
 específicos de una ruta donde los usuarios registran y comparan los tiempos que han tardado en completarlo mediante GPS. Este sistema transforma
@@ -95,15 +92,54 @@ se puede comprometer la tecnica y seguridad del ascenso.
 
 \subsection{Coleccionismo de logros (Pokémon Go)}
 
-\paragraph{Pokémon Go}
+\paragraph{Pokémon Go\citep{PokemonGO}}
 Pokémon Go es una aplicación del universo Pokémon centrada en la gamificación del desplazamiento físico con la vinculación de recompensas virtuales
 y el progreso en la narrativa de un juego. Este sistema permite convertir el esfuerzo en un incentivo para obtener el sentimiento de coleccionsimo 
 y descubrimiento. La aplicación en un ejemplo de la implementación del sistema PBL (Points Badges and Leaderboards) previamente definido. 
 
-La desventajaprincipal de esta aplicación es que el objetivo deja de ser el deporte y pasa a ser la recompensa del juego, creando una dependencia 
-negativa en los usuarios.
+La desventaja principal de esta aplicación es que el objetivo del usuario deja de ser el deporte y pasa a ser la recompensa del juego, 
+creando una posible dependencia negativa en los usuarios.
 
 
 \section{Conclusiones del Estado del Arte e identificación de la oportunidad}
  
-(Por hacer)
+Para finalizar este capítulo, se presentan las concolusiones obtenidas tras el análisis comparativo entre las aplicaciones, 
+permitiendo identificar la necesidad del mercado y la propuesta de valor de nuestra aplicación.
+
+\subsection{Síntesis de la problemática actual}
+
+Tras analizar las soluciones existentes, se observa que el mercado de aplicaciones de escalada presenta problemas en tres aspectos críticos:
+
+\begin{itemize}
+\item \textbf{Experiencia de Usuario (UX) deficiente:} Aplicaciones como TopLogger o WeClimb ofrecen una gran densidad de datos, 
+pero a costa de interfaces saturadas que dificultan el uso y registro de rutas en la aplicación. La barrera tecnológica aleja 
+al escalador casual que solo busca un registro sencillo de su progresión.
+
+\item \textbf{Gamificación superficial:} La mayoría de las herramientas se limitan a clasificaciones numéricas (leaderboards) 
+fácilmente manipulables, lo que genera desmotivación. Falta un sistema de recompensas basado en el esfuerzo, la constancia y el "coleccionismo" 
+de hitos personales que no dependa únicamente de ser el mejor del ranking.
+
+\item \textbf{Dependencia de hardware o geografía:} Existen buenas soluciones como MoonBoard, pero están limitadas a sus muros de escalada específicos, 
+o aplicaciones como WeClimb y TopLogger cuya implantación en España es inexistente. No existe una herramienta universal, intuitiva y "gamificada" 
+que el escalador pueda llevar de un rocódromo a otro.
+\end{itemize}
+
+\subsection{Identificación de la oportunidad}
+
+El análisis de aplicaciones como \textbf{Strava} y \textbf{Pokémon Go} revela que existe un gran potencial en la adaptación de mecánicas de gamificación
+de otros sectores a la escalada. La oportunidad reside en desarrollar una solución que combine:
+
+\begin{enumerate}
+\item \textbf{Registro visual y ágil:} Adoptar un sistema híbrido de mapas centiales dinámicos y sistema de tarjetas para minimizar el tiempo 
+de interacción de escalador para reconocer y acceder a la ruta con el móvil durante la sesión.
+\item \textbf{Gamificación basada en PBL:} Realizar una implementación correcta de el sistema PBL basado en el modelo RAMP de forma que las estadísticas
+funcionen como los \textit{Points} para mantener la motivación y constancia de los usuarios, además de la  implementación de Leaderboards entre 
+grupos de amigos eliminando el factor de los abusos de los sistemas de posicionamiento.
+
+\item \textbf{Enfoque social y comunitario:} Fomentar la interacción mediante personalización del perifl y la comparación de estadísticas 
+personales, creando un sentimiento de pertenencia a la comunidad del rocódromo local.
+\end{enumerate}
+
+En conclusión, este proyecto se posiciona entre als herramientas de entrenamiento puro y las redes sociales generales, 
+ofreciendo un sistema de entrenamiento que registra datos de las sesiones y motiva activamente al  escalador a través de una 
+experiencia lúdica y bien diseñada.
