@@ -125,7 +125,114 @@ Se describe cómo se organiza la interfaz de usuario y su comunicación con el b
 
 \section{Diseño de la Base de Datos}
 
-Se presenta el modelo de datos y la lógica de persistencia asociada.
+Como se mencionó anteriormente en la sección de decisiones tecnológicas, la naturaleza de los datos en ClimbIt presentaba 
+relaciones claras y bien definidas entre entidades como escaladores, rocódromos, zonas y rutas, lo que nos llevó a 
+descartar desde el principio las bases de datos no relacionales en favor de un modelo relacional. La estructura jerárquica 
+y las múltiples relaciones muchos-a-muchos entre entidades hacían que un modelo relacional fuese la opción más apropiada 
+para garantizar integridad referencial, coherencia de datos y facilidad de consultas complejas.
+
+Elegimos PostgreSQL como sistema gestor de bases de datos relacional (SGBDR) debido a su robustez, rendimiento, escalabilidad 
+y su creciente popularidad en el ecosistema de desarrollo. Para facilitar la interacción entre la aplicación y la base de datos, 
+utilizamos Sequelize como ORM, que nos permite trabajar con los modelos de datos de forma orientada a objetos sin necesidad de 
+escribir SQL directamente, proporcionando además una capa adicional de seguridad contra inyecciones SQL y abstrayendo las 
+particularidades específicas de PostgreSQL.
+
+\subsection{Entidades Principales del Sistema}
+
+El modelo de datos de ClimbIt está compuesto por las siguientes entidades principales:
+
+\begin{itemize}
+    \item \textbf{Escalador:} Representa a los usuarios del sistema, almacenando información de perfil, credenciales de 
+    autenticación y configuración personal.
+    
+    \item \textbf{Rocódromo:} Entidad que representa cada uno de los lugares donde se practica la escalada, incluyendo información 
+    como nombre, ubicación y datos de contacto.
+    
+    \item \textbf{Zona:} Las diferentes áreas o sectores dentro de un rocódromo, cada una con su propio mapa y características.
+    
+    \item \textbf{Pista:} Las rutas específicas de escalada dentro de una zona, con información de dificultad, tipo de escalada 
+    y estado.
+    
+    \item \textbf{Ascentso:} Registro de cada vez que un escalador asciende una pista, almacenando información como fecha, 
+    valoración y estado del ascenso.
+    
+    \item \textbf{EscalaDificultad:} Tabla de catálogo que define los niveles de dificultad disponibles en el sistema.
+    
+    \item \textbf{Amistad:} Gestión de relaciones entre escaladores, permitiendo crear conexiones entre usuarios.
+    
+    \item \textbf{Suscripción:} Control de suscripciones de escaladores a rocódromos específicos.
+    
+    \item \textbf{FotosPerfil:} Almacenamiento de imágenes de perfil de escaladores.
+\end{itemize}
+
+\subsection{Relaciones Principales del Modelo}
+
+El modelo relacional de ClimbIt está estructurado mediante las siguientes relaciones:
+
+\paragraph{Relaciones Jerárquicas:} La estructura principal del sistema sigue una jerarquía clara:
+\begin{itemize}
+    \item Un Rocódromo contiene múltiples Zonas (relación 1:N).
+    \item Una Zona contiene múltiples Pistas (relación 1:N).
+\end{itemize}
+Esta jerarquía refleja la estructura física de los rocódromos reales en la vida.
+
+\paragraph{Relaciones Muchos-a-Muchos:} El sistema implementa varias relaciones M:N que requieren tablas de unión:
+\begin{itemize}
+    \item Escalador-Escalador a través de Amistad, permitiendo que dos usuarios establezcan relaciones bidireccionales.
+    \item Escalador-Rocódromo a través de Suscripción, permitiendo que un escalador se suscriba a múltiples rocódromos 
+    y que un rocódromo tenga múltiples suscriptores.
+    \item Escalador-Pista a través de Ascentso, registrando cada ascenso realizado por cada escalador.
+\end{itemize}
+
+\paragraph{Relaciones de Integridad Referencial:} Todas las claves foráneas están configuradas con restricciones 
+de integridad referencial adecuadas para mantener la consistencia de datos, evitando operaciones que dejasen la 
+base de datos en un estado inconsistente.
+
+\subsection{Normalización y Diseño}
+
+La estructura de la base de datos ha sido diseñada siguiendo los principios de normalización relacional, alcanzando 
+la tercera forma normal (3FN) en la mayoría de las entidades. Esto implica:
+
+\begin{itemize}
+    \item Eliminación de datos redundantes, evitando la duplicación de información.
+    \item Cada atributo depende únicamente de la clave primaria de su entidad.
+    \item Separación de conceptos en entidades distintas con relaciones apropiadas entre ellas.
+\end{itemize}
+
+Estas prácticas de normalización garantizan que las operaciones de actualización, inserción y eliminación sean eficientes 
+y no generen inconsistencias en los datos.
+
+\subsection{Decisiones de Diseño Específicas}
+
+A lo largo del diseño de la base de datos tomamos varias decisiones específicas:
+
+\paragraph{Campos de Estado y Booleanos:} Utilizamos campos booleanos para representar estados como \texttt{Activo} en 
+rocódromos, zonas y pistas, permitiendo desactivar entidades sin eliminarlas completamente de la base de datos, 
+facilitando así el mantenimiento histórico de datos.
+
+\paragraph{Gestión de URLs y Rutas de Imágenes:} Campos como \texttt{logoURL}, \texttt{imagenURL} y \texttt{mapa} almacenan 
+rutas a los recursos multimedia asociados a cada entidad. Las imágenes se almacenan en el servidor tras ser procesadas 
+a formato webp mediante ffmpeg, mejorando rendimiento sin perder calidad.
+
+\paragraph{Timestamps de Auditoría:} Cada entidad cuenta con campos \texttt{FechaCreacion} y, en casos relevantes, 
+\texttt{FechaRetirada} o \texttt{FechaModificacion} para mantener un registro histórico de cambios en los datos.
+
+\paragraph{Enumeraciones:} Ciertos campos utilizan tipos enumerados como \texttt{Estado} en ascensos (completado, intentando, etc.) 
+y \texttt{Tipo} en pistas (búlder, ruta, etc.), proporcionando validación a nivel de base de datos.
+
+\subsection{Migraciones y Versionado}
+
+La estructura de la base de datos se gestiona a través de migraciones controladas por Sequelize, permitiendo:
+
+\begin{itemize}
+    \item Versionado de cambios en el esquema de la base de datos.
+    \item Posibilidad de revertir cambios si es necesario.
+    \item Documentación implícita de la evolución del modelo de datos.
+    \item Reproducibilidad del esquema en diferentes entornos (desarrollo, pruebas, producción).
+\end{itemize}
+
+Adicionalmente, se utilizan seeds (\textit{seeders}) para poblar la base de datos con datos iniciales como niveles de 
+dificultad estándar, tipos de escalada y datos de prueba, facilitando el desarrollo y las pruebas del sistema.
 
 \section{Diseño de la UI y UX}
 
