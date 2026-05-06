@@ -2,15 +2,15 @@
 \label{cap:metodologiaDesarrollo}
 
 Uno de los factores más importantes en el desarrollo de un proyecto es el plan y metodología que se va a llevar a cabo para su desarrollo.
-En este capítulo detallamos cómo se ha definido la metodología de nuestra aplicación llamada \textit{ClimbIt} para lograr un 
+En este capítulo detallamos cómo se ha definido la metodología de nuestra aplicación \textit{ClimbIt} para lograr un 
 flujo de trabajo funcional con sus herramientas específicas para la gestión y organización que permite ir avanzar eficientemente en las 
 diferentes fases del proyecto.
 
 \section{Metodología de trabajo: Scrumban}
 
 Como metodología de trabajo nos decantamos por utilizar \textbf{Scrumban} debido a que consideramos que aplicar Scrum puro podía resultar 
-demasiado estricto especialmente para un equipo de dos personas y en Kanban echamos en falta peridos de trabajo definidos para tener la eficiencia  
-el trabajo con presión de fechas de entrega.   
+demasiado estricto especialmente para un equipo de dos personas y en Kanban echamos en falta peridos de trabajo intensos y acotados en el tiempo. 
+Scrumban es una metodología híbrida que combina lo mejor de ambos mundos, permitiendo la flexibilidad de Kanban con la estructura de Scrum.   
 
 De Scrum nos quedamos con el concepto de \textit{sprints} (iteraciones temporales de desarrollo) de dos semanas aproximadamente y de las técnicas
 de especificación de requisitos mediante \textit{Hisotiras de usuario} y \textit{Epics} (estructuras para la definición de casos de uso). 
@@ -33,31 +33,29 @@ bloques principales, el Perfil de cliente y Mapa de valor.
 
 \paragraph{Perfil del cliente}
 : Se enfoca exclusivamente en entender al usuario. Te pones en su situación y describes sus 
-"trabajos" (lo que intenta resolver), sus "dolores" o frustraciones (los obstáculos y emociones negativas que encuentra) 
-y sus "alegrías" o ganancias (los resultados y beneficios que desea obtener).
+\textit{trabajos} (lo que intenta resolver), sus \textit{frustraciones} (los obstáculos y emociones negativas que encuentra) 
+y sus \textit{ganancias} (los resultados y beneficios que desea obtener).
 
-Se identificó que el usuario escalador busca cumplir "trabajos" funcionales (registrar sesiones, ver pistas), 
-sociales (compartir logros) y emocionales (sentirse motivado). Sus principales "frustraciones" (Pains) giran en torno a 
+Se identificó que el usuario escalador busca cumplir trabajos funcionales (registrar sesiones, ver pistas), 
+sociales (compartir logros) y emocionales (sentirse motivado). Sus principales frustraciones giran en torno a 
 la dificultad del registro manual, la falta de una plataforma centralizada y la desmotivación por no visualizar su progreso. 
-Por otro lado, sus "alegrías" (Gains) deseadas son la facilidad para seguir su evolución, recibir feedback y sentirse parte de una 
+Por otro lado, sus ganancias deseadas son la facilidad para seguir su evolución, recibir feedback y sentirse parte de una 
 comunidad competitiva y sana.
 
 \paragraph{Mapa de Valor}
 Se enfoca en cómo un producto o servicio crea valor en base a los datos del pefil de cliente. Aquí se describen los 
-"productos y servicios" alivian los "dolores" de tus clientes (Pain Relivers) y cómo generan las 
-"alegrías" que ellos buscan (Gain creators).
+\textit{productos y servicios} alivian frustraciones de tus clientes (\textit{Pain Relivers}) y cómo generan las 
+ganancias que ellos buscan (\textit{Gain creators}).
 
-Para responder a este perfil, se determino que los Pain Relievers se enfocan en ofrecer una 
-interfaz intuitiva, un registro de progreso automatizado y una plataforma segura y centralizada. Finalmente, sus "creadores de alegrías" 
-(Gain Creators) se centran en proporcionar estadísticas detalladas, un sistema de logros motivador y una comparativa social que impulse 
+Para responder al perfil del cliente, se determino que los \textit{Pain Relievers} se enfocan en ofrecer una 
+interfaz intuitiva, un registro de progreso automatizado y una plataforma segura y centralizada. Finalmente, sus \textit{Gain Creators}  se centran en proporcionar estadísticas detalladas, un sistema de logros motivador y una comparativa social que impulse 
 al usuario a mejorar e interactuar con sus compañeros.
-
 % [Imagen de VPC]
 
 \subsection{Visualización del viaje: User Story Map}
 
-A partir de la propuesta de valor, se construyó un User Story Map para visualizar el "viaje" completo del usuario dentro de la aplicación, 
-utilizando la plataforma Mural.  Un USR (Mapa de Historias de Usuario) es una técnica visual utilizada en la gestión ágil de proyectos para 
+A partir de la propuesta de valor, se construyó un User Story Map para visualizar el recorrido completo del usuario dentro de la aplicación, 
+utilizando la plataforma Mural. Un USR (User Story Map) es una técnica visual utilizada en la gestión ágil de proyectos para 
 organizar y priorizar las historias de  usuario. Este enfoque facilita la comprensión del flujo de trabajo y las interacciones del usuario 
 con el sistema, ayudando a definir y planificar las funcionalidades del producto de manera efectiva.
 
@@ -65,13 +63,13 @@ Este mapa visual resulto muy importante ya que nos ayudó a dividir el proyecto.
 pudimos decidir qué funcionalidades eran vitales para el primer prototipo, cuáles entrarían en el Producto Mínimo Viable (MVP) y qué ideas 
 quedaban relegadas a versiones futuras.
 
-%[Captura del USM]
+%[Captura y enlace al USM]
 
 \section{Herramientas de gestión y seguimiento}
 
 Para la gestión del proyecto tomamos la decisión de tener las herramientas lo más cercanas posibles para reducir el rozamiento de su uso.
- Descartamos usar plataformas externas tipo Jira o Trello y centralizamos toda la gestión directamente en \textbf{GitHub Projects}, 
- manteniendo los requisitos vinculados al código fuente y las herramientas de despliegue. 
+Descartamos usar plataformas externas tipo Jira o Trello y centralizamos toda la gestión directamente en \textbf{GitHub Projects}, 
+manteniendo los requisitos vinculados al código fuente y las herramientas de despliegue. 
 
 El \textit{Product Backlog} se fue rellenando progresivamente con las tareas extraídas del User Story Map. Cada requisito, ya fuera una Historia 
 de Usuario (HU) funcional o una tarea técnica (como configurar la base de datos), se tradujo en una \textit{Issue} dentro del repositorio 
@@ -117,4 +115,20 @@ cuenta desde el inicio con archivos `.gitignore` configurados para el \textit{st
 
 \section{Uso de Inteligencia Artificial como Apoyo al Desarrollo}
 
-(por hacer)
+Durante el ciclo de vida del proyecto, hemos empleado herramientas de Inteligencia Artificial (IA) generativa como asistentes de desarrollo. 
+El uso de esta tecnología no ha sustituido en ningún momento nuestra toma de decisiones, el diseño de la arquitectura o la lógica de negocio, sino que 
+ha actuado como un recurso de apoyo para optimizar nuestros tiempos y aumentar el alcance del proyecto sin comprometer la calidad de este.
+
+La integración de la IA en nuestro flujo de trabajo se ha estructurado de la siguiente manera:
+
+\paragraph{Investigación y adopción de buenas prácticas:} En las fases de exploración técnica, la IA se utilizó como un motor de búsqueda. 
+Ante la necesidad de implementar nuevas funcionalidades o integrar herramientas desconocidas, recurrimos a ella para evaluar diferentes alternativas, 
+comprender sus enfoques y asimilar buenas prácticas. Esto nos permitió filtrar grandes volúmenes de documentación de manera 
+eficiente, facilitando una toma de decisiones más informada y acelerando la curva de aprendizaje.
+
+\paragraph{Automatización de tareas repetitivas y reducción de carga cognitiva:}
+En el desarrollo del código de nuestro proyecto, nos hemos encontrado con muchas fases de repetición de código repetitivo que no aportan valor innovador . 
+Nuestra norma de uso consistió en que, una vez que la arquitectura, el diseño o la implementación de una funcionalidad base habían sido definidos, 
+validados y programados manualmente al menos una vez por el equipo, utilizábamos la IA para replicar y adaptar estos patrones en otros componentes similares. 
+Al delegar este trabajo de repetición mecánica, pudimos redirigir nuestra concentración hacia tareas críticas, dedicando mucho más tiempo y esfuerzo a la 
+revisión exhaustiva, el control de calidad y la optimización del código final.
