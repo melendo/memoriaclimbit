@@ -1,20 +1,132 @@
-\chapter{Integración Continua, Despliegue y DevOps (CI/CD)}
+\chapter{Integración Continua, Despliegue y DevOps}
 \label{cap:cicd}
 
-En este capítulo se resume cómo se automatiza la entrega del software y cómo se preparan los distintos entornos del proyecto.
+En este capítulo explicamos cómo se ha automatizado la entrega de software y el despiegue de la infraestructura para los diferentes 
+entornos de \textit{ClimbIt}. Se han empleado metodologías de Integración Continua (CI) y Despliegue Continuo 
+(CD) para revisar cada cambio nuevo en el código y de esta manera se pueda publicar de manera segura.
 
-\section{Diseño del Pipeline de CI/CD}
+\section{Diseño la Integración Continua}
 
-Se describen las etapas del pipeline, sus validaciones y su finalidad dentro del ciclo de entrega.
+La integración continua es una práctica que permite fusionar nuevo código desarrollado dentro de producción de forma segura y eficiente. 
+En \textit{ClimbIt} se han implementado dos mecanismos para permitir la integración continua del código.
+
+\subsection{Calidad de Código y Validación Pre-commits}
+
+Antes de subir el código al repositorio remoto, se realiza una primera revisión del código en local para asegurar que cumple con las 
+normas establecidas del proyecto, para ello usamos las siguientes herramientas:
+
+\begin{itemize}
+    \item \textbf{Formateo automático con Prettier:} Usamos \textbf{Prettier} para que todo el código desarrollado tenga el mismo estilo visual. 
+    Se encarga automáticamente de poner puntos y coma al final de las lineas, usar comillas dobles o evitar que las líneas de texto sean demasiado 
+    largas.
+    
+    \item \textbf{Revisión de errores con ESLint:} \textbf{ESLint} es una herramienta que notifica si se estan cometiendo errores de lógica o 
+    usando malas prácticas al programar en \textit{Javascript}, \textit{Typescript} o \textit{React}. Se ha configurado desactivando alertas 
+    innecesarias y avisándo si se crean variables que luego no se referencian.
+    
+    \item \textbf{Automatización de los pre-commits con Husky:} Usamos una herramienta llamada \textbf{Husky} para configurar unos disparadores 
+    (\textit{hooks}) de Git que obligan al código a pasar por Prettier y ESLint justo antes de que el programador realice un commit de los cambios. 
+    Si el código falla en la validación de Prettier o EsLint, Husky bloquea el guardado, asegurando de que solo código de buena calidad 
+    se sube al repositorio.
+\end{itemize}
+
+\subsection{Workflow de Integración (ClimbIt-CI)}
+
+Una vez los cambios han pasado las validaciones locales y se suben a GitHub, al crearse una \textit{Pull Request} a una de las ramas principales
+(\texttt{main} o \texttt{develop}) mediante GitHub actions se ejecuta la pipeline (\textit{ClimbIt-CI}) que realiza las siguientes pasos: 
+
+\begin{itemize}
+    \item \textbf{Creación del entorno:} Se crea en un servidor de GitHub un entorno temporal con la base de datos \textit{PostgreSQL} exclusivamente 
+    para hacer las pruebas.
+    \item \textbf{Instalación de dependencias:} Dentro del sistema se ejecuta el comando \texttt{npm ci} para descargar exactamente las mismas 
+    librerías que necesita el proyecto.
+    \item \textbf{Pruebas de Integración:} Prepara la base de datos y ejecuta las pruebas automáticas con la herramienta \textit{Jest}
+    para comprobar que toda la lógica de la aplicación y las conexiones (APIs) funcionan correctamente.
+\end{itemize}
 
 \section{Entornos de desarrollo, preproducción y producción}
 
-Se diferencian los entornos utilizados y el propósito de cada uno.
+Para poder desarrollar de forma ágil y segura, se ha dividido el proyecto en tres entornos distintos:
+
+\begin{itemize}
+    \item \textbf{Entorno de Desarrollo Local:} Se trata del entorno de desarrolla local en el que los cambios se visualizan al 
+    instante (\textit{Hot Reload}). Solo de ejecuta en contenedores de \textit{Docker} la base de datos \textit{PostgreSQL} y su panel de control 
+    (\textit{pgAdmin}). El \textit{frontend} y \textit{backend} se ejecuta localmente con el comando \texttt{npm run dev}.
+    
+    \item \textbf{Entorno de Preproducción (\texttt{dev.climbit.es}):} Se ejecuta en un \textit{self-hosted runner} a través GitHub que se define más 
+    adelante. Este entorno tiene la finalidad de validar el funcionamiento de los cambios en un servidor real antes de publicarlos 
+    en producción (se ejecuta bajo el proyecto \texttt{climbit\_dev}).
+    
+    \item \textbf{Entorno de Producción (\texttt{app.climbit.es}):} También se ejecuta en un \textit{self-hosted runner} a través GitHub y se 
+    trata la versión final, estable y pública de la aplicación, que es la que usan los usuarios finales. Se ejecuta bajo 
+    \texttt{climbit\_prod} Es accesible desde cualquier navegador a traves de \footnote{https://app.climbit.es/}.
+\end{itemize}
 
 \section{Despliegue de la infraestructura}
 
-Se explica la preparación y publicación de la infraestructura necesaria para ejecutar la solución.
+Para publicar \textit{ClimbIt}, tomamos la decisión no usar servidores \textit{Cloud} ya que realizandolo localmente tenemos un
+control total sobre la información y además nos ayuda a ahorrar costes. Para ello se ha montado un servidor (\textit{self-hosted}) que se puede
+utilizar mediante GitHub actions.
+
+\subsection{Orquestación mediante Contenedores}
+
+Tanto el entorno de preproducción como el de desarrollo se organizan usando \textit{Docker Compose}. Esta arquitectura agrupa cuatro 
+ contenedores que se conectan entre sí:
+
+\begin{enumerate}
+    \item \textbf{Frontend:} Servidor web que entrega la interfaz de usuario.
+    \item \textbf{Backend:} API Node.js que gestiona la lógica de negocio.
+    \item \textbf{PostgreSQL:} Motor de base de datos relacional.
+    \item \textbf{pgAdmin:} Interfaz gráfica para la administración de la base de datos.
+\end{enumerate}
+
+\subsection{Hardware y Ejecución (Self-hosted Runner)}
+
+Físicamente, nuestro servidor funciona en una \textbf{Raspberry Pi 4 (con 4GB de RAM)} usando el sistema opertativo \textit{PiOS} basado en 
+\textit{Debian}. Dentro del servidor se ha instalado un \textit{GitHub Self-hosted Runner} como servicio. Se trata de un programa que espera continuamente
+órdenes de despliegue automático desde GitHub. Cuando recibe la orden, la Raspberry Pi vuelve a montar la aplicación y le asigna los puertos 
+correctos (el puerto 80 para producción y el 81 para preproducción) de forma automática y segura.
+
+\subsection{Exposición Segura y Cifrado: Cloudflare Zero Trust}
+
+Para acceder al servidor por internet sin poner en peligro nuestra red wifi del domicilio, decidimos usar un túnel seguro 
+llamado \textbf{Cloudflare Zero Trust}. Este es sistema crea una conexión directa y protegida (\textit{tunnel}) desde las direcciones de internet (\texttt{app.climbit.es} 
+y \texttt{dev.climbit.es}) en los servidores de CloudFlare hasta nuestra Raspberry Pi.
+
+Toda la información viaja encriptada usando el protocolo\textbf{HTTPS} y Cloudflare se encarga automáticamente de gestionar los certificados de 
+seguridad (\textbf{certificados SSL/TLS}) en sus propios servidores. De esta forma, se garantiza la seguridad de los datos de los usuarios 
+sin tener que lidiar con configuraciones de seguridad ni tener que abrir puertos.
 
 \section{Empaquetado y Subida a Google Play}
 
-Se documenta el proceso de empaquetado de la aplicación móvil y su preparación para distribución.
+Aunque \textit{ClimbIt} este construida como una página web progresiva (PWA), decidimos subirla también a la Play Store de Android, debido 
+a que el proceso de instalación resultaba lioso para perfiles de bajo nivel tecnológico y subiendola a la play store se reduce ese rozamiento.
+
+\subsection{Tecnología Trusted Web Activity (TWA) y Bubblewrap}
+
+Para transformar una aplicación web en un formato que acepte Android (.aab), usamos un programa llamado 
+\textbf{\textit{Bubblewrap}} desarrollado por Google. Esta herramienta envuelve nuestra web usando una tecnología llamada 
+\textit{Trusted Web Activity} (TWA) y gracias a esto, la aplicación se asimila a cualquier otra aplicación nativa instalada en el móvil, 
+aunque por dentro sigue funcionando conectada a nuestro servidor. Tiene la ventaja de que cualquier cambio que hagamos en la web se actualiza al 
+instante en la aplicación del móvil.
+
+\subsection{Configuración de Verificación y Requisitos Legales}
+
+Para poder publicar en Google Play completamos los siguientes pasos técnicos y legales:
+\begin{itemize}
+    \item \textbf{Verificación del dominio (\textit{assetlinks.json}):} Se configuro en la ruta (\texttt{.well-known/assetlinks.json}) el 
+    envio de información para demostrar a Google que la web es nuestra. Esto permite que el móvil 
+    confíe en la aplicación, y no aparezca la barra de búsqueda del navegador y muestre la \textit{app} en pantalla completa.
+    \item \textbf{Política de Privacidad:} Redactamos y publicamos una página explicando cómo tratamos los datos ya que es un requisito para subir
+    aplicaciones en Google Play. Para ello se utilizo una plantilla de la página iubenda como se ve en \footnote{https://www.iubenda.com/privacy-policy/86624965}.
+    \item \textbf{Manifiesto de Aplicación Web (\textit{manifest.json}):} Se configuroó este archivo con los iconos, colores y 
+    datos de la aplicación para que, al instalarla, se integre visualmente en cualquier dispositivo Android.
+    \item \textbf{Configuración de el perfil de la aplicación:} Además de esto para la tienda se tuvo que crear una descripción, banner, formulario
+    de eliminación de datos y capturas en dispositivos para la tienda.
+\end{itemize}
+
+\subsection{Fase de Lanzamiento: Prueba Cerrada}
+
+ Actualmente \textit{ClimbIt} está en la fase de \textbf{Prueba Cerrada} dentro de Google Play Console, por lo que solo un 
+grupo de \textit{testers} tienen acceso para probarla. Esto permite ver cómo funciona en diferentes móviles y 
+asegurarnos de que toda la tecnología PWA y TWA responde correctamente antes de lanzarla para todos los usuarios.
