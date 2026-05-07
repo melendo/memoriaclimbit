@@ -193,46 +193,65 @@ la viabilidad, rendimiento y una correcta experiencia de usuario:
 
 \section{Alcance de las versiones}
 
-En este apartado definimos las funcionalidades implementadas en cada iteración del proyecto, reflejando la evolución de la aplicación desde su primer prototipo hasta su fase de mantenimiento post-lanzamiento, de acuerdo con el registro de cambios (\textit{changelog}) establecido.
+En este apartado se definen las funcionalidades implementadas en cada versión del proyecto, reflejando la evolución de la aplicación desde 
+el prototipo hasta su estado actual.
 
 \subsection{Requisitos del prototipo (v.0.1.0)}
 
-Esta primera versión estableció la base funcional y arquitectónica del sistema, permitiendo un flujo de uso básico y testeable para el usuario escalador, junto con la preparación de la infraestructura técnica:
+Esta fue la primera versión y se estableció la base funciona del sistema, permitiendo un flujo básico para el escalador, junto con la 
+preparación de la infraestructura técnica:
 
 \begin{itemize}
-    \item \textbf{Autenticación y Perfil:} Implementación del inicio y cierre de sesión, registro mediante correo electrónico y visualización de la información básica del usuario.
-    \item \textbf{Gestión de Rocódromos:} Desarrollo de un buscador global de centros, gestión de suscripciones (suscribirse y desuscribirse), listado rápido de ``Mis Rocódromos'' y navegación básica por las zonas del muro.
-    \item \textbf{Interacción con Rutas:} Capacidad para listar rutas por zona, consultar su información detallada y actualizar el estado de escalada (flash, completado y proyecto).
-    \item \textbf{Infraestructura Técnica:} Configuración de un entorno robusto mediante contenedores (Docker), despliegue continuo (CI/CD) con GitHub Actions y creación de entornos aislados para desarrollo y producción.
+    \item \textbf{Autenticación y Perfil:} Implementación del inicio y cierre de sesión, registro mediante correo electrónico y visualización 
+    de la información básica del usuario.
+    \item \textbf{Gestión de Rocódromos:} Desarrollo de un buscador de rocódromos, gestión de suscripciones (suscribirse y desuscribirse), 
+    y navegación básica por las zonas.
+    \item \textbf{Interacción con Rutas:} Funcionalidad de listar rutas por zona, consultar su información detallada y actualizar el estado de 
+    escalada (flash, completado y proyecto).
+    \item \textbf{Infraestructura Técnica:} Configuración de un entorno mediante contenedores (Docker), despliegue continuo (CI/CD) 
+    con GitHub Actions y creación de entornos para preproducción y producción.
 \end{itemize}
 
-\subsection{Evolución iterativa y versiones intermedias (v.0.2.0 - v.0.2.2)}
+\subsection{Versiones intermedias (v.0.2.0 - v.0.2.2)}
 
-Durante estas iteraciones intermedias, el desarrollo se centró en asentar las herramientas para el rol de Gestor de Rocódromo, enriquecer la experiencia de usuario y optimizar el rendimiento en dispositivos móviles:
+Durante estas iteraciones intermedias, el desarrollo se centró implementar funcionalidades para el rol de Gestor de Rocódromo, enriquecer la 
+experiencia de usuario y optimizar el rendimiento en dispositivos móviles:
 
 \begin{itemize}
-    \item \textbf{Personalización y Estadísticas:} Se habilitó la edición avanzada del perfil (apodo, descripción y selección de avatar desde una galería). Además, se implementó un sistema de visualización de estadísticas que incluye el resumen global, actividad mensual con mapas de calor y distribución por tipos de ruta y dificultad.
-    \item \textbf{Herramientas para Gestores:} Se dotó de la capacidad para subir y actualizar la información del rocódromo, así como definir sus escalas de dificultad.
-    \item \textbf{Gestión Dinámica de Rutas:} Se integraron mapas dinámicos interactivos por zona. Para las rutas, se completaron las operaciones de creación, edición y borrado lógico, incorporando validaciones de coordenadas, soporte para captura o subida de imágenes y un sistema de valoración por estrellas.
-    \item \textbf{Optimización Móvil (PWA):} Se configuró la aplicación como \textit{Progressive Web App} (PWA) instalable, optimizando la carga diferida de imágenes e implementando modos de lectura sin conexión y una interfaz táctil adaptada (\textit{Mobile First}).
+    \item \textbf{Personalización y Estadísticas:} Se implemento la edición avanzada del perfil (apodo, descripción y foto de perfil entre predefinidas). 
+    Además, se implementó un sistema de visualización de estadísticas que incluye el resumen global, actividad mensual con mapas de 
+    calor y estadísticas de distribución por tipos de ruta y dificultad.
+    \item \textbf{Herramientas para Gestores:} Se desarrollo la capacidad para subir y actualizar la información del rocódromo, así como definir sus 
+    escalas de dificultad.
+    \item \textbf{Gestión Dinámica de Rutas:} Se diseñaron y desarrollaron mapas dinámicos interactivos por zona. Para las rutas, se completaron 
+    las funcionalidades de creación, edición, borrado lógico, y un sistema de valoración por estrellas.
+    \item \textbf{Optimización Móvil (PWA):} Se configuró la aplicación como \textit{Progressive Web App} (PWA) instalable, optimizando la carga 
+    de imágenes e implementando modos de lectura sin conexión.
 \end{itemize}
 
 \subsection{Requisitos del MVP (v.1.0.0)}
 
-El Producto Mínimo Viable (MVP) consolidó la plataforma integrando el factor social, fundamental para la retención, y refactorizando el sistema para garantizar la accesibilidad en entornos de baja conectividad:
+El Producto Mínimo Viable (MVP) se completo añadiendo el factor social, y refactorizando el sistema para garantizar la accesibilidad en entornos 
+de baja conectividad:
 
 \begin{itemize}
-    \item \textbf{Funcionalidades Sociales:} Incorporación de un sistema de amistades que permite buscar usuarios, enviar o recibir solicitudes y gestionar la lista de amigos. Se habilitó la visualización de perfiles públicos y se integró un \textit{Leaderboard} (tabla de clasificación) basado en rutas completadas y días de actividad mensual.
-    \item \textbf{Usabilidad y Retención:} Implementación de un tutorial interactivo de \textit{onboarding} tras el registro, validación en tiempo real para correos y apodos, y visualización de fotografías de las rutas a pantalla completa.
-    \item \textbf{Arquitectura \textit{Offline-First}:} Reestructuración de la base de la aplicación para priorizar el funcionamiento sin conexión, asegurando que los escaladores puedan registrar su progreso en rocódromos con mala cobertura de red.
+    \item \textbf{Funcionalidades Sociales:} Incorporación de un sistema de amistades que permite buscar usuarios, enviar o recibir solicitudes y 
+    gestionar la lista de amigos. Se habilitó la visualización de perfiles públicos y se integró un \textit{Leaderboard} (tabla de clasificación) 
+    basado en rutas completadas y días activos en el mes.
+    \item \textbf{Usabilidad y Retención:} Implementación de un tutorial interactivo de \textit{onboarding} tras el registro o en el menú del perfil, 
+    validación en tiempo real para correos y apodos en el registro, y visualización de las imágenes de las rutas a pantalla completa.
+    \item \textbf{Arquitectura \textit{Offline-First}:} Reestructuración del \textit{cacheo} de la aplicación para priorizar el funcionamiento sin conexión.
 \end{itemize}
 
 \subsection{Mantenimiento y mejoras post-lanzamiento (v.1.0.1)}
 
-Tras el despliegue del MVP, se publicó un parche menor centrado en solventar errores críticos, añadir políticas legales y mejorar detalles específicos de la interfaz:
+Tras el despliegue del MVP, se publicó un parche centrado para arreglar errores, añadir política de privacidad y mejorar detalles 
+específicos de la interfaz:
 
 \begin{itemize}
-    \item \textbf{Correcciones Funcionales:} Solución de bloqueos en la interfaz táctil de mapas dinámicos en dispositivos iOS y reparación del fallo que impedía la correcta actualización de las listas de amigos y solicitudes sociales.
-    \item \textbf{Transparencia:} Inclusión de una sección de Política de Privacidad accesible directamente desde el perfil del usuario.
-    \item \textbf{Ajustes Visuales:} Inclusión de nuevos colores para el etiquetado de rutas (azul celeste) y rediseño de las tarjetas del \textit{Leaderboard} para una visualización más clara de las métricas competitivas.
+    \item \textbf{Correcciones Funcionales:} Solución de fallo en la interfaz de mapas dinámicos en dispositivos iOS y reparación del 
+    fallo que impedía actualización de las listas de amigos y solicitudes de amistad.
+    \item \textbf{Transparencia:} Añadida de una sección de Política de Privacidad accesible desde el perfil del usuario.
+    \item \textbf{Ajustes Visuales:} Inclusión de nuevos colores para el etiquetado de rutas (azul celeste) y rediseño en las tarjetas del 
+    \textit{Leaderboard} para una visualización más clara.
 \end{itemize}
