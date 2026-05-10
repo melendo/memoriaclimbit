@@ -3,11 +3,494 @@
 
 Este capítulo documenta la construcción práctica de la solución y las decisiones tomadas durante su desarrollo.
 
-\section{Desarrollo del Backend}
+\section{Implementación del backend}
+\label{sec:implementacion-backend}
 
-Se describen los módulos principales del servidor, sus responsabilidades y la lógica de negocio implementada.
+Para cumplir con los requisitos que se marcaron para el proyecto, el backend se desarrolló como una API REST 
+que encapsule la lógica de negocio necesaria para gestionar los recursos principales de la aplicación y servirlos al frontend.
 
-\section{Desarrollo del Frontend}
+La implementación se organiza de forma que las responsabilidades estén claramente separadas gracias a la decisión 
+de seguir una arquitectura hexagonal detallada en el capítulo de diseño. 
+
+El alcance tratado en esta sección se limita a la implementación funcional y estructural del backend.
+
+\subsection{Punto de entrada y ciclo de vida del servidor}
+
+El archivo \textit{index.js} ubicado en la raíz de la carpeta \textit{apps/backend} actúa como punto de partida de la 
+aplicación. Su función principal es la de inicializar y arrancar el servidor Express en el puerto especificado por la 
+variable de entorno \textit{PORT} (que por defecto es 3000).
+
+La secuencia de inicio se divide en los siguientes pasos:
+
+\begin{enumerate}
+  \item \textbf{Carga de la aplicación}: se importa la instancia de Express desde server.js situado en 
+  \textit{src/interfaces/http/server.js}.
+  
+  \item \textbf{Conexión a dependencias}: la aplicación llama a \textit{app.conectar()}, que inicializa la conexión 
+  a la base de datos y prepara los recursos necesarios (inyección de dependencias del contenedor, modelos de Sequelize, etc.).
+  
+  \item \textbf{Puesta en escucha}: una vez la conexión es exitosa, el servidor se pone en escucha en el puerto 
+  configurado mediante \textit{app.listen()}.
+  
+  \item \textbf{Manejo de errores}: en caso de fallo en cualquiera de los pasos anteriores (error de conexión a BD, fallos de 
+  configuración), se captura la excepción, se registra en la consola y se termina el proceso con 
+  \textit{process.exit(1)}, señalizando el error.
+\end{enumerate}
+
+Este diseño asíncrono permite que la app espere a que todas las dependencias estén preparadas antes de aceptar peticiones. 
+Dentro de nuestros entornos con docker, el contenedor está configurado para esperar a que el servicio de base de datos esté 
+preparado antes de ejecutar este script de arranque, garantizando que no se intente conectar a una BD que aún no está lista.
+
+\subsection{Arquitectura por capas}
+
+La implementación del backend sigue un enfoque de arquitectura por capas, que favorece la separación de responsabilidades, 
+facilita el testing y mejora la mantenibilidad del código. Cada capa tiene un rol específico y bien delimitado:
+
+\subsubsection{\textit{Domain} — Entidades y Contratos}
+
+La capa de dominio contiene las definiciones de las entidades de negocio y las interfaces de los repositorios. 
+Esta capa es independiente de cualquier tecnología específica y sin dependencias externas. Define qué es un y como se
+valida un escalador, un rocódromo, etc., así como las operaciones que se pueden realizar sobre ellas a través de 
+las interfaces de repositorio. 
+
+Por ejemplo, el repositorio de escaladores define un contrato que especifica que debe existir un método 
+\textit{encontrarPorCorreo(correo)} para buscar un escalador por correo, o \textit{encontrarPorApodo(apodo)} para búsquedas 
+por apodo. La implementación concreta de estos métodos la proporciona la capa de infraestructura, pero el contrato se define
+en esta capa.
+
+\subsubsection{\textit{Application} — Casos de Uso}
+
+Los casos de uso encapsulan toda la lógica de negocio de la aplicación. Cada caso de uso representa una acción que el usuario 
+puede realizar como crear un escalador, autenticarse, suscribirse a un rocódromo, enviar una solicitud de amistad... Los 
+casos de uso reciben repositorios y servicios a través de inyección de dependencias, realizan validaciones y orquestación, 
+y devuelven resultados o lanzan excepciones, que se devuelven al controlador, que será el encargado de manejar la respuesta.
+
+Por ejemplo, el caso de uso \textit{src/aplication/escaladores/crearEscalador.js}
+recibe el repositorio de escaladores y el servicio de hash de contraseñas. El caso de uso se encarga de validar que el 
+correo sea único realizando una consulta a la bd a través del repositorio, genera un hash de la contraseña usando el servicio
+\textit{/infrastructure/security/passwordService.js},
+crea una entidad escalador y delega la persistencia al repositorio invocando el método correspondiente, en este caso
+\textit{escaladorRepository.crear(nuevoEscalador)}. Si algo falla, lanza una 
+excepción descriptiva que el controlador captura y transforma en una respuesta HTTP adecuada.
+
+\subsubsection{\textit{Infrastructure} — Implementaciones Concretas}
+
+La capa de infraestructura contiene las implementaciones concretas de los repositorios, también llamados adaptadores. Estos son
+los encargados de actuar sobre la base de datos usando Sequelize. En esta capa también se ubican servicios de utilidad, como
+hashing de contraseñas mediante bcryptjs y la generación de JWT a través de jsonwebtoken, y el contenedor de inyección de 
+dependencias (\texttt{container.js}). 
+
+Aquí es donde se instancian los objetos, se conectan entre sí (un caso de uso recibe un repositorio y un servicio inyectados) 
+y se exportan para su uso en las rutas. Esta capa es la que más cambiaría en caso de necesitar una arquitectura diferente: 
+p. ej. cambiar de Sequelize a TypeORM, o de Postgres a MongoDB. Los casos de uso no cambiarían, solo sus dependencias 
+inyectadas.
+
+Un ejemplo: \texttt{EscaladorRepositoryPostgres} implementa la interfaz del dominio y usa Sequelize para ejecutar queries 
+para persistir los datos en la bd o leerlos. 
+Cuando el caso de uso llama a \textit{encontrarPorCorreo(correo)}, este repositorio traduce la operación a una consulta 
+Sequelize, que a su vez la traduce a una sentencia SQL y devuelve el escalador encontrado o \textit{null} si no existe.
+
+\subsubsection{\textit{Interfaces} — Adaptadores HTTP}
+
+La capa de interfaz expone la aplicación mediante endpoints HTTP y está compuesta por rutas y controladores. En esta capa,
+el router valida la petición, mientras que el controlador invoca el caso de uso y traduce su resultado
+a una respuesta HTTP.
+
+El flujo general de una petición es:
+
+\begin{enumerate}
+  \item El router recibe la petición HTTP con los parámetros (body, query, params).
+  \item Valida los parámetros con \texttt{express-validator} y el resto de middlewares de la ruta.
+  \item Redirige al controlador.
+  \item Invoca el caso de uso correspondiente con los datos validados.
+  \item Maneja excepciones del caso de uso y las traduce a códigos HTTP.
+  \item Retorna el resultado serializado a JSON.
+\end{enumerate}
+
+Por ejemplo, el router \textit{escaladorRouter.js} procesa las llamadas a \textit{POST /escaladores/create}. Esta petición 
+contiene el payload con los datos del nuevo escalador. Tras la validación con \textit{express-validator}, la petición se
+deriva al controlador \textit{EscaladorController}, que ejecuta \texttt{crearEscaladorUseCase.execute(datos)}. El caso de
+uso aplica la lógica de negocio, crea el escalador y genera el token JWT de autenticación. Finalmente, el controlador
+retorna \textit{201 Created} con el token, o un código de error 4xx/5xx si falla el proceso.
+
+\paragraph{\textbf{Flujo de la petición HTTP Crear Escalador:}}
+
+\texttt{POST /escaladores/create} payload:
+\verb|{correo:"user@ci.com", apodo:"John", contrasena:"Password123"}|
+
+\begin{enumerate}
+  \item El cliente HTTP envía la petición.
+  \item El servidor recibe la petición en la capa de \textit{interfaces}: el router valida los parámetros con las validaciones
+  definidas en el validador de la ruta. Si la Validación falla se retorna un error 400 con detalles del error (la contraseña 
+  debe incluir al menos 1 número, etc.). Si la validación es exitosa, se redirecciona al controlador.
+  \item El controlador invoca el caso de uso correspondiente para crear el escalador: \texttt{CrearEscaladorUseCase.execute(\{correo, apodo, contraseña\})}.
+  \item El caso de uso (capa \textit{application}) ejecuta la lógica de negocio: verifica que el correo sea único consultando 
+  el repositorio; si existe, lanza excepción. Se valida que el apodo también sea único. En caso de no serlo, 
+  lanza una excepción. Si no existe, un usuario registrado con ese apodo y ese correo, genera hash de contraseña usando el servicio y
+  crea una entidad escalador con los datos validados.
+  \item El caso de uso llama a la función concreta del repositorio para crear un nuevo escalador: \texttt{escaladorRepository.create(nuevoEscalador)}.
+  \item El repositorio (capa \textit{infrastructure}) traduce a una operación Sequelize: crea un nuevo registro en la 
+  tabla de escaladores en Postgres.
+  \item Si la inserción del escalador fue exitosa, retorna al caso de uso los datos del escalador creado, y este delega de nuevo
+  en el servicio correspondiente la generación del JWT. Si todo sale como se espera, se retorna el token al controlador.
+  \item El controlador retorna un código \textit{201 Created} con el token generado o la procesa las excepciones lanzadas para retornar
+  un error con un mensaje descriptivo.
+\end{enumerate}
+
+Esta arquitectura proporciona flexibilidad (cambiar tecnologías de BD sin tocar casos de uso), testabilidad (mockear 
+repositorios en tests de casos de uso) y un claro mapeo entre concepto de negocio y código fuente.
+
+\subsection{Composición e inyección de dependencias}
+
+El contenedor de inyección de dependencias se encuentra implementado en el archivo \textit{src/infrastructure/container.js} y es 
+el punto central donde se instancian todos los objetos de la aplicación. En él se inyectan y se conectan las dependencias 
+necesarias. Este patrón permite que los 
+casos de uso y controladores no tengan que crear directamente sus dependencias, sino que las reciben ya construidas como
+se comentó en la sección de decisiones de diseño.
+
+\paragraph{\textbf{Estructura del contenedor:}}
+
+El contenedor es una función asíncrona que:
+
+\begin{enumerate}
+  \item Espera a que se carguen los modelos de Sequelize desde la base de datos.
+  \item Instancia los repositorios, inyectándoles el modelo correspondiente:\\ \texttt{new EscaladorRepositoryPostgres(db.Escalador)}.
+  \item Instancia los otros servicios de infraestructura: \texttt{passwordService}, \texttt{tokenService}.
+  \item Instancia cada caso de uso, inyectándole sus dependencias:\\ \texttt{new CrearEscalador(escaladorRepository, passwordService, tokenService)}.
+  \item Agrupa los casos de uso en objetos por dominio (escaladores, pistas, rocodromos, amistades).
+  \item Instancia los controladores, inyectándoles los casos de uso agrupados.
+  \item Exporta todo lo necesario para que las rutas accedan a los controladores.
+\end{enumerate}
+
+\textbf{Ventajas de este enfoque:}
+
+\begin{itemize}
+  \item \textbf{Testabilidad}: en tests unitarios, se puede pasar un mock del repositorio al caso de uso, sin tocar la base de datos real.
+  \item \textbf{Flexibilidad}:  en caso de ser necesario cambiar la implementación del repositorio a, por ejemplo, otro SGBDR, únicamente 
+  se requiere cambios en el contenedor y en la clase la implementación concreta del repositorio, no en los casos de uso.
+  \item \textbf{Centralización}: todas las dependencias e instancias se crean en un único lugar, facilitando el mantenimiento y 
+  la visualización de dependencias.
+\end{itemize}
+
+\textbf{Ejemplo de inyección:}
+
+Un controlador recibe el caso de uso inyectado: (sustituir por imagenes con polacode)
+
+\begin{verbatim}
+const escaladorController = new EscaladorController(
+  escaladorUseCases
+);
+\end{verbatim}
+
+El controlador invoca el caso de uso pasándole datos:
+
+\begin{verbatim}
+async crear(req, res) {
+  const resultado = 
+    await this.useCases.crear.ejecutar(req.body);
+  res.status(201).json(resultado);
+}
+\end{verbatim}
+
+\subsection{Interfaces HTTP (controladores y rutas)}
+
+Los controladores actúan como adaptadores entre el protocolo HTTP y los casos de uso de negocio. Su responsabilidad es 
+validar las peticiones entrantes, invocar el caso de uso, y transformar el resultado en una respuesta HTTP. La recepción y 
+respuesta de peticiones HTTP sigue el siguiente flujo:
+
+\begin{enumerate}
+  \item El router recibe la petición HTTP con los parámetros (body, query, params).
+  \item Valida los parámetros usando \texttt{express-validator} y el resto de middlewares implicados en la petición.
+  \item Redirige al controlador.
+  \item Invoca el caso de uso correspondiente con los datos validados.
+  \item Maneja excepciones del caso de uso y traduce a códigos HTTP:
+  \item Retorna el resultado serializado a JSON.
+\end{enumerate}
+
+\subsection{Manejo de errores}
+
+La gestión de errores en ClimbIt implementa una jerarquía personalizada de excepciones que permite traducir sin fricción 
+los errores técnicos de capas inferiores, como pueden ser errores de base de datos o validación, a errores de dominio 
+que finalmente se transforman a respuestas HTTP coherentes.
+
+\subsubsection*{Jerarquía de errores personalizados}
+
+Se define una clase base \texttt{AppError} que extiende de la clase \texttt{Error} nativa de JavaScript. Esta clase encapsula:
+
+\begin{itemize}
+  \item \textbf{statusCode}: código HTTP a retornar (400, 401, 403, 404, 409, 500).
+  \item \textbf{code}: identificador de error semántico (p. ej. \texttt{NOT\_FOUND}, 
+  \texttt{CONFLICT}, \texttt{VALIDATION\_ERROR}).
+  \item \textbf{message}: descripción legible para el cliente.
+  \item \textbf{isOperational}: indica si es un error esperado (true) o un bug del sistema (false).
+  \item \textbf{cause}: referencia al error original para debugging (útil en desarrollo).
+\end{itemize}
+
+A partir de \texttt{AppError}, se definen subclases específicas:
+
+\begin{itemize}
+  \item \textbf{BadRequestError}: 400. Parámetros de entrada inválidos.
+  \item \textbf{ValidationError}: 422. Validación de datos fallida.
+  \item \textbf{AuthenticationError}: 401. Token JWT inválido o expirado.
+  \item \textbf{AuthorizationError}: 403. Rol o permisos insuficientes.
+  \item \textbf{NotFoundError}: 404. Recurso no existe.
+  \item \textbf{ConflictError}: 409. Violación de regla de negocio (correo duplicado, etc.).
+  \item \textbf{InternalServerError}: 500. Error inesperado (isOperational=false).
+\end{itemize}
+
+\subsubsection*{Patrón Adapter: Traducción de errores de repositorio}
+
+Los repositorios interactúan con la bd a través de Sequelize, que lanza excepciones específicas como 
+\texttt{SequelizeUniqueConstraintError} o \texttt{SequelizeValidationError}. Estas excepciones técnicas no 
+son de utilidad a los casos de uso o al cliente, por lo que se traducen mediante un adaptador: la función 
+\texttt{mapRepositoryError()} localizada en \texttt{infrastructure/repositories/dbErrorHandler.js}. Esta función:
+
+\begin{enumerate}
+  \item Recibe el error original lanzado por Sequelize.
+  \item Detecta el tipo de error (violación de restricción única, validación, etc.) inspeccionando su nombre y mensaje.
+  \item Traduce a la clase \texttt{AppError} correspondiente:
+    \begin{itemize}
+      \item Sequelize UNIQUE CONSTRAINT → \texttt{ConflictError} (409).
+      \item Sequelize VALIDATION ERROR → \texttt{ValidationError} (422).
+      \item Otros errores BD → \texttt{InternalServerError} (500).
+    \end{itemize}
+  \item Preserva el error original en la propiedad \texttt{cause} para trazabilidad en logs.
+  \item Retorna la excepción de dominio mapeada.
+\end{enumerate}
+
+\subsubsection*{Middleware de manejo de errores HTTP}
+
+En el archivo \texttt{src/interfaces/http/server.js} se han definido dos middlewares de captura de errores 
+que se ejecutan secuencialmente:
+
+\textbf{Primer middleware: Errores de Multer y Upload}
+
+Intercepta errores específicos del procesamiento de archivos:
+
+\begin{itemize}
+  \item \texttt{MulterError} con code \texttt{LIMIT\_FILE\_SIZE}: archivo excede tamaño máximo (413 Payload Too Large).
+  \item Errores de validación de tipo MIME o FFmpeg: retorna 400 o el status definido en el error.
+\end{itemize}
+
+\textbf{Segundo middleware: Manejo genérico de AppError}
+
+Es el punto de salida final donde todos los errores (del negocio, de la BD, etc.) se traducen a respuestas JSON:
+
+\begin{enumerate}
+  \item Detecta si el error es instancia de \texttt{AppError}.
+  \item Si es AppError: extrae su \texttt{statusCode} y \texttt{code}.
+  \item Si no: asume 500 Internal Server Error.
+  \item Construye la respuesta JSON:
+    \begin{verbatim}
+{
+  error: "Mensaje descriptivo",
+  code: "ERROR_CODE"  // solo si es AppError
+}
+    \end{verbatim}
+  \item Devuelve la respuesta con el statusCode correspondiente.
+\end{enumerate}
+
+
+\subsubsection*{Ventajas de este enfoque de manejo de errores:}
+
+\begin{itemize}
+  \item \textbf{Separación de concerns}: Los errores técnicos no contaminan lógica de negocio.
+  \item \textbf{Consistencia}: todas las respuestas de error siguen el mismo formato JSON.
+  \item \textbf{Testabilidad}: se puede mockear mapRepositoryError() en tests para inyectar errores específicos.
+  \item \textbf{Debugging}: se preserva el error original en \texttt{cause} sin exponerlo al cliente.
+  \item \textbf{Escalabilidad}: añadir nuevos tipos de error es trivial: extender AppError y mapear en dbErrorHandler.
+\end{itemize}
+
+\subsection{Autenticación y seguridad}
+
+\textbf{Flujo de autenticación:}
+
+La autenticación en la aplicación se implementa mediante JWT (JSON Web Tokens). El flujo es:
+
+\begin{enumerate}
+  \item El usuario se registra proporcionando correo, contraseña y datos de perfil.
+  \item El caso de uso \texttt{CrearEscalador} valida que el correo sea único.
+  \item La contraseña se hashea usando \texttt{bcryptjs}.
+  \item Se almacena el hash (nunca la contraseña en texto plano).
+  \item En la autenticación, el usuario proporciona correo y contraseña.
+  \item El caso de uso \texttt{AutenticarEscalador} recupera el escalador por correo.
+  \item Compara la contraseña proporcionada con el hash almacenado en la base de datos usando \texttt{bcryptjs.compare()}.
+  \item Si coincide, genera un JWT firmado con una clave secreta, incluyendo correo, el apodo y el rol: Escalador, 
+  Admin o Gestor. En caso de ser gestor, se incluye un array con los ids de los rocódromos que gestione.
+  \item El cliente almacena el JWT y lo envía en el header \texttt{Authorization: Bearer <token>} en futuras peticiones.
+  \item Un middleware verifica y decodifica el JWT, adjuntando los datos del usuario a la petición.
+  \item Las rutas protegidas validan que el usuario esté autenticado y tenga el rol necesario para acceder al recurso.
+\end{enumerate}
+
+\textbf{Middleware de autenticación:}
+
+Cada ruta protegida (p. ej. obtener perfil, actualizar datos) valida que exista un JWT válido antes de procesar la petición. 
+Si el token es inválido o expirado, se retorna 401 Unauthorized.
+
+\textbf{Validaciones de entrada:}
+
+Todas las rutas validan los parámetros de entrada usando \texttt{express-validator}:
+
+\begin{itemize}
+  \item \textbf{Correos}: validación de formato de email.
+  \item \textbf{Contraseñas}: longitud mínima, tipos de caracteres...
+  \item \textbf{IDs}: validación de que sean números o UUIDs según el formato esperado.
+  \item \textbf{Archivos}: validación de tipo MIME y tamaño máximo.
+\end{itemize}
+
+Las validaciones fallidas retornan 400 Bad Request con detalles del error.
+
+\textbf{Consideraciones de seguridad:}
+
+\begin{itemize}
+  \item Las contraseñas nunca se almacenan en texto plano.
+  \item Los tokens JWT tienen un tiempo de expiración de 12h para limitar riesgos de compromiso.
+  \item Los secretos (clave de JWT, credenciales de la bd) se almacenan en variables de entorno, nunca en el código.
+  \item Los errores de autenticación no revelan si el correo existe o no, para prevenir enumeración de usuarios.
+\end{itemize}
+
+\subsection{Gestión de archivos y multimedia}
+
+\textbf{Tipos de archivos gestionados:}
+
+La aplicación almacena dos tipos de archivos, svg para los mapas de las zonas y webp para el resto de imágenes. Todas
+las imágenes se almacenan en distintas carpetas dentro del directorio \texttt{/app/backend/uploads/} según la entidad a la que
+pertenecen:
+
+\begin{itemize}
+  \item \textbf{Fotos de perfil}: \texttt{/uploads/fotos\_perfil/}.
+  \item \textbf{Imágenes de pistas}: \texttt{/uploads/imagenes\_pistas/}.
+  \item \textbf{Logos de rocódromos}: \texttt{/uploads/logos\_rocodromos/}.
+  \item \textbf{Mapas de zonas}: \texttt{/uploads/mapas\_zonas/}.
+\end{itemize}
+
+Todas las imágenes son analizadas para validar su tipo real a través de la librería \texttt{file-type}. Una vez validadas
+se convierten al formato WebP utilizando \texttt{FFmpeg}, garantizando una comprensión eficiente que permite reducir su tamaño
+sin perdida de calidad apreciable. Esto se traduce en una mejora de rendimiento a la hora de servir las imágenes y un menor 
+consumo de espacio en disco.
+
+Si el endpoint al que se intenta subir una imagen es \texttt{POST /zonas/:id/mapa}, el flujo cambia. Se valida que el formato 
+sea svg exclusivamente. Cualquier otro formato es rechazado por decisión técnica de negocio. Estos mapas se renderizan en el
+frontend y se requiere que sean vectoriales para mantener su calidad al redimensionarlo para verlo en profundidad. Por ende, 
+estas imágenes tampoco son procesadas por FFmpeg, sino que se almacenan directamente en formato svg después de validar su 
+tipo real con \texttt{file-type}.
+
+\textbf{Validaciones de seguridad en archivos:}
+
+\begin{itemize}
+  \item \textbf{Validación de tipo}: se usa la librería \texttt{file-type} para verificar el MIME actual del archivo, no confiar solo en la extensión.
+  \item \textbf{Límite de tamaño}: previene ataques de negación de servicio (llenar disco).
+  \item \textbf{Nombres sanitizados}: los archivos se renombran con UUID o hash, evitando traversal attacks (\texttt{../../../etc/passwd}).
+  \item \textbf{Almacenamiento seguro}: los archivos se sirven a través de rutas controladas, no directamente del filesystem.
+\end{itemize}
+
+\textbf{Flujo de subida de archivos:}
+
+\begin{enumerate}
+  \item El cliente envía una petición \texttt{multipart/form-data} a uno de los endpoints para subir imágenes a la app
+  incluyendo el archivo en el campo \texttt{foto} del payload y el header \texttt{Authorization: Bearer <token>}.
+    
+  \item La ruta encargada intercepta la petición y ejecuta middlewares de validación:
+    \begin{itemize}
+      \item \texttt{verifyToken()}: valida que el JWT sea válido y no esté expirado.
+      \item \texttt{authorizeRocodromoAccess()}: verifica permisos del usuario, ya que se requiere rol de admin o 
+      gestor según el recurso.
+    \end{itemize}
+  
+  \item El middleware \texttt{uploadImages(...).single('foto')} de Multer intercepta la petición.
+  
+  \item Multer almacena el archivo temporalmente en el directorio configurado con un nombre aleatorio generado usando UUID.  
+    
+  \item Se genera un objeto \texttt{req.file} con propiedades: \texttt{path} (ruta temporal), \texttt{filename} (nombre 
+  del archivo), \texttt{mimetype} (tipo MIME declarado por el cliente), y \texttt{size} (tamaño en bytes).
+    
+  \item El middleware \texttt{validateUploadedFileType()} valida la integridad del archivo:
+    \begin{itemize}
+      \item Detecta la firma real del archivo (magic bytes) usando \texttt{fileTypeFromFile()}, independientemente 
+      de la extensión.
+      \item Verifica que el tipo MIME detectado esté en la lista de permitidos (JPG, JPEG, PNG, WebP).
+      \item Rechaza intentos de spoofing (p. ej. un archivo ejecutable con extensión .jpg).
+    \end{itemize}
+  
+  \item Se añade la propiedad \texttt{detectedMimeType} a \texttt{req.file} con el tipo real detectado.
+  
+  \item El middleware \texttt{processUploadedRasterToWebp()} detecta si el archivo es una imagen raster (JPG, JPEG, PNG o WebP).
+  
+  \item Se ejecuta \texttt{FFmpeg} para convertir la imagen a WebP y eliminar metadatos EXIF por privacidad. 
+  
+  \item Se elimina el archivo original que se almacenó temporalmente.
+  
+  \item El objeto \texttt{req.file} se actualiza con la nueva ruta.
+  
+  \item El controlador recibe la petición y valida que \texttt{req.file} exista; si no, lanza un \texttt{BadRequestError}. 
+  Después construye e invoca al caso de uso correspondiente.
+  
+  \item El caso de uso verifica que la URL no esté vacía y delega la persistencia al repositorio.
+    
+  \item El repositorio ejecuta una sentencia de Sequelize para introducir la nueva imagen a la entidad correspondiente y 
+  retorna el resultado.
+  
+  \item El caso de uso retorna el resultado al controlador.
+  
+  \item El controlador devuelve una respuesta HTTP \texttt{201 Created} con la url de la imagen almacenada.
+  
+  \item El cliente recibe la respuesta y puede acceder a la imagen mediante peticiones GET.
+\end{enumerate}
+
+\subsection{Testing y calidad}
+
+La calidad es uno de los pilares clave que se marcaron para el desarrollo del proyecto. Al trabajar con unos 
+requisitos cambiantes en las iteraciones se quería garantizar la robustez de la aplicación. Por ello, se implementó 
+una estrategia de pruebas en dos niveles: tests unitarios, para probar la lógica de las diferentes capas de forma aislada,
+y test E2E (\textit{end-to-end}) para validar los flujos completos de las peticiones HTTP.
+
+\begin{itemize}
+  
+\item Los \textbf{tests unitarios} validan los casos de uso de forma aislada, usando mocks de los repositorios y de los casos de uso 
+para comprobar lógica de negocio, validaciones, manejo de errores y persistencia sin necesidad de una base de datos real.
+
+
+\item Los \textbf{tests e2e} cubren flujos completos de las funciones reales de la aplicación. 
+Se cubren todos los casos posibles especificados en las Historias de Usuario. Los tests E2E se ejecutan contra bases de datos
+identicas a las de producción gracias a las migraciones de Sequelize. 
+\end{itemize}
+
+Para realizar los test se ha utilizado la librería \texttt{Jest} que permite el uso de mocks y aserciones, perfectamente 
+integrable en la arquitectura implementada. En el caso de los test E2E, se ha utilizado \texttt{supertest} para simular 
+peticiones HTTP a la aplicación y validar las respuestas. 
+
+Para garantizar el nivel de calidad propuesto para el proyecto y eliminar riesgos de errores al refactorizar y añadir funcionalades 
+al proyecto, se estableció una política de cobertura de código mínima del 80\% en líneas, ramas y funciones en todos los archivos,
+excluyendo archivos de configuración, migraciones y modelos de Sequelize. Esta configuración se encuentra en el archivo \texttt{jest.config.js}
+situado en \texttt{apps/backend}.
+
+\subsection{Resumen}
+
+La implementación del backend de ClimbIt se estructura siguiendo principios de arquitectura hexagonal, garantizando 
+separación de responsabilidades, testabilidad y flexibilidad.
+
+\textbf{Puntos fuertes de la implementación:}
+
+\begin{itemize}
+  \item \textbf{Arquitectura por capas}: Domain → Application → Infrastructure, con clara separación de concerns.
+  \item \textbf{Casos de uso encapsulados}: la lógica de negocio está centralizada, facilitando cambios y reutilización.
+  \item \textbf{Inyección de dependencias}: flexibilidad para cambiar implementaciones (repositorios, servicios) sin alterar 
+  casos de uso.
+  \item \textbf{Seguridad}: autenticación por JWT, hashing de contraseñas con bcryptjs, analisis de imagenes con file-type 
+  y validación de acceso a endpoins exhaustiva.
+  \item \textbf{Mejora de rendimiento}: conversión de imágenes a WebP mediante FFmpeg para reducir los tiempos de carga 
+  y el consumo de espacio.
+  \item \textbf{Manejo de errores}: excepciones específicas del negocio traducidas a respuestas HTTP claras.
+  \item \textbf{Testing}: estrategia multicapa con tests unitarios y e2e, umbrales de cobertura del 80\%.
+  \item \textbf{Escalabilidad}: la estructura de carpetas y composición permite añadir nuevos casos de uso, repositorios y 
+  controladores sin refactorización mayor.
+\end{itemize}
+
+
+Esta implementación proporciona una base sólida, mantenible y escalable para la API REST de ClimbIt.
+
+
+\section{Implementación del Frontend}
 
 Se explica la implementación de la interfaz y la integración con los servicios de la aplicación.
 
