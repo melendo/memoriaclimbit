@@ -126,43 +126,40 @@ Se describe cómo se organiza la interfaz de usuario y su comunicación con el b
 \section{Diseño de la Base de Datos}
 
 Como se mencionó anteriormente en la sección de decisiones tecnológicas, la naturaleza de los datos en ClimbIt presentaba 
-relaciones claras y bien definidas entre entidades como escaladores, rocódromos, zonas y rutas, lo que nos llevó a 
-descartar desde el principio las bases de datos no relacionales en favor de un modelo relacional. La estructura jerárquica 
-y las múltiples relaciones muchos-a-muchos entre entidades hacían que un modelo relacional fuese la opción más apropiada 
+relaciones claras y bien definidas entre las diferentes entidades, desglosadas en el siguiente punto. Esto propició que se
+descartara desde el principio las bases de datos no relacionales en favor de un modelo relacional. La estructura jerárquica 
+y las múltiples relaciones muchos-a-muchos, como se representa en la Figura XX, entre entidades hacían que un modelo relacional fuese la opción más apropiada 
 para garantizar integridad referencial, coherencia de datos y facilidad de consultas complejas.
 
-Elegimos PostgreSQL como sistema gestor de bases de datos relacional (SGBDR) debido a su robustez, rendimiento, escalabilidad 
-y su creciente popularidad en el ecosistema de desarrollo. Para facilitar la interacción entre la aplicación y la base de datos, 
-utilizamos Sequelize como ORM, que nos permite trabajar con los modelos de datos de forma orientada a objetos sin necesidad de 
-escribir SQL directamente, proporcionando además una capa adicional de seguridad contra inyecciones SQL y abstrayendo las 
-particularidades específicas de PostgreSQL.
+PostgreSQL fue el sistema gestor de bases de datos relacional (SGBDR) que mejor se adaptaba a los requerimientos del proyecto debido
+a su robustez, rendimiento, escalabilidad y su creciente popularidad en el ecosistema de desarrollo. Para facilitar la interacción 
+entre la aplicación y la base de datos, utilizamos Sequelize como ORM, que nos permite trabajar con los modelos de datos de forma 
+orientada a objetos sin necesidad de escribir SQL directamente, proporcionando además una capa adicional de seguridad contra 
+inyecciones SQL y abstrayendo las particularidades específicas de PostgreSQL.
 
 \subsection{Entidades Principales del Sistema}
 
-El modelo de datos de ClimbIt está compuesto por las siguientes entidades principales:
+Tras el análisis de los datos obtenidos en las capturas de requisitos y el modelado de las Historias de Usuario que se 
+implementarían, el modelo de datos de ClimbIt quedó compuesto por las entidades y relaciones que se pueden ver en
+la Figura XX. Las entidades principales son las siguientes:
+
+{ Figura del modelo E-R }
 
 \begin{itemize}
-    \item \textbf{Escalador:} Representa a los usuarios del sistema, almacenando información de perfil, credenciales de 
-    autenticación y configuración personal.
+    \item \textbf{Escalador:} Representa a los usuarios del sistema. En ella se almacena la información de perfil (apodo, descripción),
+    credenciales de autenticación (email, contraseña) y configuración personal.
     
-    \item \textbf{Rocódromo:} Entidad que representa cada uno de los lugares donde se practica la escalada, incluyendo información 
-    como nombre, ubicación y datos de contacto.
+    \item \textbf{Rocódromo:} Entidad que representa cada uno de los lugares donde se practica la escalada, incluyendo configuración de dificultades
+    para ese rocódromo e información como nombre, ubicación, descripción y horarios.
     
-    \item \textbf{Zona:} Las diferentes áreas o sectores dentro de un rocódromo, cada una con su propio mapa y características.
+    \item \textbf{Zona:} Las diferentes áreas dentro de un rocódromo, cada una con su propio mapa e información propia.
     
-    \item \textbf{Pista:} Las rutas específicas de escalada dentro de una zona, con información de dificultad, tipo de escalada 
-    y estado.
-    
-    \item \textbf{Ascentso:} Registro de cada vez que un escalador asciende una pista, almacenando información como fecha, 
-    valoración y estado del ascenso.
+    \item \textbf{Pista:} Las rutas específicas de escalada dentro de una zona, con información de dificultad, tipo de escalada y la zona del rocódromo
+    de la que forman parte. 
     
     \item \textbf{EscalaDificultad:} Tabla de catálogo que define los niveles de dificultad disponibles en el sistema.
     
-    \item \textbf{Amistad:} Gestión de relaciones entre escaladores, permitiendo crear conexiones entre usuarios.
-    
-    \item \textbf{Suscripción:} Control de suscripciones de escaladores a rocódromos específicos.
-    
-    \item \textbf{FotosPerfil:} Almacenamiento de imágenes de perfil de escaladores.
+    \item \textbf{FotosPerfil:} Almacenamiento de url de imágenes de perfil disponibles para los escaladores.
 \end{itemize}
 
 \subsection{Relaciones Principales del Modelo}
@@ -171,22 +168,32 @@ El modelo relacional de ClimbIt está estructurado mediante las siguientes relac
 
 \paragraph{Relaciones Jerárquicas:} La estructura principal del sistema sigue una jerarquía clara:
 \begin{itemize}
-    \item Un Rocódromo contiene múltiples Zonas (relación 1:N).
-    \item Una Zona contiene múltiples Pistas (relación 1:N).
+    \item Un \textbf{Rocódromo} contiene múltiples \textbf{Zonas} (relación 1:N).
+     
+    \item Una \textbf{Zona} contiene múltiples \textbf{Pistas} (relación 1:N).
+     
+    \item Una \textbf{Foto de Perfil} puede ser utilizada por múltiples \textbf{Escaladores} (relación 1:N).
+     
+    \item Una \textbf{Escala de Dificultad} puede ser utilizada por múltiples \textbf{Rocódromos}, pero un \textbf{Rocódromo} solo puede tener 2 \textbf{Escalas de Dificultad} diferentes,
+    una para vías y una para bloque (relación 2:N).
 \end{itemize}
-Esta jerarquía refleja la estructura física de los rocódromos reales en la vida.
 
-\paragraph{Relaciones Muchos-a-Muchos:} El sistema implementa varias relaciones M:N que requieren tablas de unión:
+\paragraph{Relaciones Muchos-a-Muchos:} El sistema implementa varias relaciones M:N que se representan a través de las siguientes tablas de unión:
 \begin{itemize}
-    \item Escalador-Escalador a través de Amistad, permitiendo que dos usuarios establezcan relaciones bidireccionales.
-    \item Escalador-Rocódromo a través de Suscripción, permitiendo que un escalador se suscriba a múltiples rocódromos 
-    y que un rocódromo tenga múltiples suscriptores.
-    \item Escalador-Pista a través de Ascentso, registrando cada ascenso realizado por cada escalador.
-\end{itemize}
+    \item \textbf{Escalador-Escalador} a través de \textit{SolicitudAmistad}. Un escalador puede solicitar amistad a otro, representados en esta tabla como 
+    \textit{Remitente} y \textit{Destinatario}.
 
-\paragraph{Relaciones de Integridad Referencial:} Todas las claves foráneas están configuradas con restricciones 
-de integridad referencial adecuadas para mantener la consistencia de datos, evitando operaciones que dejasen la 
-base de datos en un estado inconsistente.
+    \item \textbf{Escalador-Escalador} a través de \textit{Amistad}. Se gestionan las amistades entre dos usuarios que establezcan tras aceptar
+    las solicitudes de la tabla \textit{SolicitudAmistad}.
+
+    \item \textbf{Escalador-Rocódromo} a través de \textit{Suscripción}, permite a un escalador suscribirse a múltiples rocódromos y viceversa, que un rocódromo
+    tenga múltiples suscriptores.
+
+    \item \textbf{Escalador-Rocódromo} a traves de \textit{GestorRocódromo}, que contiene a los escaladores que tienen permiso de gestión de los rocódromos existentes, 
+    permitiendo que un rocódromo tenga múltiples gestores y que un escalador pueda gestionar múltiples rocódromos.
+
+    \item \textbf{Escalador-Pista} a través de \textit{EscalaPista}, registrando cada ascenso realizado o como proyecto de hacerlo por cada escalador.
+\end{itemize}
 
 \subsection{Normalización y Diseño}
 
@@ -202,37 +209,52 @@ la tercera forma normal (3FN) en la mayoría de las entidades. Esto implica:
 Estas prácticas de normalización garantizan que las operaciones de actualización, inserción y eliminación sean eficientes 
 y no generen inconsistencias en los datos.
 
+La tabla de \textit{EscalasDificultad} es la única que no cumple la 3FN. Esta tabla incluye un campo \textit{Dificultades} de tipo array que almacena todos los niveles
+de dificultad, rompiendo el principio de atomicidad. Esta decisión se tomó para mejorar el proceso de obtención de las dificultades disponibles en cada rocódromo, 
+evitando así la necesidad de realizar consultas adicionales a la hora de crear una ruta. PostgreSQL ofrece el uso de estos tipos de datos de forma nativa, 
+por lo que se decidió que almacenar las dificultades de esta forma era lo más óptimo para el rendimiento de la aplicación.
+
 \subsection{Decisiones de Diseño Específicas}
 
-A lo largo del diseño de la base de datos tomamos varias decisiones específicas:
+A lo largo del diseño de la base de datos se tomaron varias decisiones específicas:
 
-\paragraph{Campos de Estado y Booleanos:} Utilizamos campos booleanos para representar estados como \texttt{Activo} en 
-rocódromos, zonas y pistas, permitiendo desactivar entidades sin eliminarlas completamente de la base de datos, 
-facilitando así el mantenimiento histórico de datos.
+\paragraph{Campos de Estado y Booleanos:} Se utilizan campos booleanos para representar estados como \texttt{Activo} en todas las entidades principales. Esto permite
+realizar borrados lógicos en entidades sin eliminarlas completamente, facilitando así el mantenimiento histórico de datos y la consistencia entre relaciones. También
+se han utilizado como sustitutos de roles específicos, concretamente en el caso de los gestores, se encuentra el campo \textit{Propietario}, que es un booleano para indicar 
+si ese gestor además es propietario, que en el futuro que se especifica en la sección de Conclusiones y Trabajo Futuro, le otorgará permisos adicionales. Lo mismo 
+sucede con el campo \textit{isAdmin} en la tabla de escaladores, que indica si un usuario tiene permisos de administrador o no, lo que le otorgará permisos adicionales
+a la hora de gestionar puntos clave de ClimbIt.
 
-\paragraph{Gestión de URLs y Rutas de Imágenes:} Campos como \texttt{logoURL}, \texttt{imagenURL} y \texttt{mapa} almacenan 
-rutas a los recursos multimedia asociados a cada entidad. Las imágenes se almacenan en el servidor tras ser procesadas 
-a formato webp mediante ffmpeg, mejorando rendimiento sin perder calidad.
+\paragraph{URLs y Rutas de Imágenes:} Campos como \textit{logoURL}, \textit{imagenURL} y \textit{mapa} almacenan 
+rutas a los recursos asociados a cada entidad. Las imágenes se almacenan en el servidor tras ser procesadas 
+a formato webp y se guardan en sendos campos la ruta relativa a ese recurso.
 
-\paragraph{Timestamps de Auditoría:} Cada entidad cuenta con campos \texttt{FechaCreacion} y, en casos relevantes, 
-\texttt{FechaRetirada} o \texttt{FechaModificacion} para mantener un registro histórico de cambios en los datos.
+\paragraph{Timestamps:} Cada entidad cuenta con campos autogenerados por PostgreSQL: \textit{CreatedAt}, fecha en al que se creó la entrada de ese
+recurso en la base de datos, y  \textit{UpdatedAt}, que se actualiza cada vez que ese recurso sufre algún tipo de modificación Estos campos permiten llevar una 
+trazabilidad para cada recurso y su utilización dentro del sistema para servirla como información al usuario en puntos relevantes, como por ejemplo en las Pistas, 
+indicándole cuando fue su introducción al rocódromo.
 
-\paragraph{Enumeraciones:} Ciertos campos utilizan tipos enumerados como \texttt{Estado} en ascensos (completado, intentando, etc.) 
-y \texttt{Tipo} en pistas (búlder, ruta, etc.), proporcionando validación a nivel de base de datos.
+\paragraph{Enumeraciones:} Ciertos campos utilizan tipos enumerados. En la tabla \textit{EscalaPista} se utiliza en el campo \textit{Estado}, que contiene los estados  (completado, intentando, etc.) 
+en los que se puede encontrar el progreso de un escalador con respecto a la ruta: \textit{Flash} si la completo al primer intento, \textit{Completado} si la completó en varios
+y \textit{Proyecto} si la quiere marcar para completarla en un futuro. En la tabla \textit{SolicitudAmistad} también se encuentra el campo \textit{Estado}, puede tomar otros 3 
+valores: \textit{Pendiente} si la solicitud de amistad ha sido enviada y aún no ha sido gestionada, \textit{Aceptada} si la solicitud se aceptó y se inició una amistad 
+y \textit{Rechazada} si el destinatario la rechazó. Por último, en la tabla \textit{Pista}, se encuentra el campo \textit{Tipo}, que puede tomar los valores de 
+\textit{Bloque} o \textit{Vía}, dependiendo del tipo de pista que se esté dando de alta.
 
-\subsection{Migraciones y Versionado}
+\subsection{Migraciones y Seeders:}
 
-La estructura de la base de datos se gestiona a través de migraciones controladas por Sequelize, permitiendo:
+Toda la estructura de la base de datos se gestiona a través de migraciones controladas por Sequelize, permitiendo:
 
 \begin{itemize}
     \item Versionado de cambios en el esquema de la base de datos.
     \item Posibilidad de revertir cambios si es necesario.
+    \item Reestructuración y repoblado de tablas en actualizaciones de esquema.
     \item Documentación implícita de la evolución del modelo de datos.
     \item Reproducibilidad del esquema en diferentes entornos (desarrollo, pruebas, producción).
 \end{itemize}
 
-Adicionalmente, se utilizan seeds (\textit{seeders}) para poblar la base de datos con datos iniciales como niveles de 
-dificultad estándar, tipos de escalada y datos de prueba, facilitando el desarrollo y las pruebas del sistema.
+Adicionalmente, se utilizaron \textit{seeders} al principio del desarrollo para poblar la base de datos con datos de prueba, para realizar tests y comprobaciones, 
+pero se cambió posteriormente a poblados mediante Postman, ya que permite una gran flexibilidad, rapidez y facilita incluso la subida de imágenes.
 
 \section{Diseño de la UI y UX}
 
