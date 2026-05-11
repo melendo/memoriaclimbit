@@ -2,18 +2,18 @@
 \label{cap:estadoDelArte}
 
 Una vez planteados los objetivos generales y específicos para este proyecto, este capítulo analiza en mayor profundidad los aspectos clave sobre los 
-que se ha diseñado y construido la solución propuesta. Para ello primero se amplía el contexto de la escalada explicando su auge en los últimos años,
-se desarrollan los sistemas de dificultad y se definen los desafíos tecnicos que conlleva el registro de la actividad. Finalmente se analiza el panorama
+que se ha diseñado y construido la solución propuesta. Para ello, primero se amplía el contexto de la escalada explicando su auge en los últimos años,
+se desarrollan los sistemas de dificultad y se definen los desafíos técnicos que conlleva el registro de la actividad. Finalmente se analiza el panorama
 tecnológico y se obtienen conclusiones y resultados.
 
 \section{El auge de la escalada en España}
 
 En los últimos años, la escalada ha experimentado un crecimiento sin precedentes a nivel global, principalmente impulsado por su debut como deporte en el 
 calendario olímpico de los Juegos de Tokio 2020. En España, este fenómeno ha sido especialmente notable en parte debido al oro obtenido en estos juegos olímpicos
-por el escalador Alberto Gines. El número de licencias de la Federación Española de Deportes de Montaña y Escalada (FEDME) ha crecido de forma exponencial, 
+por el escalador Alberto Ginés. El número de licencias de la Federación Española de Deportes de Montaña y Escalada (FEDME) ha crecido de forma exponencial, 
 superando las 290.000 licencias y consolidándose en la actualidad como la cuarta federación deportiva del país. 
 
-Este auge ha provocado el aumento de rocódromos en los centros urbanos, haciéndo de la escalada un deporte mucho más accesible para principiantes al ofrecer un entorno 
+Este auge ha provocado el aumento de rocódromos en los centros urbanos, haciendo de la escalada un deporte mucho más accesible para principiantes al ofrecer un entorno 
 controlado e independiente de las condiciones meteorológicas de la roca \footnote{https://www.levante-emv.com/deportes/2024/03/29/auge-escalada-deporte-minoritario-boom-100403605.html}. 
 
 \section{Escalas de dificultad y análisis de progresión}
@@ -23,21 +23,20 @@ Según los estudios de estandarización, la definición de "difícil" varía eno
 subdividir la exigencia física y técnica en numerosos grados reconocibles por la comunidad \cite{mandelli2019scales}.
 
 Como se introdujo en el capítulo anterior, las escalas más empleadas en España son la Fontainebleau para bloque y la escala francesa para vías.
-Estas escalas tienen una nomenclatura similar de formq que se estructuran mediante un sistema compuesto por un número, una letra y 
+Estas escalas tienen una nomenclatura similar de forma que se estructuran mediante un sistema compuesto por un número, una letra y 
 opcionalmente el símbolo «+». El número (generalmente mayor que 4) define la dificultad base. Esta dificultad se subdivide utilizando las 
-letras «a», «b» y «c» y se emplea el signo positivo para indicar un nivel de exigencia superior dentro de la misma letra. De este modo, una 
-progresión típica en la dificultad seguiría el orden: 6a, 6a+, 6b, 6b+, 6c, 6c+, 7a, y así sucesivamente. A pesar de ser similares en notación para distinguirlas la escala de Fontainebleau suele representarse con 
-letras mayúsculas (por ejemplo, 7B+), mientras que la francesa utiliza minúsculas (por ejemplo, 7b+).
+letras «a», «b» y «c» y se emplea el signo positivo para indicar un nivel de dificultad por encima. Como ejemplo una progresión típica sería 
+6a, 6a+, 6b, 6b+, 6c, 6c+, 7a, y así sucesivamente. Aunque estas dos escalas (francesa y fontainebleau) tengan una notación similar se pueden 
+distinguir de forma que la escala de Fontainebleau suele representarse con letras mayúsculas (por ejemplo, 7B+), mientras que la francesa utiliza minúsculas (por ejemplo, 7b+).
 
-Independientemente de esto a nivel internacional coexisten diversas escalas métricas dependiendo de la modalidad y la región geográfica. Además de 
-las escalas ya nombradas destacan el Sistema Yosemite Decimal (YDS) para vías o la escala V (\textit{V-Scale}) para bloque, muy populares en Norteamérica y otras regiones.
+Además de estas escalas a nivel internacional coexisten diversas métricas dependiendo de la modalidad (vía y bloque) y la región geográfica. Destacan 
+el Sistema Yosemite Decimal (YDS) para vías o la escala V (\textit{V-Scale}) para bloque, muy populares en Norteamérica y otras regiones.
 
-Esta multiplicidad de sistemas genera una importante barrera de accesibilidad. La conversión entre escalas no es lineal ni matemáticamente 
-exacta, ya que cada métrica nació en contextos y estilos diferentes, resultando en equivalencias aproximadas y a menudo subjetivas.
-
-En consecuencia, los escaladores encuentran grandes dificultades para interpretar su nivel real o registrar su progreso al enfrentarse a 
-nomenclaturas extranjeras. Esta falta de estandarización universal les obliga a depender de tablas de conversión externas como la que se 
-observa en la imagen \ref{fig:conversion_dificultades} reduciendo la fuidez del seguimiento.
+Esta variedad de sistemas genera una importante barrera de accesibilidad ya que la conversión entre escalas no es lineal ni matemáticamente 
+exacta. Cada métrica nació en diferentes contextos por lo que como resultado se tienen equivalencias aproximadas y a menudo subjetivas. 
+En consecuencia, los escaladores se encuentran con dificultades para interpretar la dificultad real de rutas al enfrentarse a 
+nomenclaturas extranjeras. Esta falta de estandarización obliga a depender de tablas de conversión externas como la que se 
+observa en la imagen \ref{fig:conversion_dificultades} reduciendo la fluidez del registro de la progresión.
 
 \begin{figure}[h]
     \centering
@@ -49,18 +48,18 @@ observa en la imagen \ref{fig:conversion_dificultades} reduciendo la fuidez del 
 
 \subsection{El progreso en la escalada: Análisis de datos masivos}
 
-El progreso en la escalada es notablemente lento y no lineal, un factor que justifica la necesidad de integrar mecánicas de gamificación. 
+El progreso en la escalada es notablemente lento lo que justifica la necesidad de integrar mecánicas de gamificación para mantener la motivación en los escaladores. 
 
-En un análisis estadístico sobre 4 millones de ascensiones registradas \citep{masullo_climbing}, se extraen conclusiones sobre 
+En un análisis estadístico sobre 4 millones de ascensiones registradas por \cite{masullo_climbing}, se extraen conclusiones sobre 
 la evolución de los escaladores. Los datos muestran que el 90\% de los usuarios registra a lo largo de su historial entre 3 y 306 ascensiones, situándose 
-la media en unas 110 rutas. Además como se puede visualizar en la gráfica \ref{fig:grafica_dificulades_años}, el estudio determina el tiempo promedio que tarda un escalador en superar barreras de dificultad como 
+la media en unas 110 rutas. Además como se visualiza en la gráfica \ref{fig:grafica_dificultades_años}, el estudio determina el tiempo promedio que tarda un escalador en superar barreras de dificultad como 
 alcanzar el grado 7a requiere una media de 4,5 años de práctica, llegar al 7b toma unos 6 años y escalar un 8a conlleva entre 8 y 9 años de dedicación.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\textwidth]{./Imagenes/Fuentes/dificultad_por_año.png} 
-    \caption{Media de dificulades por años escalados.}
-    \label{fig:grafica_dificulades_años}
+    \caption{Media de dificultades por años escalados.}
+    \label{fig:grafica_dificultades_años}
 \end{figure}
 
 
@@ -68,7 +67,7 @@ El análisis también destaca el salto de dificultad que supone subir una ruta e
 al \textit{flash} (al primer intento y sin caídas). Por ejemplo, para consolidar un nivel de 7a ensayado, las estadísticas indican que el 
 escalador debe ser capaz de escalar consistentemente grados 6a+/6b al \textit{flash}.
 
-Esta extensa temporalidad genera largas fases de estancamiento donde el registro pierde sentido si no cuenta con incentivos a corto y medio plazo, 
+Esta extensa ventana de progreso genera largas fases de estancamiento donde el registro pierde sentido si no cuenta con incentivos a corto y medio plazo, 
 lo que da pie a las soluciones tecnológicas y de gamificación.
 
 \section{Desafíos técnicos en el registro de la actividad}
@@ -78,16 +77,21 @@ rutas por GPS en ciclismo o el uso de pulsómetros en \textit{running}), en la e
 de modalidades, de secuencias de movimientos y de escalas de medición exige que la recolección de los datos dependa de un esfuerzo manual por parte del 
 usuario, lo que suele derivar en la pereza y el abandono del seguimiento.
 
-Para comprender el análisis de las aplicaciones de mercado, es necesario profundizar en esta complejidad técnica. El seguimiento digital debe ser capaz 
-de diferenciar métricas clave como el estilo de la ascensión (un ascenso al \textit{flash} aporta mucho más valor estadístico e impacta de diferente 
-manera al progreso que uno ensayado tras múltiples intentos), a la vez que la plataforma debe gestionar de manera fluida la constante rotación periódica 
-de rutas temporales que diseñan los \textit{route setters} del rocódromo.
+Para comprender el análisis de las aplicaciones de mercado, es necesario profundizar en esta complejidad técnica. El registro digital debe ser capaz 
+de diferenciar métricas clave como el tipo del ascenso (un ascenso al \textit{flash} aporta mucho más valor que uno ensayado tras múltiples intentos), 
+a la vez que la plataforma debe gestionar de manera fluida la constante rotación periódica de rutas temporales que diseñan los \textit{route setters} del rocódromo.
 
 \section{Análisis de aplicaciones de escalada}
 
 Se ha realizado un análisis del panorama tecnológico actual identificando tres tipos de soluciones principales, 
-agrupadas según su propósito funcional y su nivel de integración con el entorno físico del rocódromo. En los 
-siguientes subapartados se describen las características técnicas de cada categoría y se realiza un análisis 
+agrupadas según su propósito funcional:
+\begin{itemize}
+\item \textbf{Aplicaciones integradas con el rocódromo}
+\item \textbf{Aplicaciones centradas en la comunidad}
+\item \textbf{Aplicaciones con hardware específico} 
+\end{itemize}
+
+En los siguientes subapartados se describen las características técnicas de cada categoría y se realiza un análisis 
 crítico de las fortalezas y debilidades de las aplicaciones identificadas.
 
 \subsection{Aplicaciones integradas con el rocódromo}
@@ -96,7 +100,7 @@ Estas aplicaciones mantienen una vinculación directa con las instalaciones depo
 extensión digital para el registro de la actividad diaria.
 
 \paragraph{TopLogger}
-TopLogger\footnote{TopLogger (2026). Disponible en: \url{https://toplogger.nu/es}} permite el registro del 
+TopLogger\footnote{TopLogger disponible en: \url{https://toplogger.nu/es}} permite el registro del 
 estado de las rutas (completada, flash, proyecto) de los rocódromos asociados, facilitando su identificación 
 por ubicación, color y grado de dificultad. Para la navegación, emplea un mapa cenital interactivo que permite 
 al usuario desplazarse por los diferentes sectores del muro como se aprecia en la imagen \ref{fig:toplogger_mapa}
@@ -122,8 +126,8 @@ en su interfaz, lo que compromete la usabilidad para perfiles con menor competen
 sistema de ránkings es vulnerable a registros falsos y su implantación en España es actualmente limitada.
 
 \paragraph{WeClimb}
-WeClimb\footnote{WeClimb (2026). Disponible en: \url{https://weclimb.fr/}} ofrece funcionalidades de registro 
-similares, pero se diferencia por su sistema de identificación basado en tarjetas visuales con fotografías 
+WeClimb\footnote{WeClimb disponible en: \url{https://weclimb.fr/}} ofrece funcionalidades de registro 
+similares a TopLogger, pero se diferencia por su sistema de identificación de rutas está basado en tarjetas visuales con fotografías 
 reales de las rutas. Esta aproximación facilita el reconocimiento del bloque o la vía directamente frente al muro.
 
 \begin{figure}[h]
@@ -135,22 +139,21 @@ reales de las rutas. Esta aproximación facilita el reconocimiento del bloque o 
 
 Incluye herramientas para resaltar las presas utilizables en cada imagen, permitiendo la creación de retos 
 personalizados. Sin embargo, su despliegue está focalizado en el mercado francés y carece de una capa de 
-gamificación profunda. Asimismo, la navegación por tarjetas puede resultar ineficiente en sectores con una 
+gamificación profunda. Asimismo, la navegación por tarjetas puede resultar ineficiente en muros con una 
 densidad de rutas muy elevada.
 
 \subsection{Aplicaciones centradas en la comunidad}
 
-Este grupo prioriza la interacción social y el intercambio de experiencias sobre el registro sistemático de 
+Aplicaciones que priorizan la interacción social y el intercambio de experiencias sobre el registro de 
 cada ascenso.
 
 \paragraph{KAYA}
-KAYA\footnote{KAYA Climbing App (2026). Disponible en: \url{https://kayaclimb.com/}} se define como una red 
-social especializada donde los usuarios comparten sus ascensiones mediante publicaciones y vídeos cortos en 
-formato vertical, conocidos como "betas" con una estructura similar a aplicaciones como \textit{Instagram}. 
-Implementa un sistema de insignias (\textit{Badges}) en base a el número de 
-rutas completadas y su dificultad como se observa en la imagen \ref{fig:kaya_badges}. Su principal limitación técnica es que está orientada 
-a ascensos puntuales, generalmente en roca natural, careciendo de una integración fluida con la rutina de entrenamiento de un 
-rocódromo convencional.
+KAYA\footnote{KAYA disponible en: \url{https://kayaclimb.com/}} se trata de una red 
+social orientada a la escalada donde los usuarios comparten sus ascensos mediante publicaciones y vídeos cortos en 
+formato vertical, conocidos como \textit{betas} con una estructura similar a aplicaciones como \textit{Instagram}. 
+Implementa un sistema de gamificación de insignias (\textit{Badges}) en base al número de 
+rutas completadas y su dificultad como se observa en la imagen \ref{fig:kaya_badges}. Su principal limitación es que está orientada 
+a ascensos puntuales generalmente en roca natural, careciendo de una integración fluida con rocódromos.
 
 \begin{figure}[h]
     \centering
@@ -163,10 +166,10 @@ rocódromo convencional.
 \subsection{Aplicaciones con hardware específico}
 
 \paragraph{Kilter Board}
-Kilter Board\footnote{Kilter Board (2026). Disponible en: \url{https://kiltergrips.com/}} representa una 
+Kilter Board\footnote{Kilter Board disponible en: \url{https://kilterboard.io/}} es una 
 solución híbrida que combina un muro físico estandarizado con un sistema de iluminación LED controlado por una 
-aplicación móvil. Al seleccionar una ruta en la app, las presas correspondientes se iluminan en el muro como se observa
-en la imagen .
+aplicación móvil que al seleccionar una ruta en la app, las presas correspondientes se iluminan en el muro como se observa
+en la imagen \ref{fig:kilterboard}.
 
 \begin{figure}[h]
     \centering
@@ -176,9 +179,9 @@ en la imagen .
 \end{figure}
 
 Cuenta con un sistema de \textit{ranking} global y una extensa base de datos validada por la comunidad, permitiendo 
-la comparación de rendimiento a nivel mundial. A diferencia de otras herramientas orientadas únicamente al alto rendimiento, 
+la comparación de rendimiento a nivel mundial. A diferencia de otras herramientas orientadas únicamente al alto rendimiento (como MoonBoard), 
 destaca por su diseño ergonómico y su accesibilidad para escaladores principiantes, en gran parte gracias a la posibilidad 
-de ajustar la inclinación del muro, aunque su uso se limita exclusivamente a su hardware específico.
+de ajustar la inclinación del muro. Su limitación es que su uso se limita exclusivamente a su hardware específico realizando un registro parcial.
 
 \section{Análisis de aplicaciones de otros deportes}
 
@@ -186,30 +189,30 @@ Para identificar mecánicas de gamificación transferibles, se han examinado apl
 sectores deportivos.
 
 \subsection{Competiciones y ranking por segmentos (Strava)}
-Strava \footnote{Strava (2026). Disponible en: \url{https://www.strava.com/}} ha logrado una alta fidelización 
-mediante el concepto de "segmentos": tramos específicos de una ruta donde los usuarios comparan tiempos registrados 
-vía GPS. Sus títulos (KOM/QOM) son un sistema de badges para transformar el 
-entrenamiento en una competición virtual. Este modelo es extrapolable a la escalada tratando cada vía o bloque como un 
-segmento donde medir el número de intentos o el estilo de ascenso. No obstante, el registro basado estrictamente en el 
-tiempo es contraproducente en esta disciplina, ya que puede comprometer la técnica y la seguridad del escalador en favor 
-de la velocidad.
+Strava \footnote{Strava disponible en: \url{https://www.strava.com/}} ha logrado una alta fidelización de usuarios
+mediante el concepto de "segmentos"(tramos específicos de una ruta donde los usuarios comparan tiempos registrados 
+vía GPS). Sus títulos (KOM/QOM) son un sistema de badges para transformar el 
+entrenamiento en una competición virtual. Este modelo se puede extrapolar a la escalada tratando cada vía o bloque como un 
+segmento donde medir el número de intentos o el estilo de ascenso. A pesar de que existe una modalidad de escalada basada 
+en el tiempo en completarla, el registro basado en el tiempo es contraproducente en esta disciplina, ya que puede comprometer 
+la técnica y la seguridad del escalador en favor de la velocidad.
 
 \subsection{Coleccionismo de logros (Pokémon Go)}
-Pokémon Go\footnote{Pokémon GO (2026). Disponible en: \url{https://pokemongo.com/es}} destaca por la implementación 
+Pokémon Go\footnote{Pokémon Go disponible en: \url{https://pokemongo.com/es}} destaca por la implementación 
 del sistema PBL (Points, Badges and Leaderboards) vinculado al coleccionismo y al desplazamiento físico. Esta mecánica 
-de "completar colecciones" es aplicable a la escalada mediante la superación de circuitos completos de un determinado 
-nivel o color, incentivando la constancia y el descubrimiento de nuevas rutas. La principal desventaja de este enfoque 
+de completar colecciones es aplicable a la escalada mediante un sistema de recompensas basado en el esfuerzo realizado 
+incentivando la constancia y el descubrimiento de nuevas rutas. La principal desventaja de este enfoque 
 es el riesgo de generar una dependencia negativa en el usuario, provocando que el objetivo principal deje de ser la 
-actividad deportiva para centrarse únicamente en la obtención de la recompensa virtual.
+actividad deportiva para centrarse únicamente en la obtención de esta recompensa virtual.
 
 \section{Conclusiones del Estado del Arte e identificación de la oportunidad}
  
-Para finalizar este capítulo, se presentan las concolusiones obtenidas tras el análisis comparativo entre las aplicaciones, 
+Para finalizar en este capítulo se presentan las conclusiones obtenidas tras el análisis comparativo entre las aplicaciones, 
 permitiendo identificar la necesidad del mercado y la propuesta de valor de nuestra aplicación.
 
 \subsection{Síntesis de la problemática actual}
 
-Tras analizar las soluciones existentes, se observa que el mercado de aplicaciones de escalada presenta problemas en tres aspectos críticos:
+Tras analizar el contexto y las soluciones existentes, se observa que las soluciones actuales para la escalada presentan los siguientes aspectos críticos:
 
 \begin{itemize}
 \item \textbf{Experiencia de Usuario (UX) deficiente:} Aplicaciones como TopLogger o WeClimb ofrecen una gran densidad de datos, 
@@ -217,30 +220,37 @@ pero a costa de interfaces saturadas que dificultan el uso y registro de rutas e
 al escalador casual que solo busca un registro sencillo de su progresión.
 
 \item \textbf{Gamificación superficial:} La mayoría de las herramientas se limitan a clasificaciones numéricas (leaderboards) 
-fácilmente manipulables, lo que genera desmotivación. Falta un sistema de recompensas basado en el esfuerzo, la constancia y el "coleccionismo" 
-de hitos personales que no dependa únicamente de ser el mejor del ranking.
+fácilmente manipulables, lo que genera desmotivación.
 
-\item \textbf{Dependencia de hardware o geografía:} Existen buenas soluciones como MoonBoard, pero están limitadas a sus muros de escalada específicos, 
-o aplicaciones como WeClimb y TopLogger cuya implantación en España es inexistente. No existe una herramienta universal, intuitiva y "gamificada" 
-que el escalador pueda llevar de un rocódromo a otro.
+\item \textbf{Dependencia de hardware o geografía:} Existen buenas soluciones como Kilter Board, pero están limitadas a sus muros de escalada específicos 
+dando como resultado un registro parcial de las sesiones de escalada.
+
+\item \textbf{Escalas de dificultad no normalizadas:} La gran variedad de escalas diferentes crea una barrera de accesibilidad 
+para determinar la dificultad real de una ruta, causando que las aplicaciones solo acepten un tipo de escala y perjudicando a una fracción
+de los usuarios.
 \end{itemize}
 
 \subsection{Limitaciones de las soluciones existentes y oportunidades de mejora}
 
 El análisis de aplicaciones como \textbf{Strava} y \textbf{Pokémon Go} revela que existe un gran potencial en la adaptación de mecánicas de gamificación
-de otros sectores a la escalada. La oportunidad reside en desarrollar una solución que combine:
+de otros sectores a la escalada. La oportunidad reside en desarrollar una solución que combine los siguientes factores:
 
 \begin{enumerate}
-\item \textbf{Registro visual y ágil:} Adoptar un sistema híbrido de mapas centiales dinámicos y sistema de tarjetas para minimizar el tiempo 
-de interacción de escalador para reconocer y acceder a la ruta con el móvil durante la sesión.
-\item \textbf{Gamificación basada en PBL:} Realizar una implementación correcta de el sistema PBL basado en el modelo RAMP de forma que las estadísticas
-funcionen como los \textit{Points} para mantener la motivación y constancia de los usuarios, además de la  implementación de Leaderboards entre 
+\item \textbf{Registro visual y ágil:} Adoptar un sistema híbrido de mapas cenitales dinámicos como los de TopLogger y sistema de tarjetas para minimizar el tiempo 
+de interacción de escalador para reconocer y acceder a la ruta con el móvil durante la sesión como los de WeClimb.
+
+\item \textbf{Gamificación basada en PBL:} Realizar una implementación correcta del sistema PBL basado en el modelo RAMP de forma que las estadísticas
+funcionen como los \textit{Points} para mantener la motivación y constancia de los usuarios, además de la implementación de Leaderboards entre 
 grupos de amigos eliminando el factor de los abusos de los sistemas de posicionamiento.
 
-\item \textbf{Enfoque social y comunitario:} Fomentar la interacción mediante personalización del perifl y la comparación de estadísticas 
-personales, creando un sentimiento de pertenencia a la comunidad del rocódromo local.
+\item \textbf{Enfoque social y comunitario:} Fomentar la interacción mediante personalización del perfil y la comparación de estadísticas 
+personales, creando un sentimiento de pertenencia a la comunidad del rocódromo local (\textit{Relatedness} del modelo RAMP).
+
+\item \textbf{Sistemas de dificultades personalizados:} Crear un sistema que permita a cada rocódromo tener asignado para bloques y vías una escala de dificultad
+diferente entre sistemas estandarizados (como escala francesa, Fontainebleau, V-Scale entre otros) o personalizados, reduciendo así la fricción que genera que un
+centro no pueda usar sus propias escalas.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
 \end{enumerate}
 
-En conclusión, este proyecto se posiciona entre als herramientas de entrenamiento puro y las redes sociales generales, 
-ofreciendo un sistema de entrenamiento que registra datos de las sesiones y motiva activamente al  escalador a través de una 
+En conclusión, este proyecto se posiciona entre las herramientas de entrenamiento puro y las redes sociales generales, 
+ofreciendo un sistema de entrenamiento que registra datos de las sesiones y motiva activamente al escalador a través de una 
 experiencia lúdica y bien diseñada.
