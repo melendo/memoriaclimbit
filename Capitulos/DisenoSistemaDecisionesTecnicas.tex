@@ -91,20 +91,31 @@ nos ayudaron a obtener un código más limpio, modular y fácil de mantener. Los
 
 \paragraph{Patrón Repository:} Este patrón propuesto por Martin Fowler consiste en crear una interfaz entre la lógica de negocio y la capa
 de persistencia, en nuestro caso, nuestra base de datos PostgreSQL a través de Sequelize, de manera que nos permite desacoplar el negocio
-de la infraestructura, manteniendo así un código más mantenible en el tiempo. En nuestro caso, como se puede ver en la Figura XX,
+de la infraestructura, manteniendo así un código más mantenible en el tiempo. En nuestro caso, como se puede ver en la \ref{fig:diagrama_repository},
 la capa de dominio define la interfaz del repositorio en la que se establecen los métodos que se necesitan para realizar las diferentes operaciones
 y la capa de infraestructura implementa dicha interfaz con la que hablar con la base de datos. De esta manera, la capa de aplicación
 solo se encarga de definir la lógica de los distintos casos de uso.
 
-{Figura del diagrama de patrón repository}
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=1\textwidth]{./Imagenes/Fuentes/Diagrama_Patron_Repository.png} 
+    \caption{Diagrama patrón Repository en ClimbIt}
+    \label{fig:diagrama_repository}
+\end{figure}
 
 \paragraph{Patrón Adapter:} El patrón Adapter es uno de los patrones clásicos introducidos por Erich Gamma, Richard Helm, Ralph Johnson y John Vlissides, 
 también conocidos como los ``Gang of Four'' y se encarga de adaptar distintas interfaces para que puedan trabajar entre ellas. En nuestro caso,
-lo hemos utilizado para adaptar distintos errores que pueden surgir en las diferentes capas, como se puede observar en la Figura XX, para 
+lo hemos utilizado para adaptar distintos errores que pueden surgir en las diferentes capas, como se puede observar en la \ref{fig:diagrama_adapter}, para 
 centralizar el manejo de estos errores en un único lugar, permitiéndonos así mantener una consistencia a la hora de tratar los distintos 
 errores que pueden surgir.
 
-{Figura del diagrama de patrón adapter}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{./Imagenes/Fuentes/Diagrama_Patron_Adapter.png} 
+    \caption{Diagrama patrón Adapter en ClimbIt}
+    \label{fig:diagrama_adapter}
+\end{figure}
 
 \paragraph{Patrón Singleton:} Introducido también por ``The Gang of Four'' en su libro ``Design Patterns: Elements of Reusable Object-Oriented Software'', 
 el patrón Singleton sirve para garantizar que una clase tenga únicamente una instancia al mismo tiempo a lo largo de la ejecución de la aplicación. 
