@@ -2,84 +2,54 @@
 \label{cap:disenoSistema}
 
 En este capítulo se detallan las decisiones técnicas adoptadas para la implementación de ClimbIt
-así como la justificación de dichas elecciones frente a las alternativas actuales del mercado. 
+así como la justificación de dichas elecciones frente a las alternativas existentes. 
 También se detallarán las arquitecturas del frontend y del backend y los patrones de diseño 
 utilizados.
 
+\section{Diseño del Sistema}
+Como se observa en la Figura \ref{fig:diagrama_arquitectura_climbit}, la arquitectura del sistema ClimbIt se estructura bajo un modelo cliente-servidor de tres capas. El flujo de información se inicia en los clientes web y móviles, cuyo tráfico es redirigido  a través de un túnel de Cloudflare que asegura la red local del servidor frente a intrusiones externas. En el servidor, Nginx actúa como \textit{reverse proxy} para servir los recursos del frontend, mientras que una API REST desarrollada en Node.js gestiona la lógica de negocio y el procesamiento de peticiones. Finalmente, la persistencia de la información se delega en un sistema de gestión de bases de datos PostgreSQL supervisado mediante la herramienta gráfica PgAdmin,  garantizando así una infraestructura robusta, escalable y con una clara separación de responsabilidades. Todo el sistema se encuentra alojado en una Raspberry Pi 4 en diferentes contenedores Docker. La explicación detallada de cada una de las capas y los componentes que las conforman se encuentra en la sección \textit{Integración Continua, Despliegue y DevOps}
+ 
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=1\textwidth]{./Imagenes/Fuentes/DiagramaArquitecturaClimbIt.png} 
+    \caption{Diagrama de la arquitectura del sistema ClimbIt}
+    \label{fig:diagrama_arquitectura_climbit}
+\end{figure}
+
+A continuación, se detallan las decisiones de diseño y el stack tecnológico utilizado para cada una de las capas del sistema, así como la arquitectura y los patrones de diseño implementados tanto en el backend como en el frontend.
+
 \section{Decisiones de Diseño y Stack Tecnológico}
 
-Para ClimbIt surgieron varias opciones de diseño para el sistema, pero al final optamos por 
-una separación de responsabilidades para ceder la lógica de negocio y la persistencia de los datos 
-al backend y un frontend SPA (\textit{Single Page Application}) simple y de fácil navegación 
-que consuma esos datos a través de una API. 
-Desde el comienzo sabíamos que el alcance de esta aplicación era notablemente amplio, por lo que 
-la decisión sobre qué arquitectura utilizar fue previamente meditada. Valoramos tres opciones de 
-diseño para el backend: una arquitectura monolítica, una arquitectura hexagonal y 
-una arquitectura de microservicios. 
+Para cumplir con los requisitos marcados para ClimbIt se determinó que un modelo cliente-servidor era la mejor opción para mantener la separación de responsabilidades: lógica de negocio y persistencia de los datos en el backend y un frontend SPA (\textit{Single Page Application}) simple y de fácil navegación que consuma esos datos a través de una API.Tras un análisis inicial del alcance del proyecto se llegó a la conclusión de que era notablemente amplio, por lo que la decisión sobre qué arquitectura utilizar fue ampliamente meditada. Valoramos tres opciones de diseño para el backend: una \textbf{arquitectura monolítica}, una \textbf{arquitectura hexagonal} y una arquitectura basada en \textbf{microservicios}. 
 
-Para la elección tuvimos en cuenta tres factores principales: la escalabilidad, la mantenibilidad y la complejidad 
-de desarrollo. Una arquitectura monolítica podría haber sido más sencilla de implementar inicialmente, pero a 
-medida que el proyecto creciese, podría habernos llevado a un código difícil de mantener y escalar. Por otro lado, 
-una arquitectura de microservicios nos habría ofrecido grandes ventajas en cuanto a la escalabilidad, pero la curva de 
-aprendizaje y la dificultad que añadía al desarrollo y la necesidad de gestionar múltiples servicios nos 
-hizo descartarla, por el momento, para este proyecto. Al final decidimos que la arquitectura hexagonal nos daba 
-el equilibrio entre dificultad de desarrollo, mantenibilidad y escalabilidad que buscábamos para ClimbIt, permitiéndonos
-desacoplar toda la lógica de negocio de factores externos como la base de datos y el frontend, quedando así un sistema 
-más modular y fácil de mantener a largo plazo.
+Para la elección tuvimos en cuenta tres factores principales: \textbf{escalabilidad}, \textbf{mantenibilidad} y  \textbf{complejidad de desarrollo}. Una arquitectura monolítica podría haber sido más sencilla de implementar inicialmente, pero a medida que el proyecto creciese y la posibilidad de que los requisitos cambiasen, podría habernos llevado a un código difícil de mantener y escalar. Por otro lado, una arquitectura de microservicios habría ofrecido grandes ventajas en cuanto a la escalabilidad en el largo plazo, pero su empinada curva de aprendizaje, la dificultad que añadía al desarrollo y la necesidad de gestionar múltiples servicios sumada a la prácticamente nula necesidad para la implementación los requisitos funcionales marcados para el alcance del proyecto hizo que fuera la primera en ser descartada. Al final decidimos que la arquitectura hexagonal nos daba el equilibrio entre dificultad de desarrollo, mantenibilidad y escalabilidad que buscábamos para ClimbIt, permitiéndonos desacoplar toda la lógica de negocio de factores externos como la base de datos y el frontend, quedando así un sistema más modular y fácil de mantener a largo plazo.
 
-En cuanto al stack tecnológico, para el backend optamos por usar Node.js con Express debido a su popularidad, fiabilidad, 
-facilidad de uso y su amplio ecosistema de librerías. Elegimos trabajar directamente con JavaScript y en formato ESModules 
-y no con TypeScript principalmente por la velocidad de desarrollo y porque Node.js no tiene un soporte nativo para TypeScript.
-Para la base de datos, descartamos desde el principio las bases 
-de datos no relacionales, ya que la naturaleza de los datos de ClimbIt, con relaciones claras entre escaladores, 
-rocódromos y rutas se adaptaba mejor a un modelo relacional. Ambos habíamos trabajado previamente con bases de datos 
-como MariaDB y MySQL, pero debido a su rendimiento, escalabilidad y su más que creciente popularidad y ecosistema 
-decidimos que para nuestro proyecto, y para las ideas que queremos llegar a implementar en el futuro, PostgreSQL 
-era la mejor opción. Para la comunicación entre el backend y la base de datos, optamos por usar un ORM 
-(\textit{Object-Relational Mapping}) para facilitar el desarrollo, así como una capa extra de seguridad. Después de evaluar varias
-opciones elegimos que Sequelize, debido a su diseño nativo para JavaScript, era la opción más indicada. Otros ORMs como 
-TypeORM o Prisma también eran opciones válidas, pero al estar más orientados a TypeScript no podríamos aprovechar al máximo 
-sus características, por lo que Sequelize era la mejor opción para nuestro proyecto.
+En cuanto al stack tecnológico, para el backend se optó por usar \textbf{Node.js} con \textbf{Express} debido a su popularidad, fiabilidad y amplio ecosistema de librerías, así como la extensa documentación disponible. Como lenguaje de programación se decidió trabajar directamente con \textbf{JavaScript} en formato ESModules y no con TypeScript principalmente porque Node.js no tiene un soporte completo para todas las funcionalidades que ofrece TypeScript.
 
-A la hora de servir imágenes al frontend, llegamos a la conclusión de que tener imágenes sin procesar
-en el servidor jugaría en nuestra contra a la hora de tener un buen rendimiento, por lo que decidimos generalizar el uso
-del formato webp en todas las imágenes que se subieran a la aplicación, exceptuando los mapas de las zonas, 
-que se mantendrían en formato svg. Obligar a que los usuarios subieran las imágenes en un único formato generaría 
-una gran fricción a la hora de usar la app; la solución más óptima era permitir una amplia gama de formatos para las imágenes
-y convertirlas a webp en el servidor antes de guardarlas. Para ello decidimos usar la librería ffmpeg, una de 
-las librerías más populares y potentes para el procesamiento de imágenes que ya habíamos utilizado previamente en otro proyecto.
+Para la base de datos, se descartó desde el principio las bases de datos no relacionales, ya que la naturaleza de los datos de ClimbIt, con relaciones claras entre escaladores, rocódromos y rutas, se adaptaba mejor a un modelo relacional. \textbf{PostgreSQL} se ha convertido en la base de datos relacional más utilizada y querida en el mundo del desarrollo, como se demuestra en la encuesta anual \textit{Stack Overflow Developer Survey}\footnote{https://survey.stackoverflow.co/2025/technology\#most-popular-technologies-database-database-prof} del pasado año 2025, debido a su gran rendimiento, escalabilidad y comunidad. Otras opciones como MySQL o MariaDB también eran opciones válidas, pero al no ofrecer características como soporte nativo para tipos de datos JSON o arrays, que sí ofrece PostgreSQL, y que se adaptaban perfectamente a las necesidades del proyecto, se decidió que PostgreSQL era la mejor opción.
 
-En cuanto a la gestión de sesiones, optamos por JWT (\textit{JSON Web Tokens}) por su 
-ligereza y capacidad de escala futura. Los tokens contienen la información necesaria sobre 
-permisos e identidad del usuario, eliminando la necesidad de realizar validaciones completas con cada petición 
-y mejorando así los tiempos de respuesta y el rendimiento. Además, al estar firmados con una clave secreta, garantizamos 
-que los datos no pueden ser manipulados, proporcionando una capa adicional de seguridad sin 
-sobrecargar el servidor con sesiones almacenadas.
+Para la comunicación entre el backend y la base de datos, se decidió que utilizar un ORM (\textit{Object-Relational Mapping}) facilitaria el desarrollo y colocaría una capa extra de seguridad. Después de evaluar varias opciones se determinó que \textbf{Sequelize}, debido a su diseño nativo para JavaScript, era la opción más indicada. Otros ORMs como TypeORM o Prisma también barajaron, pero al estar orientados a TypeScript no se podría aprovechar al máximo sus características.
 
-Para el frontend sabíamos que queríamos una aplicación web, pero que fuera PWA (\textit{Progressive Web App}), para que los usuarios 
-de cualquier dispositivo pudieran acceder a ella y descargarla sin la necesidad de tener que crear una aplicación nativa para 
-cada plataforma. Desde el principio fuimos reticentes con el uso de frameworks frontend. Después de valorar las ventajas que 
-nos ofrecían frente a la curva de aprendizaje y la complejidad añadida que suponían, decidimos optar por una solución más ligera 
-y sencilla: utilizar HTML, CSS y JavaScript puro, ayudados de Bootstrap para mantener un diseño consistente. Esto nos permitió 
-tener un control total sobre el código y una velocidad inicial de desarrollo mucho mayor, ya que los dos habíamos desarrollado 
-previamente con estas tecnologías. Por otro lado, sí nos supuso un reto la implementación de ciertas funcionalidades, en 
-concreto el enrutamiento de las vistas o la implementación manual de componentes personalizados, que es algo que los 
-frameworks manejan de forma nativa y que nosotros tuvimos que implementar desde cero, pero al final creemos que fue la decisión 
-correcta para el proyecto. 
+A la hora de servir imágenes al frontend, se llegó a la conclusión de que tener imágenes sin procesar en el servidor jugaría en nuestra contra a la hora de tener un buen rendimiento, por lo que decidimos generalizar el uso del formato \textbf{webp} en todas las imágenes que se subieran a la aplicación, exceptuando los mapas de las zonas, que se mantendrían en formato \textbf{svg}. Obligar a que los usuarios subieran las imágenes en un único formato generaría una gran fricción a la hora de usar la app, por lo que la solución más óptima era permitir una amplia gama de formatos para las imágenes y convertirlas en el servidor antes de almacenarlas. Para esta tarea se optó por utilizar la librería \textbf{ffmpeg}, una de las librerías más populares y potentes para el procesamiento de imágenes.
+
+En cuanto a la gestión de sesiones, se decidió usar \textbf{JWT} (\textit{JSON Web Tokens}) por su ligereza y capacidad de escala. Los tokens contienen la información necesaria sobre permisos e identidad del usuario, eliminando la necesidad de realizar validaciones completas con cada petición y mejorando así los tiempos de respuesta y el rendimiento. Además, al estar firmados con una clave secreta, se garantiza que los datos no pueden ser manipulados, proporcionando una capa adicional de seguridad sin cargar el servidor con sesiones almacenadas.
+
+Para el frontend se planteó desde el principio la necesidad de que la aplicación tuviera que ser utilizada desde dispositivos móviles, pero no se quería limitar el uso a un tipo de dispositivo concreto, ya que supondría perder una amplia base de usuarios. Por lo que se debía decidir entre desarrollar aplicaciones nativas para cada plataforma, lo que supondría un esfuerzo inasumible para el alcance del proyecto, o desarrollar una aplicación web, pero que permitiese utilizarla como si fuera nativa. La decisión estaba clara, se optó por desarrollar una \textbf{PWA} (\textit{Progressive Web App}), que permitía tener la flexibilidad y alcance para que cualquier usuario, independientemente de su dispositivo, pudiera acceder a la aplicación.
+
+Para desarrollar la aplicación, después de valorar las ventajas que nos ofrecían distintos frameworks frente a la curva de aprendizaje y la complejidad añadida que suponían, decidimos optar por una solución más ligera y sencilla: utilizar \textbf{HTML}, \textbf{CSS} y \textbf{JavaScript} puro junto con \textbf{Bootstrap} para mantener un diseño consistente. Esta decisión permitía mantener un control total sobre el código y a la vez que una velocidad inicial de desarrollo  mayor debido a los conocimientos previos. Por otro lado, sí suponía un reto la implementación de ciertas funcionalidades, en concreto el enrutamiento de las vistas o la implementación manual de componentes personalizados, que es algo que los frameworks manejan de forma nativa y que se tenían que implementar desde cero.
 
 
 \section{Diseño de la Arquitectura}
 
 \subsection{Backend}
-
+(Pendiente de refactorización)
 Una vez elegida la arquitectura hexagonal para el backend, se diseñó la estructura del proyecto siguiendo los principios de 
 esta arquitectura y aplicando una serie de patrones de diseño que nos permitieran mantener un código limpio, sencillo y modular, 
 completamente independiente entre las diferentes capas. La arquitectura hexagonal organiza el código en capas definidas, 
 donde cada una tiene una responsabilidad clara. La capa de dominio se encarga de la lógica de negocio y las reglas del sistema, 
 donde se definen todos los contratos y validaciones sobre los objetos que se procesan. La capa de infraestructura se encarga
 de la comunicación con la base de datos, que nosotros gestionamos a través de Sequelize, así como los modelos que representan
-las entidades del sistema, las migraciones y las seeds. La capa de aplicación se encarga de definir la lógica de los use 
-cases, orquestando la interacción entre la capa de dominio y la capa de infraestructura. Por último, la capa de presentación, 
+las entidades del sistema, las migraciones y las seeds. La capa de aplicación se encarga de definir la lógica de los  casos de uso, orquestando la interacción entre la capa de dominio y la capa de infraestructura. Por último, la capa de presentación, 
 que nosotros hemos llamado interfaz, se encarga de la comunicación con el frontend a través de una API REST, definiendo los 
 endpoints, los controladores que gestionan las peticiones y respuestas y los middlewares que nos ayudan a la autenticación 
 de tokens, formatos de datos y validaciones tanto de datos como de archivos.
@@ -132,7 +102,63 @@ alineado con la filosofía de la arquitectura hexagonal.
 
 \subsection{Frontend}
 
-Se describe cómo se organiza la interfaz de usuario y su comunicación con el backend.
+Como se describe en la sección anterior, la arquitectura del frontend fue diseñada adoptando una aproximación modular 
+y por capas sin usar frameworks tradicionales como React o Vue, lo que implicó implementar manualmente ciertos patrones 
+como el enrutado de vistas y la gestión del ciclo de vida de componentes. Esta decisión se justificaba por la necesidad 
+de mantener un control total sobre el código y maximizar la velocidad inicial de desarrollo.
+
+\paragraph{Arquitectura en Capas:} La estructura del frontend se organiza en tres capas claramente diferenciadas:
+
+\begin{itemize}
+    \item \textbf{Capa Core:} Centraliza toda la lógica de infraestructura transversal, incluyendo el cliente HTTP centralizado que gestiona la comunicación con la API REST del backend, la inyección automática de tokens JWT, el manejo de errores para situaciones offline, y el enrutado por hash que controla la navegación entre vistas. Esta capa también incluye utilidades globales de UI como el banner de conectividad, estados de carga y manejo de formularios.
+    
+    \item \textbf{Capa Modules:} Agrupa el código de negocio por dominios funcionales (autenticación, escalador, rocódromo, ruta, zona, social, error). Cada módulo sigue el patrón controlador-vista, donde el controlador orquesta la obtención de datos del cliente HTTP centralizado y controla el flujo de interacción, mientras que la vista se encarga únicamente del renderizado HTML y el enlace de callbacks de eventos. Este patrón establece una separación clara de responsabilidades: la vista no contiene lógica de negocio, y el controlador no contiene lógica de presentación.
+    
+    \item \textbf{Capa Components:} Alberga todas las piezas reutilizables de interfaz. De esta forma, se logra reducir la duplicidad y se mantiene una consistencia visual a lo largo de toda la app: barra de navegación, formularios editables, modales de confirmación, notificaciones toast, selectores de imágenes, mapas SVG interactivos con pan y zoom, tarjetas de estadísticas de progreso y botones de estado. Cada componente expone funciones de renderizado que generan HTML y funciones de inicialización que vinculan listeners de eventos.
+\end{itemize}
+
+\paragraph{Arquitectura Controlador-Vista:} Originalmente, se planteó la implementación del frontend con el patrón MVC(Modelo-Vista-Controlador), pero se optó por unificar Modelo y Controlador, ya que la lógica de negocio se encuentra toda delegada al backend y significaría añadir una capa extra que no aportaría tanto valor en contraposición a la complejidad extra que implicaría. Por ello, se adoptó esta simplificación en la que el controlador se encarga de realizar las llamadas a la API a través del cliente HTTP y procesa los datos obtenidos para usarlos en la vista, que se encarga de renderizar el contenido. El controlador y la vista tienen unas funciones bien diferenciadas:
+El controlador es responsable de:
+
+\begin{itemize}
+    \item Llamadas a la API a través del cliente HTTP para obtener y enviar datos.
+    \item Procesar los datos obtenidos del backend para su uso en la vista.
+    \item Procesar los datos recibidos de la vista para enviarlos al backend.
+    \item Gestionar el estado local del módulo (almacenado en variables de módulo o \texttt{localStorage}).
+    \item Construir el contexto necesario para renderizar la vista(construcción de componentes, preparación de datos...).
+    \item Definir callbacks que respondan a los eventos que se sucedan en la vista por parte del usuario.
+\end{itemize}
+
+La vista, por su parte, se encarga únicamente de:
+
+\begin{itemize}
+    \item Generar el HTML necesario basado en los datos proporcionados por el controlador.
+    \item Enlazar listeners de eventos a elementos del DOM.
+    \item Delegar todos los eventos de usuario a los callbacks del controlador.
+\end{itemize}
+
+Esta división reduce el acoplamiento, facilita la comprensión del código y permite una mejor escalabilidad y mantenimiento del proyecto.
+
+\paragraph{Cliente HTTP:} Similar al patrón Repository en el backend, el cliente HTTP actúa como único mediador entre los módulos y la API REST. Sus responsabilidades son: la inyección del token JWT en los headers de autenticación, la detección de respuestas 401 (sesiones expiradas) que dispara el borrado del token y redirecciona al login, y  marcar el comportamiento cuando no hay conexión a red. En modo offline, el cliente distingue entre operaciones de solo lectura (GET, HEAD) que pueden proceder con datos en caché, y operaciones de escritura (POST, PUT, DELETE) que son rechazadas, asegurando que el usuario pueda seguir consultando la información almacenada sin poder realizar cambios que no puedan ser sincronizados con el servidor.
+
+\paragraph{PWA y Estrategia de Caché:} La aplicación se encuentra completamente diseñada e implementada como una PWA. 
+En el manifiesto se definen  el modo \texttt{standalone} para que la aplicación se comporte como una app nativa instalada, la orientación se bloquea 
+a portrait cuando se ejecuta en modo instalado, y se establece un ícono y tema de color consistentes.
+En el service worker se establecen una serie de características para garantizar una experiencia fluida para el usuario, 
+tanto online como offline. A través de la librería Workbox, se han implementado estrategias de caché para cada tipo de recurso en función de los criterios que se han considerado más relevantes en su impacto a la experiencia del usuario.
+Las distintas estrategias de caché son las siguientes, organizadas por tipo de recurso:
+
+\begin{itemize}
+    \item \textbf{Librerías externas} (CDN de Bootstrap, Material Icons, etc.): Caché-first con expiración anual, priorizando velocidad, ya que estos recursos cambian raramente.
+    
+    \item \textbf{Imágenes de rutas:} Stale-while-revalidate con expiración de 20 minutos, permitiendo que se sirvan versiones en caché mientras se actualizan en segundo plano, mejorando la respuesta inicial sin sacrificar frescura.
+    
+    \item \textbf{APIs de negocio} (endpoints de escaladores, rocódromos, zonas, rutas): Network-first con timeout de 10 segundos, priorizando datos frescos pero cayendo a caché si la red tarda o no está disponible.
+    
+    \item \textbf{Activos de interfaz} (logos, avatares): Stale-while-revalidate con expiración de 1 día, proporcionando una buena     experiencia visual incluso en conexiones lentas.
+\end{itemize}
+
+Esta diferenciación en la caché asegura que la experiencia offline sea funcional para consultar tus estadísticas o las rutas de un rocódromo, mientras que la estrategia de caché en línea minimiza tiempos de respuesta sin sacrificar sustancialmente la consistencia de datos.
 
 \section{Diseño de la Base de Datos}
 
