@@ -5,7 +5,7 @@ En este capítulo se detalla la metodología de trabajo aplicada durante el proc
 
 \section{Enfoque de Diseño Centrado en el Usuario (DCU)}
 
-Tal como se expuso en los capítulos previos, la reciente popularización de la escalada ha provocado la entrada masiva de nuevos perfiles de deportistas con necesidades no cubiertas por las soluciones tecnológicas actuales. Ante esta situación, resultaba crucial que el proyecto adoptara desde su inicio un enfoque de Diseño Centrado en el Usuario (DCU) \cite{norman1986user}. El DCU es una filosofía de diseño que tiene por objeto la creación de productos que resuelvan necesidades concretas, situando a los usuarios finales en el centro de todas las fases de desarrollo e involucrándolos activamente.
+Tal como se expuso en los capítulos previos, la reciente popularización de la escalada ha provocado la entrada masiva de nuevos perfiles de deportistas con necesidades no cubiertas por las soluciones tecnológicas actuales. Ante esta situación, resultaba crucial que el proyecto adoptara desde su inicio un enfoque de Diseño Centrado en el Usuario (DCU) \citep{abras2004user}. El DCU es una filosofía de diseño que tiene por objeto la creación de productos que resuelvan necesidades concretas, situando a los usuarios finales en el centro de todas las fases de desarrollo e involucrándolos activamente.
 
 Para garantizar el desarrollo de una solución que realmente aporte valor y reduzca las frustraciones actuales de los escaladores, las actividades de análisis y diseño  de requisitos se estructuraron de la siguiente manera:
 
@@ -22,7 +22,7 @@ Antes de iniciar la fase de desarrollo e implementación, se determinó que era 
 
 \subsection{Lienzo de Propuesta de Valor (Value Proposition Canvas)}
 
-Con el objetivo de empatizar de manera efectiva con el usuario final y ejecutar la primera tarea de diseño, se construyó un \textit{Value Proposition Canvas} (VPC), modelo propuesto por Osterwalder \cite{osterwalder2014value}. Esta herramienta permite situarse en la perspectiva del escalador y analizar su contexto dividiéndolo en dos bloques principales como se puede ver en la imagen \ref{fig:imagen_vpc}. A continaución se desarrollan cada uno de estos bloques:
+Con el objetivo de empatizar de manera efectiva con el usuario final y ejecutar la primera tarea de diseño, se construyó un \textit{Value Proposition Canvas} (VPC), modelo propuesto por \cite{osterwalder2015value}. Esta herramienta permite situarse en la perspectiva del escalador y analizar su contexto dividiéndolo en dos bloques principales como se puede ver en la imagen \ref{fig:imagen_vpc}. A continaución se desarrollan cada uno de estos bloques:
 
 \begin{figure}[h]
     \centering
@@ -39,9 +39,10 @@ Se centra en cómo un producto o servicio crea valor en base a los datos del per
 
 \subsection{Visualización del viaje: User Story Map}
 
-Basándose en la propuesta de valor, se realizo la construcción de un \textit{User Story Map} (USM), técnica definida por Jeff Patton, para visualizar el recorrido completo del usuario dentro de la aplicación \cite{patton2014user}, en este caso mediante la herramienta digital Mural. Un USM facilita la comprensión profunda del flujo de trabajo y las interacciones delusuario con el sistema, ayudando a visualizar y planificar las funcionalidades de manera global.
+Basándose en la propuesta de valor, se realizo la construcción de un \textit{User Story Map} (USM), técnica definida por Jeff Patton, para visualizar el recorrido completo del usuario dentro de la aplicación \citep{patton2014user}, en este caso mediante la herramienta digital Mural. Un USM facilita la comprensión profunda del flujo de trabajo y las interacciones delusuario con el sistema, ayudando a visualizar y planificar las funcionalidades de manera global.
 
-Este mapa visual resultó extremadamente útil a lo largo del desarollo del proyecto principalmente por el agrupamiento de los diferentes hitos, de manera que trazando líneas horizontales sobre el conjunto de historias agrupadas como se puede observar en la imagen \ref{fig:imagen_usm}. Se tomaron decisiones de diseño clave para decidir qué funcionalidades eran vitales para el primer prototip y cada uno de los diferentes hitos alcanzados permititendo dejar las ideas menos prioritarias para versiones futuras. Para visualizar en detalle el Mapa de Historia de Usuario de ClimbIt se puede hacer a través del siguiente enlace \footnote{Mapa de Historia de Usuario de ClimbIt: \url{https://app.mural.co/t/cm4232/m/cm4232/1719575921327/bb32e73a637ba77298937e8268d651afbee035e2?sender=u9565d89e69e5dee32c568362}}.
+Este mapa visual resultó extremadamente útil a lo largo del desarollo del proyecto principalmente por el agrupamiento de los diferentes hitos, de manera que trazando líneas horizontales sobre el conjunto de historias agrupadas como se puede observar en la imagen \ref{fig:imagen_usm}. Se tomaron decisiones de diseño clave para decidir qué funcionalidades eran vitales para el primer prototip y cada uno de los diferentes hitos alcanzados permititendo dejar las ideas menos prioritarias para versiones futuras. Para visualizar en detalle el Mapa de Historia de Usuario de ClimbIt se puede hacer a través del siguiente enlace 
+\footnote{Mapa de Historia de Usuario de ClimbIt: \url{https://app.mural.co/t/cm4232/m/cm4232/1719575921327/bb32e73a637ba77298937e8268d651afbee035e2?sender=u9565d89e69e5dee32c568362}}.
 
 \begin{figure}[h]
     \centering
@@ -53,7 +54,7 @@ Este mapa visual resultó extremadamente útil a lo largo del desarollo del proy
 
 \section{Metodología de trabajo: Scrumban}
 
-Para la gestión del proyecto se optó por la metodología ágil \textbf{Scrumban} \cite{ladas2009scrumban}. Se consideró que aplicar Scrum en estado puro resultaría demasiado estricto y añadiría una carga burocrática excesiva para un equipo de solo dos personas. Por otro lado, el marco de trabajo Kanban carecía de los periodos de desarrollo intensivos y acotados que se necesitaba para este proyecto. Como resultado se empleo Scrumban, una metodología híbrida que combina la flexibilidad basada en flujos de Kanban con la estructura de iteraciones planificadas de Scrum.
+Para la gestión del proyecto se optó por la metodología ágil \textbf{Scrumban} \citep{ladas2008scrumban}. Se consideró que aplicar Scrum en estado puro resultaría demasiado estricto y añadiría una carga burocrática excesiva para un equipo de solo dos personas. Por otro lado, el marco de trabajo Kanban carecía de los periodos de desarrollo intensivos y acotados que se necesitaba para este proyecto. Como resultado se empleo Scrumban, una metodología híbrida que combina la flexibilidad basada en flujos de Kanban con la estructura de iteraciones planificadas de Scrum.
 
 De Scrum se heredó el concepto de \textit{sprints} (iteraciones temporales de desarrollo) con una duración de dos semanas y las técnicas de especificación de requisitos mediante Historias de Usuario (HU) y \textit{Epics} (agrupaciones para la definición de casos de uso mayores). Por otro lado, de Kanban se adoptó su sitema de tablero WIP(Work In Progress) como se observa en la imagen \ref{fig:tablero_wip} y el sistema de tracción o \textit{pull} de manera que en lugar de preasignar las tarea durante la planificación, cada miembro del equipo seleccionaba la siguiente tarea a realizar directamente desde la columna \textit{To Do} según el contexto del momento.
 
