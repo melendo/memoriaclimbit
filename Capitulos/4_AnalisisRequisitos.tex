@@ -1,21 +1,21 @@
 \chapter{Análisis y Especificación de Requisitos}
 \label{cap:analisisRequisitos}
 
-Este capítulo detalla los requisitos y el público objetivo de la aplicación bajo un enfoque de Diseño Centrado en el Usuario (DCU).Mediante el uso de \textit{Personas} e \textit{Historias de Usuario}, se pasa de una problemática inicial a funcionalidades claras, facilitando el análisis del problema hasta la definición de los hitos de desarrollo que han exisitido durante la evolución del proyecto.
+Este capítulo detalla los requisitos y el público objetivo de la aplicación bajo un enfoque de Diseño Centrado en el Usuario (DCU). Mediante el uso de \textit{Personas} e \textit{Historias de Usuario}, se pasa de una problemática inicial a funcionalidades claras, facilitando el análisis del problema hasta la definición de los hitos de desarrollo que han existido durante la evolución del proyecto.
 
 \section{Definición del Problema}
 
 El diseño de la aplicación \textit{ClimbIt} busca solventar un conjunto de carencias detectadas en el panorama actual de la escalada en rocódromo, como se expuso en el Capítulo \ref{cap:estadoDelArte}. Para que el análisis de requisitos sea efectivo, es necesario desgranar el problema en tres grandes bloques que la aplicación debe mitigar:
 
 \begin{enumerate}
-    \item \textbf{Dificultad en el seguimiento del progreso:} La falta de un estandar en las escalas de dificultad y el cambio de rutas constante de los rocódromos hacen que el registro manual sean métodos ineficaces, causando al escalador frustración y desembocando en un abandono del seguimiento.
+    \item \textbf{Dificultad en el seguimiento del progreso:} La falta de un estándar en las escalas de dificultad y el cambio de rutas constante de los rocódromos hacen que el registro manual sean métodos ineficaces, causando al escalador frustración y desembocando en un abandono del seguimiento.
     \item \textbf{Carencia de motivación a largo plazo:} El progreso físico y técnico en la escalada es muy lento y con largas fases de estancamiento por lo que sin una plataforma que aplique mecánicas de gamificación para visualizar logros a corto o medio plazo y fomente la competitividad, la retención del escalador baja.
     \item \textbf{Desconexión en la gestión deportiva:} Los \textit{route-setters} invierten un gran esfuerzo en renovar los muros, pero carecen de una vía sencilla para registrarlos y para obtener \textit{feedback} (estadísticas de popularidad, valoraciones de dificultad) por parte de la comunidad del rocódromo.
 \end{enumerate}
 
 \section{Personas}
 
-Para asegurar que las funcionalidades a desarrollar cubren los problemas expuestos, se hace uso de la técnica de \textit{Personas} \citep{losana2021systematic}. A continuación, se presentan dos perfiles ficticios pero representativos, basados en el público objetivo, que encarnan los dos roles principales de la aplicación: el escalador y el gestor del rocódromo.
+Para asegurar que las funcionalidades a desarrollar cubren los problemas expuestos, se hace uso de la técnica de \textit{Personas} \citep{losana2021systematic}. A continuación, se presentan dos perfiles ficticios, pero representativos, basados en el público objetivo, que encarnan los dos roles principales de la aplicación: el escalador y el gestor del rocódromo.
 
 \subsection{Persona 1: Klaudia, Escaladora Constante}
 
@@ -53,19 +53,19 @@ Se presenta el perfil de Klaudia en la imagen \ref{fig:Klaudia} una escaladora q
 
 \subsection{Persona 2: Víctor, Gestor del Rocódromo}
 
-Se presenta el perfil de Victor en la imagen \ref{fig:Victor}, un \textit{route-setter} cuyo objetivo es gestionar eficientemente el muro y dinamizar a su comunidad.
+Se presenta el perfil de Víctor en la imagen \ref{fig:Victor}, un \textit{route-setter} cuyo objetivo es gestionar eficientemente el muro y dinamizar a su comunidad.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.4\textwidth]{./Imagenes/Fuentes/victor.png} 
-    \caption{Imagen de la \textit{persona} Victor}
+    \caption{Imagen de la \textit{persona} Víctor}
     \label{fig:Victor}
 \end{figure}
 
 \begin{itemize}
     \item \textbf{Perfil:} Víctor, \textit{route-setter} principal y propietario, 42 años.
     \item \textbf{Rol:} Responsable del diseño y renovación de las rutas.
-    \item \textbf{Biografía:} Víctor lleva más de una década gestionando su centro siendo su prioridad mantener el rocódromo vivo y desafiante, cambiando sectores del muro semanalmente. Busca que su rocódromo ofrezca un valor añadido comparado con la comeptecia.
+    \item \textbf{Biografía:} Víctor lleva más de una década gestionando su centro siendo su prioridad mantener el rocódromo vivo y desafiante, cambiando sectores del muro semanalmente. Busca que su rocódromo ofrezca un valor añadido comparado con la competencia.
     \item \textbf{Metas y Motivaciones:}
     \begin{itemize}
         \item Ofrecer la mejor experiencia y servicios a los clientes de su rocódromo.
@@ -77,14 +77,14 @@ Se presenta el perfil de Victor en la imagen \ref{fig:Victor}, un \textit{route-
         \item Ignora de forma objetiva qué rutas son las más populares o cuáles no gustan.
         \item Hecha en falta una plataforma para registrar todas las nuevas rutas.
     \end{itemize}
-    \item \textbf{Relación con la aplicación (\textit{ClimbIt}):} Víctor utilizará el panel de gestión para mantener actualizadolas rutas del rocódromo y ClimbIt actuará como una herramienta de gestión que le proporcionará un valor añadido a su rocódromo.
+    \item \textbf{Relación con la aplicación (\textit{ClimbIt}):} Víctor utilizará el panel de gestión para mantener actualizadas las rutas del rocódromo y ClimbIt actuará como una herramienta de gestión que le proporcionará un valor añadido a su rocódromo.
 \end{itemize}
 
 \section{Especificación de Funcionalidades (Historias de Usuario)}
 
 Una vez comprendido los usuarios, los requisitos del sistema se han especificado mediante Historias de Usuario. En esta sección se listan los identificadores y títulos de las funcionalidades completadas en el desarrollo de ClimbIt extraídas del \textit{Product Backlog} y agrupadas por temática. 
 
-Dado que la descripción y los criterios de aceptación de todas las Historias de Usuario son muy extentensas se han relegado al \textbf{Apéndice \ref{Appendix:Key1}} para facilitar la lectura y fluidez de este documento.
+Dado que la descripción y los criterios de aceptación de todas las Historias de Usuario son extensas se han relegado al \textbf{Apéndice \ref{Appendix:Key1}} para facilitar la lectura y fluidez de este documento.
 
 \subsection{Autenticación y Gestión de Perfil}
 Historias orientadas al acceso al sistema y la personalización de la cuenta:
@@ -155,7 +155,7 @@ Historias relativas a la interacción directa con las vías y bloques:
 
 \section{Roles del Sistema}
 
-Orientandose a una visión técnica del proyecto se ha definido un modelo de permisos basado en cuatro roles principales, cada uno de estos con un nivel de autorización y acceso a las funcionalidades dentro de la plataforma:
+Orientándose a una visión técnica del proyecto se ha definido un modelo de permisos basado en cuatro roles principales, cada uno de estos con un nivel de autorización y acceso a las funcionalidades dentro de la plataforma:
 
 \subsection{Escalador}
 Es el rol base que representa al usuario fina, siendo su objetivo principal es registrar sus actividades y participar en la comunidad. Tiene permisos de lectura sobre la información pública de los rocódromos y permisos de escritura sobre sus datos personales y entre sus funciones se encuentran la gestión de su perfil, la interacción social, el registro de ascensos y la consulta de clasificaciones y estadísticas.
