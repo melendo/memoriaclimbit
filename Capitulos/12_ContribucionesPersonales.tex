@@ -2,16 +2,51 @@
 \label{cap:contribucionesPersonales}
 \addcontentsline{toc}{chapter}{Contribuciones Personales}
 
-En caso de trabajos no unipersonales, cada participante indicará en la memoria su contribución al proyecto con una extensión de al menos dos páginas por cada uno de los participantes.
+Con el objetivo de aumentar el alcance de la aplicación lo máximo posible sin comprometer la calidad, tomamos la decisión de hacer una división de responsabilidades, aunque ambos integrantes participamos activamente en la toma de decisiones y en la elaboración de todas las áreas del proyecto. A continuación se detallan las contribuciones de cada uno de los integrantes.
 
-En caso de trabajo unipersonal, elimina esta página en el fichero \texttt{TFGTeXiS.tex} (comenta o borra la línea \verb|\include{Capitulos/ContribucionesPersonales}|).
+\section*{Contribuciones de Iván Alcalde Cámara}
+En mi caso, no soy un escalador activo ni tenía experiencia previa en el ámbito de la escalada, por lo que mi contribución se centró principalmente en la parte técnica del proyecto, aunque también participé en la elaboración de los requisitos y en la interacción con los usuarios finales. A continuación se detallan mis contribuciones en cada una de las áreas del proyecto.
 
-\section*{Iván Alcalde Cámara}
-Al menos dos páginas con las contribuciones.
+\subsection*{1. Adaptación al tópico y Análisis de Requisitos}
+Debida a mi falta de experiencia en el mundo de la escalada, empecé informándome a través de mi compañero e investigando sobre el tema para poder aportar valor al proyecto. Además, comencé realizando una ligera búsqueda de aplicaciones existentes que me permitió entender mejor las necesidades de los usuarios y contribuir a la elaboración de los requisitos del proyecto. Participé activamente en la definición de las Historias de Usuario y en la adaptación del User Story Map a lo largo de las revisiones del proyecto con las evaluaciones obtenidas de los usuarios en las capturas de requisitos.
+
+\subsection*{2. Diseño del sistema y Arquitectura}
+En cuanto al diseño, tanto mi compañero como yo participamos en la identificación de las distintas arquitecturas y tecnologías estructuramos el diseño inicial de la aplicación. Diseñé los distintos modelos Entidad-Relación y las estructuras de las tablas de la base de datos y de preparar Sequelize y su conexión con la base de datos PostgreSQL junto con el camino para el uso de migraciones dentro del proyecto, así como la implementación de buenas prácticas y la adopción de patrones de diseño que mejoraran la calidad del software.
+
+En cuanto al repositorio, me encargue de configurar el proyecto como un monorepositorio a través de la librería \texttt{Lerna}, para mantener centralizado dentro de un mismo repositorio la gestión tanto del backend como del frontend con separados en distintos \textit{workspaces}. Configuré \texttt{ESLint} y \texttt{Prettier} para mantener un código consistente y de calidad y \texttt{Husky} para la gestión de los \textit{hooks} de \texttt{Git} y ejecutar procesos de formateo de código para mantener una estructura y diseño consistente con buenas prácticas. También me encargué de aumentar la seguridad dentro del repositorio, bloqueando manualmente las ejecuciones de \textit{post-installs} de dependencias al ejecutar \texttt{npm install} y demás opciones de seguridad, con el fin de evitar o mitigar vulnerabilidades procedentes del creciente número de ataques a librerías del ecosistema de \texttt{Node.JS}.
+
+En cuanto a las interfaces, una vez mi compañero realizó los bocetos iniciales del sistema, me encargué junto con él de elevar el diseño de los mockups a un diseño más final que implementamos posteriormente en el frontend. Para su elaboración nos basamos en los conocimientos adquiridos en la asignatura Interfaces de Usuario que habíamos cursado en el grado.
+
+\subsection*{3. Implementación y Desarrollo}
+
+Durante el desarrollo de la aplicación, participé activamente en la implementación del backend. Me encargué de la implementación de la lógica de negocio, la creación de las rutas y controladores para la gestión de los recursos, así como la integración con la base de datos PostgreSQL utilizando Sequelize y las migraciones para cada iteración e implementación de funcionalidades y los diferentes middlewares de validación de datos y manejo de errores, junto con la implementación del sistema de autenticación y autorización utilizando JWT (\textit{JSON Web Tokens}) para asegurar un correcto acceso por roles dentro de las diferentes secciones de la aplicación. 
+
+También me encargué de implementar el sistema de validación de archivos a través de \texttt{Multer} y \texttt{file-type}, su procesado y transformación a \textit{webp} con \texttt{FFmpeg} y almacenamiento en el servidor.
+
+Conforme avanzaba el proyecto y mi compañero se centraba más en la interacción con usuarios y la configuración de la aplicación como PWA y aplicando e investigando las estrategias de cacheo y funcionamiento offline, continué yo desarrollando las diferentes secciones del frontend que seguíamos implementando. Me encargué de la sección Social, Perfil y estadísticas propias del escalador junto con su integración con las estadísticas dentro de un rocódromo concreto.
+
+A lo largo del desarrollo también me encargue de las pruebas y la calidad de la aplicación. En cuanto a backend implementé pruebas unitarias para cada capa de la arquitectura utilizando \texttt{Jest} y pruebas de E2E para las rutas y flujos completos utilizando \texttt{Supertest}. Apliqué también una configuración de cobertura de código para el backend estableciendo un mínimo del 80\% para validar la calidad del código. Estructuré también un \textit{workflow} inicial para ser ejecutado cada vez que se se realizara una pull request a las ramas \textit{Develop y Main}, bloqueando el merge si no se cumplían los criterios de calidad o alguno de los test fallaba.
+
+Para el frontend, implementé un sistema de pruebas manuales debido a la falta de estabilidad del proyecto por los cambios constantes en el diseño, ejecutándolas cuando se implementaban nuevas funcionalidades y regresiones sobre otras que pudieran haberse visto afectadas por las modificaciones. 
+
+\section*{4. Captura de requisitos y Validación con Usuarios}
+
+Diseñé y participé en las dos fases de la captura de requisitos, tanto en la fase inicial de entrevistas, diseñando el guion y tomando notas sobre las respuestas de los entrevistados y en la evaluación de los resultados obtenidos, como en la segunda fase, elaborando el formulario y el procesamiento de los datos obtenidos para elaborar un listado de las mejoras y nuevas funcionalidades a implementar en el proyecto. 
+
+También participé en el proceso de mapeo y registro de rutas en el rocódromo Uadibloc, tomando medidas y publicando las rutas \textit{in situ} para poder comenzar las pruebas con los usuarios finales.
+
+\section*{5. Aportaciones a la Memoria}
+Por último, en cuanto a la elaboración de la memoria, me he encargado de redactar los siguientes capítulos:
+\begin{itemize}
+    \item Capítulo 5: Diseño del Sistema y Decisiones Técnicas.
+    \item Capítulo 6: Implementación y Desarrollo.
+    \item Capítulo 8: Pruebas y Validación.
+    \item Capítulo 9: Conclusiones y Trabajo Futuro.
+\end{itemize}
 
 \section*{Contribuciones de Ignacio Melendo Bruggeman}
 
-Con el objetivo de aumentar el alcance de la aplicación lo máximo posible sin comprometer la calidad, tomamos la decisión de hacer una división de responsabilidades. A continuación se detallan mis contribuciones en las diferentes áreas del proyecto.
+Mi contribución estuvo más enfocada en el producto, al ser conocedor del tópico y de la comunidad de la escalada, por lo que me centré más en la elaboración de los requisitos y la interacción con los usuarios finales, aunque también participé activamente en la implementación y desarrollo del proyecto. A continuación se detallan mis contribuciones en cada una de las áreas del proyecto.
 
 \subsection*{1. Gestión del Proyecto y Metodología}
 
