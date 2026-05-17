@@ -14,36 +14,9 @@ de seguir una arquitectura hexagonal detallada en el capítulo de diseño.
 
 El alcance tratado en esta sección se limita a la implementación funcional y estructural del backend.
 
-\subsection{Punto de entrada y ciclo de vida del servidor}
+\subsection{Arquitectura hexagonal}
 
-El archivo \textit{index.js} ubicado en la raíz de la carpeta \textit{apps/backend} actúa como punto de partida de la 
-aplicación. Su función principal es la de inicializar y arrancar el servidor Express en el puerto especificado por la 
-variable de entorno \textit{PORT} (que por defecto es 3000).
-
-La secuencia de inicio se divide en los siguientes pasos:
-
-\begin{enumerate}
-  \item \textbf{Carga de la aplicación}: se importa la instancia de Express desde server.js situado en 
-  \textit{src/interfaces/http/server.js}.
-  
-  \item \textbf{Conexión a dependencias}: la aplicación llama a \textit{app.conectar()}, que inicializa la conexión 
-  a la base de datos y prepara los recursos necesarios (inyección de dependencias del contenedor, modelos de Sequelize, etc.).
-  
-  \item \textbf{Puesta en escucha}: una vez la conexión es exitosa, el servidor se pone en escucha en el puerto 
-  configurado mediante \textit{app.listen()}.
-  
-  \item \textbf{Manejo de errores}: en caso de fallo en cualquiera de los pasos anteriores (error de conexión a BD, fallos de 
-  configuración), se captura la excepción, se registra en la consola y se termina el proceso con 
-  \textit{process.exit(1)}, señalizando el error.
-\end{enumerate}
-
-Este diseño asíncrono permite que la app espere a que todas las dependencias estén preparadas antes de aceptar peticiones. 
-Dentro de nuestros entornos con docker, el contenedor está configurado para esperar a que el servicio de base de datos esté 
-preparado antes de ejecutar este script de arranque, garantizando que no se intente conectar a una BD que aún no está lista.
-
-\subsection{Arquitectura por capas}
-
-La implementación del backend sigue un enfoque de arquitectura por capas, que favorece la separación de responsabilidades, 
+La implementación del backend sigue un enfoque de arquitectura hexagonal, que favorece la separación de responsabilidades, 
 facilita el testing y mejora la mantenibilidad del código. Cada capa tiene un rol específico y bien delimitado:
 
 \subsubsection{\textit{Domain} — Entidades y Contratos}
@@ -120,33 +93,18 @@ retorna \textit{201 Created} con el token, o un código de error 4xx/5xx si fall
 
 \begin{enumerate}
   \item El cliente HTTP envía la petición.
-  \item El servidor recibe la petición en la capa de \textit{interfaces}: el router valida los parámetros con las validaciones
-  definidas en el validador de la ruta. Si la Validación falla se retorna un error 400 con detalles del error (la contraseña 
-  debe incluir al menos 1 número, etc.). Si la validación es exitosa, se redirecciona al controlador.
+  \item El servidor recibe la petición en la capa de \textit{interfaces}: el router valida los parámetros con las validaciones  definidas en el validador de la ruta. Si la Validación falla se retorna un error 400 con detalles del error (la contraseña debe incluir al menos 1 número, etc.). Si la validación es exitosa, se redirecciona al controlador.
   \item El controlador invoca el caso de uso correspondiente para crear el escalador: \texttt{CrearEscaladorUseCase.execute(\{correo, apodo, contraseña\})}.
-  \item El caso de uso (capa \textit{application}) ejecuta la lógica de negocio: verifica que el correo sea único consultando 
-  el repositorio; si existe, lanza excepción. Se valida que el apodo también sea único. En caso de no serlo, 
-  lanza una excepción. Si no existe, un usuario registrado con ese apodo y ese correo, genera hash de contraseña usando el servicio y
-  crea una entidad escalador con los datos validados.
+  \item El caso de uso (capa \textit{application}) ejecuta la lógica de negocio: verifica que el correo sea único consultando el repositorio; si existe, lanza excepción. Se valida que el apodo también sea único. En caso de no serlo,  lanza una excepción. Si no existe, un usuario registrado con ese apodo y ese correo, genera hash de contraseña usando el servicio y crea una entidad escalador con los datos validados.
   \item El caso de uso llama a la función concreta del repositorio para crear un nuevo escalador: \texttt{escaladorRepository.create(nuevoEscalador)}.
-  \item El repositorio (capa \textit{infrastructure}) traduce a una operación Sequelize: crea un nuevo registro en la 
-  tabla de escaladores en Postgres.
-  \item Si la inserción del escalador fue exitosa, retorna al caso de uso los datos del escalador creado, y este delega de nuevo
-  en el servicio correspondiente la generación del JWT. Si todo sale como se espera, se retorna el token al controlador.
-  \item El controlador retorna un código \textit{201 Created} con el token generado o la procesa las excepciones lanzadas para retornar
-  un error con un mensaje descriptivo.
+  \item El repositorio (capa \textit{infrastructure}) traduce a una operación Sequelize: crea un nuevo registro en la   tabla de escaladores en Postgres.
+  \item Si la inserción del escalador fue exitosa, retorna al caso de uso los datos del escalador creado, y este delega de nuevo en el servicio correspondiente la generación del JWT. Si todo sale como se espera, se retorna el token al controlador.
+  \item El controlador retorna un código \textit{201 Created} con el token generado o la procesa las excepciones lanzadas para retornar un error con un mensaje descriptivo.
 \end{enumerate}
-
-Esta arquitectura proporciona flexibilidad (cambiar tecnologías de BD sin tocar casos de uso), testabilidad (mockear 
-repositorios en tests de casos de uso) y un claro mapeo entre concepto de negocio y código fuente.
 
 \subsection{Composición e inyección de dependencias}
 
-El contenedor de inyección de dependencias se encuentra implementado en el archivo \textit{src/infrastructure/container.js} y es 
-el punto central donde se instancian todos los objetos de la aplicación. En él se inyectan y se conectan las dependencias 
-necesarias. Este patrón permite que los 
-casos de uso y controladores no tengan que crear directamente sus dependencias, sino que las reciben ya construidas como
-se comentó en la sección de decisiones de diseño.
+El contenedor de inyección de dependencias se encuentra implementado en el archivo \textit{src/infrastructure/container.js} y es el punto central donde se instancian todos los objetos de la aplicación. En él se inyectan y se conectan las dependencias necesarias. Este patrón permite que los casos de uso y controladores no tengan que crear directamente sus dependencias, sino que las reciben ya construidas comose comentó en la sección de decisiones de diseño.
 
 \paragraph{\textbf{Estructura del contenedor:}}
 
@@ -168,35 +126,12 @@ El contenedor es una función asíncrona que:
   \item \textbf{Testabilidad}: en tests unitarios, se puede pasar un mock del repositorio al caso de uso, sin tocar la base de datos real.
   \item \textbf{Flexibilidad}:  en caso de ser necesario cambiar la implementación del repositorio a, por ejemplo, otro SGBDR, únicamente 
   se requiere cambios en el contenedor y en la clase la implementación concreta del repositorio, no en los casos de uso.
-  \item \textbf{Centralización}: todas las dependencias e instancias se crean en un único lugar, facilitando el mantenimiento y 
-  la visualización de dependencias.
+  \item \textbf{Centralización}: todas las dependencias e instancias se crean en un único lugar, facilitando el mantenimiento y la visualización de dependencias.
 \end{itemize}
-
-\textbf{Ejemplo de inyección:}
-
-Un controlador recibe el caso de uso inyectado: (sustituir por imagenes con polacode)
-
-\begin{verbatim}
-const escaladorController = new EscaladorController(
-  escaladorUseCases
-);
-\end{verbatim}
-
-El controlador invoca el caso de uso pasándole datos:
-
-\begin{verbatim}
-async crear(req, res) {
-  const resultado = 
-    await this.useCases.crear.ejecutar(req.body);
-  res.status(201).json(resultado);
-}
-\end{verbatim}
 
 \subsection{Interfaces HTTP (controladores y rutas)}
 
-Los controladores actúan como adaptadores entre el protocolo HTTP y los casos de uso de negocio. Su responsabilidad es 
-validar las peticiones entrantes, invocar el caso de uso, y transformar el resultado en una respuesta HTTP. La recepción y 
-respuesta de peticiones HTTP sigue el siguiente flujo:
+Los controladores actúan como adaptadores entre el protocolo HTTP y los casos de uso de negocio. Su responsabilidad es validar las peticiones entrantes, invocar el caso de uso, y transformar el resultado en una respuesta HTTP. La recepción y respuesta de peticiones HTTP sigue el siguiente flujo:
 
 \begin{enumerate}
   \item El router recibe la petición HTTP con los parámetros (body, query, params).
@@ -209,9 +144,7 @@ respuesta de peticiones HTTP sigue el siguiente flujo:
 
 \subsection{Manejo de errores}
 
-La gestión de errores en ClimbIt implementa una jerarquía personalizada de excepciones que permite traducir sin fricción 
-los errores técnicos de capas inferiores, como pueden ser errores de base de datos o validación, a errores de dominio 
-que finalmente se transforman a respuestas HTTP coherentes.
+La gestión de errores en ClimbIt implementa una jerarquía personalizada de excepciones que permite traducir sin fricción los errores técnicos de capas inferiores, como pueden ser errores de base de datos o validación, a errores de dominio que finalmente se transforman a respuestas HTTP coherentes.
 
 \subsubsection*{Jerarquía de errores personalizados}
 
@@ -219,8 +152,7 @@ Se define una clase base \texttt{AppError} que extiende de la clase \texttt{Erro
 
 \begin{itemize}
   \item \textbf{statusCode}: código HTTP a retornar (400, 401, 403, 404, 409, 500).
-  \item \textbf{code}: identificador de error semántico (p. ej. \texttt{NOT\_FOUND}, 
-  \texttt{CONFLICT}, \texttt{VALIDATION\_ERROR}).
+  \item \textbf{code}: identificador de error semántico (p. ej. \texttt{NOT\_FOUND}, \texttt{CONFLICT}, \texttt{VALIDATION\_ERROR}).
   \item \textbf{message}: descripción legible para el cliente.
   \item \textbf{isOperational}: indica si es un error esperado (true) o un bug del sistema (false).
   \item \textbf{cause}: referencia al error original para debugging (útil en desarrollo).
@@ -295,10 +227,10 @@ Es el punto de salida final donde todos los errores (del negocio, de la BD, etc.
 
 \begin{itemize}
   \item \textbf{Separación de concerns}: Los errores técnicos no contaminan lógica de negocio.
-  \item \textbf{Consistencia}: todas las respuestas de error siguen el mismo formato JSON.
-  \item \textbf{Testabilidad}: se puede mockear mapRepositoryError() en tests para inyectar errores específicos.
-  \item \textbf{Debugging}: se preserva el error original en \texttt{cause} sin exponerlo al cliente.
-  \item \textbf{Escalabilidad}: añadir nuevos tipos de error es trivial: extender AppError y mapear en dbErrorHandler.
+  \item \textbf{Consistencia}: Todas las respuestas de error siguen el mismo formato JSON.
+  \item \textbf{Testabilidad}: Se puede mockear errores específicos para inyectarlos en tests.
+  \item \textbf{Debugging}: Se preserva el error original en \texttt{cause} sin exponerlo al cliente.
+  \item \textbf{Escalabilidad}:Añadir nuevos tipos de error es trivial: extender AppError y mapear en dbErrorHandler.
 \end{itemize}
 
 \subsection{Autenticación y seguridad}
@@ -315,8 +247,7 @@ La autenticación en la aplicación se implementa mediante JWT (JSON Web Tokens)
   \item En la autenticación, el usuario proporciona correo y contraseña.
   \item El caso de uso \texttt{AutenticarEscalador} recupera el escalador por correo.
   \item Compara la contraseña proporcionada con el hash almacenado en la base de datos usando \texttt{bcryptjs.compare()}.
-  \item Si coincide, genera un JWT firmado con una clave secreta, incluyendo correo, el apodo y el rol: Escalador, 
-  Admin o Gestor. En caso de ser gestor, se incluye un array con los ids de los rocódromos que gestione.
+  \item Si coincide, genera un JWT firmado con una clave secreta, incluyendo correo, el apodo y el rol: Escalador, Admin o Gestor. En caso de ser gestor, se incluye un array con los ids de los rocódromos que gestione.
   \item El cliente almacena el JWT y lo envía en el header \texttt{Authorization: Bearer <token>} en futuras peticiones.
   \item Un middleware verifica y decodifica el JWT, adjuntando los datos del usuario a la petición.
   \item Las rutas protegidas validan que el usuario esté autenticado y tenga el rol necesario para acceder al recurso.
@@ -324,8 +255,7 @@ La autenticación en la aplicación se implementa mediante JWT (JSON Web Tokens)
 
 \textbf{Middleware de autenticación:}
 
-Cada ruta protegida (p. ej. obtener perfil, actualizar datos) valida que exista un JWT válido antes de procesar la petición. 
-Si el token es inválido o expirado, se retorna 401 Unauthorized.
+Cada ruta protegida (p. ej. obtener perfil, actualizar datos) valida que exista un JWT válido antes de procesar la petición. Si el token es inválido o expirado, se retorna 401 Unauthorized.
 
 \textbf{Validaciones de entrada:}
 
@@ -338,7 +268,7 @@ Todas las rutas validan los parámetros de entrada usando \texttt{express-valida
   \item \textbf{Archivos}: validación de tipo MIME y tamaño máximo.
 \end{itemize}
 
-Las validaciones fallidas retornan 400 Bad Request con detalles del error.
+Las validaciones fallidas retornan un código 400 Bad Request con detalles del error.
 
 \textbf{Consideraciones de seguridad:}
 
@@ -364,24 +294,17 @@ pertenecen:
   \item \textbf{Mapas de zonas}: \texttt{/uploads/mapas\_zonas/}.
 \end{itemize}
 
-Todas las imágenes son analizadas para validar su tipo real a través de la librería \texttt{file-type}. Una vez validadas
-se convierten al formato WebP utilizando \texttt{FFmpeg}, garantizando una comprensión eficiente que permite reducir su tamaño
-sin perdida de calidad apreciable. Esto se traduce en una mejora de rendimiento a la hora de servir las imágenes y un menor 
-consumo de espacio en disco.
+Todas las imágenes son analizadas para validar su tipo real a través de la librería \texttt{file-type}. Una vez validadas se convierten al formato WebP utilizando \texttt{FFmpeg}, garantizando una comprensión eficiente que permite reducir su tamaño sin perdida de calidad apreciable. Esto se traduce en una mejora de rendimiento a la hora de servir las imágenes y un menor consumo de espacio en disco.
 
-Si el endpoint al que se intenta subir una imagen es \texttt{POST /zonas/:id/mapa}, el flujo cambia. Se valida que el formato 
-sea svg exclusivamente. Cualquier otro formato es rechazado por decisión técnica de negocio. Estos mapas se renderizan en el
-frontend y se requiere que sean vectoriales para mantener su calidad al redimensionarlo para verlo en profundidad. Por ende, 
-estas imágenes tampoco son procesadas por FFmpeg, sino que se almacenan directamente en formato svg después de validar su 
-tipo real con \texttt{file-type}.
+Si el endpoint al que se intenta subir una imagen es \texttt{POST /zonas/:id/mapa}, el flujo cambia. Se valida que el formato sea svg exclusivamente. Cualquier otro formato es rechazado por decisión técnica de negocio. Estos mapas se renderizan en el frontend y se requiere que sean vectoriales para mantener su calidad al manipularlo para verlo en profundidad. Por ende, estas imágenes tampoco son procesadas por FFmpeg, sino que se almacenan directamente en formato svg después de validar su tipo real con \texttt{file-type}.
 
 \textbf{Validaciones de seguridad en archivos:}
 
 \begin{itemize}
-  \item \textbf{Validación de tipo}: se usa la librería \texttt{file-type} para verificar el MIME actual del archivo, no confiar solo en la extensión.
-  \item \textbf{Límite de tamaño}: previene ataques de negación de servicio (llenar disco).
-  \item \textbf{Nombres sanitizados}: los archivos se renombran con UUID o hash, evitando traversal attacks (\texttt{../../../etc/passwd}).
-  \item \textbf{Almacenamiento seguro}: los archivos se sirven a través de rutas controladas, no directamente del filesystem.
+  \item \textbf{Validación de tipo}: Se usa la librería \texttt{file-type} para verificar la firma real del archivo y no confiar solo en el MIME ni en la extensión.
+  \item \textbf{Límite de tamaño}: Previene ataques de negación de servicio (llenado de disco).
+  \item \textbf{Nombres sanitizados}: Los archivos se renombran para evitar problemas de seguridad y privacidad.
+  \item \textbf{Almacenamiento seguro}: Los archivos se sirven a través de rutas controladas, no directamente del filesystem.
 \end{itemize}
 
 \textbf{Flujo de subida de archivos:}
@@ -477,7 +400,7 @@ separación de responsabilidades, testabilidad y flexibilidad.
   \item \textbf{Inyección de dependencias}: flexibilidad para cambiar implementaciones (repositorios, servicios) sin alterar 
   casos de uso.
   \item \textbf{Seguridad}: autenticación por JWT, hashing de contraseñas con bcryptjs, analisis de imagenes con file-type 
-  y validación de acceso a endpoins exhaustiva.
+  y validación de acceso a endpoints exhaustiva.
   \item \textbf{Mejora de rendimiento}: conversión de imágenes a WebP mediante FFmpeg para reducir los tiempos de carga 
   y el consumo de espacio.
   \item \textbf{Manejo de errores}: excepciones específicas del negocio traducidas a respuestas HTTP claras.
@@ -492,7 +415,112 @@ Esta implementación proporciona una base sólida, mantenible y escalable para l
 
 \section{Implementación del Frontend}
 
-Se explica la implementación de la interfaz y la integración con los servicios de la aplicación.
+La implementación del frontend de ClimbIt se ha enfocado en construir una interfaz web de tipo SPA (\textit{Single Page Application}) centrada en la experiencia móvil, como se trató en el capítulo anterior, con navegación basada en hash, reutilización de componentes y una integración directa con la API REST del backend para la subida de los datos de los escaladores y descarga de la información necesaria para construir las vistas. El objetivo principal ha sido ofrecer una interfaz ligera, modular y coherente, manteniendo una estructura de código fácil de mantener y de ampliar.
+
+A diferencia del backend, donde la organización responde a una arquitectura hexagonal, en el frontend se ha planteado a una adaptación del patrón \textbf{MVC} (Modelo-Vista-Controlador) separada en 3 capas: un núcleo común de infraestructura de interfaz, módulos funcionales por dominio y una capa de componentes reutilizables. Esta división permite que cada pantalla tenga su propio controlador y su propia vista, pero comparta la lógica transversal de navegación, autenticación, peticiones HTTP y retroalimentación visual.
+
+\subsection{Tecnologías y base de la aplicación}
+
+El frontend se implementó con \textit{Vite} como entorno de desarrollo y construcción, \textit{Bootstrap} como base de componentes visuales y un conjunto reducido de utilidades propias para adaptar la interfaz a las necesidades del proyecto. La aplicación incorpora además soporte \textbf{PWA} mediante \texttt{vite-plugin-pwa}, lo que permite instalarla en dispositivos móviles y aprovechar el uso de caché para funcionar parcialmente sin conexión.
+
+Los estilos de la aplicación se centralizan en \texttt{src/css/global.css}, donde se redefine la tipografía y se ajusta la paleta de colores para mantener una conisistencia visual a lo largo del proyecto. También se introducen variables CSS propias para controlar la altura útil del \textit{viewport}, el ancho máximo de la aplicación y los márgenes en distintas resoluciones de dispositivos móviles.
+
+\subsection{Estructura general del frontend}
+
+La carpeta \texttt{src/js} concentra toda la lógica de la aplicación y se organiza en tres bloques principales:
+
+\begin{itemize}
+  \item \textbf{core}: contiene la infraestructura transversal de la interfaz, como el router, el cliente HTTP y utilidades de UI.
+  \item \textbf{modules}: agrupa la funcionalidad por dominio, con duplas controlador-vista para cada área funcional.
+  \item \textbf{components}: reúne las diferentes piezas reutilizables que componen la interfaz, como modales, la barra de navegación, tarjetas, mapas SVG o \textit{helpers} de formularios.
+\end{itemize}
+
+Esta estructura evita que cada pantalla replique lógica común y permite que las vistas se construyan a partir de piezas pequeñas, focalizadas en una única responsabilidad.
+
+\subsection{Punto de entrada, navegación y ciclo de vida}
+
+El archivo \texttt{src/js/app.js} actúa como punto de entrada de la aplicación. En él se registran los \textit{service workers} de la PWA, se inicializa el router, se activa el banner de conectividad y se ajusta dinámicamente la variable \texttt{--vh} para corregir problemas de altura en distintos navegadores móviles. Además, cuando la aplicación se ejecuta instalada como PWA, se intenta bloquear la orientación en modo vertical para reforzar la experiencia de uso pensada para teléfonos.
+
+El enrutado es implementado en \texttt{src/js/core/router.js} mediante \textit{hash routing}. Cada pantalla se identifica por un fragmento de URL como \texttt{\#login}, \texttt{\#perfil}, \texttt{\#misRocodromos} o \texttt{\#mapaZona?id=1\&zona=2}. El router interpreta la ruta después del \texttt{\#}, extrae los parámetros de la url, si los posee, y aplica restricciones de acceso según el estado de autenticación y los permisos del usuario. Las rutas públicas se limitan a inicio, login y registro, mientras que el resto de pantallas de la aplicación se encuentran limitadas y requieren un token válido.
+
+De esta manera el flujo de navegación queda centralizado en un único punto: el router decide qué controlador tiene que ejecutar, el controlador recupera datos y aplica la lógica necesaria para llevar a cabo la acción correspondiente, y la vista genera el HTML final a través de fragmentos de código propios y componentes reutilizables. Este patrón simplifica la trazabilidad del comportamiento y reduce la dependencia entre pantallas.
+
+\subsection{Cliente HTTP y gestión de autenticación}
+
+La comunicación con el backend se abstrae a un único punto encapsulado en \texttt{src/js/core/client.js}, donde se encapsula la función \texttt{fetchClient()}. Este cliente añade el token JWT al encabezado \texttt{Authorization}, gestiona el modo sin conexión y unifica el tratamiento de errores de red y de respuesta HTTP.
+
+Cuando el servidor responde con un código \textit{401 Unauthorized}, el cliente interpreta que la sesión ha caducado o que el token es inválido, por lo que procede a eliminar las credenciales almacenadas y redirigir de nuevo al login. De esta forma, la lógica de sesión queda centralizada y no es necesaria replicarla en cada módulo.
+
+Además, desde el frontend se distingue entre peticiones de solo lectura (\texttt{GET, HEAD, OPTIONS}) y peticiones de escritura (\texttt{POST, PUT, PATCH, DELETE}). Si el dispositivo está offline, las operaciones modificadoras se bloquean, mientras que las peticiones de lectura pueden seguir dependiendo del estado de la aplicación y de la información almacenada en caché de la PWA. Esta decisión refuerza el modo lectura sin conexión y evita que el usuario intente ejecutar cambios que el backend no podría persistir.
+
+La autenticación se apoya en las funciones \texttt{saveToken()}, \texttt{removeToken()} y \texttt{getTokenPayload()}, que permiten almacenar el JWT, destruirlo, recuperarlo y decodificar su contenido para aplicar reglas de acceso por rol. Esto se utiliza, por ejemplo, para verificar si un usuario puede gestionar un rocódromo antes de habilitar ciertas acciones en la interfaz.
+
+\subsection{Organización por módulos funcionales}
+
+Cada dominio de la aplicación es un módulo independiente con dos piezas principales: el controlador y la vista. Los controladores contienen la lógica de interacción, realizan las peticiones al backend y preparan los datos; las vistas reciben esos datos y generan el HTML correspondiente para formar la interfaz.
+
+La aplicación se divide en los siguientes módulos:
+
+\begin{itemize}
+  \item \textbf{autenticacion}: login y registro en varios pasos.
+  \item \textbf{home}: pantalla de entrada y redirección según el estado de sesión. Actualmente es la vista de Mis Rocódromos.
+  \item \textbf{escalador}: información de perfil, edición de datos y estadísticas personales de desempeño.
+  \item \textbf{rocodromo}: listado de rocódromos, búsqueda, detalle, suscripciones, edición y estadísticas.
+  \item \textbf{zona}: mapa SVG interactivo de una zona con selección de rutas, filtros, \textit{progress bar} y listado de rutas presentes en el mapa.
+  \item \textbf{ruta}: creación, modificación, detalles, estado con respecto al escalador y valoraciones.
+  \item \textbf{social}: listado de amigos, solicitudes y ranking mensual con tus amistades.
+  \item \textbf{error}: página de error o de recursos no encontrados.
+\end{itemize}
+
+Este modelo una evolución autónoma conforme se amplíen las funcionalidades y una separación lógica y física de responsabilidades. Por ejemplo, el flujo de registro no comparte estado con el módulo de perfil, y la lógica de mapas SVG se concentra solo en \texttt{zona} y los componentes asociados.
+
+\subsection{Interfaz de usuario y componentes reutilizables}
+
+Para evitar duplicar código en componentes visuales y de interacción, se definió una capa de componentes, que es compartida para todos los módulos y ubicados en \texttt{src/js/components}. Entre los elementos más relevantes se encuentran:
+
+\begin{itemize}
+  \item \textbf{navbar.js}: navegación inferior adaptada a la versión móvil de la aplicación.
+  \item \textbf{modal.js} y \textbf{toast.js}: modales de confirmación de acciones (p.e. eliminar un amigo) y avisos transitorios para retroalimentación al usuario (p.e. confirmación de solicitud de amistad enviada).
+  \item \textbf{svgPanzoomMap.js}: interacciones con los mapas SVG.
+  \item \textbf{climbingConfig.js}: configuraciones comunes de diferentes módulos como escalas, colores y normalización de estados.
+  \item \textbf{formHelpers.js}, \textbf{editableField.js} y otros helpers: componentes de apoyo para formularios e inputs aislados, como los de edición de perfil.
+\end{itemize}
+
+La existencia de estos componentes reduce la complejidad de las vistas. En lugar de implementar lógica para cada una de las vistas, se reutilizan piezas ya preparadas para renderizar tarjetas, divisores, botones de estado o indicadores de rutas, permitiendo así mantener una consistencia visual para elementos similares y un código más limpio.
+
+\subsection{Diseño responsive, móvil y PWA}
+
+La aplicación se ha diseñado pensando primero en móvil. El contenedor principal centra el contenido en escritorio con un ancho máximo acotado, pero en pantallas pequeñas se adapta a toda la anchura disponible y aprovecha la altura completa del dispositivo. Esta decisión encaja con el uso esperado de ClimbIt como acompañante en rocódromos a través de dispositivos móviles.
+
+El soporte PWA añade la posibilidad de instalar la aplicación y obtener así un modo de uso más cercano a una app nativa. Junto a ello, el frontend muestra un banner de conectividad que informa cuando no hay red y pasa la aplicación a estar en modo lectura. Todo ello se complementa con la gestión de la variable \texttt{--vh}, que corrige desajustes de altura causados por la interfaz del navegador móvil.
+
+\subsection{Estilo visual y coherencia de interfaz}
+
+El diseño visual se controla desde \texttt{global.css}, donde se ajustan colores, tipografía y estilos específicos de la aplicación. Además de redefinir el color primario de Bootstrap, se introducen estilos para  cada componente y sección de la aplicación: \textit{cards}, barra de navegación, botones de estado de ruta, etc.
+
+La coherencia visual se apoya en dos decisiones: por un lado, reutilizar Bootstrap como base estructural; por otro, introducir una capa de personalización propia centrada en los diseños marcados tras el análisis de los requisitos y formulados en el apartado de \textit{Diseño de la IU y UX}. Esto permite obtener una interfaz reconocible sin perder flexibilidad cuando se necesitan patrones específicos como mapas, indicadores de dificultad o estados de ruta.
+
+\subsection{Calidad y verificación}
+
+Para el frontend no se ha implementado una estrategia de testing automatizado, sino que se ha optado por una validación manual de las Historias de Usuario sumada a la ejecución de pruebas regresivas en las zonas afectadas con la introducción de nuevas funcionalidades. Debido a la naturaleza iterativa del proyecto sujeta a las validaciones de los usuarios y la implementación progresiva de las funcionalidades, se consideró que la adopción y mantenimientos de un sistema automatizado de testing sería contraproducente debido al esfuerzo de implementación y mantenimiento requerido en contraposición al alcance establecido. La estructura de estas pruebas se basa en la ejecución de flujos concretos de las funcionalidades implementadas alineadas con los criterios de aceptación de las Historias de Usuario, desglosadas en el \textit{Apéndice A}. Si bien no se han implementado pruebas automáticas a este punto, sí se plantea en la sección de \textit{Conclusiones y trabajo futuro} como una línea de mejora una vez se estabilicen los requisitos y el proyecto alcance un nivel de madurez suficiente.
+
+\subsection{Resumen}
+
+La implementación del frontend de ClimbIt se apoya en una SPA modular, ligera y orientada completamente a dispositivos móvil, con un router central, un cliente HTTP común y una división clara entre módulos funcionales y componentes reutilizables.
+
+\textbf{Puntos fuertes de la implementación:}
+
+\begin{itemize}
+  \item \textbf{Arquitectura modular}: cada dominio se encapsula en su propio módulo de controlador y vista.
+  \item \textbf{Navegación centralizada}: el router controla a través del hash de la url el acceso a las pantallas.
+  \item \textbf{Integración uniforme con la API}: \texttt{fetchClient()} concentra autenticación, errores y comportamiento offline de la aplicación.
+  \item \textbf{Experiencia móvil}: interfaz orientada a pantallas pequeñas, navegación inferior y ajustes de viewport específicos.
+  \item \textbf{Reutilización de componentes}: modales, toasts, mapas SVG y helpers reducen duplicación de código y mejoran el mantenimiento.
+  \item \textbf{Coherencia visual}: estilos globales y configuración común para tipografía, paleta de colores y componentes interactivos.
+  \item \textbf{Soporte PWA}: posibilidad de instalación y comportamiento mejorado en dispositivos móviles.
+\end{itemize}
+
+En conjunto, esta implementación proporciona una interfaz consistente con la lógica del backend así como el uso previsto de la aplicación por parte de los usuarios, manteniendo un equilibrio entre simplicidad técnica sin la inclusión de frameworks y riqueza funcional.
 
 \section{Desafíos técnicos encontrados y soluciones}
 
