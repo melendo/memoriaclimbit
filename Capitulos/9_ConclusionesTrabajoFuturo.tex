@@ -1,8 +1,41 @@
 \chapter{Conclusiones y Trabajo Futuro}
 \label{cap:conclusiones}
 
-Conclusiones del trabajo y líneas de trabajo futuro.
+Este capítulo se ofrece una reflexión exhaustiva sobre los resultados obtenidos tras el diseño, desarrollo y pruebas de ClimbIt. Se comparan las metas inicialmente definidas con las soluciones implementadas y finalmente, se proponen diferentes líneas de trabajo futuro para mejorar la aplicación \textit{ClimbIt} en posteriores iteraciones.
 
-Antes de la entrega de actas de cada convocatoria, en el plazo que se indica en el calendario de los trabajos de fin de grado, el estudiante entregará en el Campus Virtual la versión final de la memoria en PDF.
+\section{Conclusiones}
 
 
+El desarrollo de la aplicación \textit{ClimbIt} ha sido un reto compuesto de numerosas fases, desde el análisis del contexto actual de la escalada pasando por la especificación de una solución que satisfaga las necesidades de los usuarios y finalizando con la implementación del producto y las pruebas de validación realizadas con usuarios reales. Una vez finalizada estas pruebas descritas anterioriormente, se puede determinar que la aplicación resultante cumple con los objetivos definidos al comienzo del proyecto.
+
+En primer lugar, se ha conseguido desarrollar un sistema de seguimiento para los escaladores que permite realizar un registro de las sesiones de manera sencilla y eficaz, permitiendo el indicar el estado sobre cada ruta (entre Completado, Proyecto y Flash) y valorarla según critrerio propio. Además mediante estos datos de sesiones se han implementado estadísticas propias para cada escalador que le permiten visualizar su progreso de manera automática influyendo en la motivación y constancia de estos. Estas estadísticas se pueden observar en el perfil, el cual es personalizable permitiendo cambiar su apariencia para dar un sentimiento de unicidad.
+
+También se ha implementado un sistema de seguimiento para el escalador basado en las mecánicas de gamificación ya definidas, de forma que basado en el modelo RAMP (\textit{Relatedness, Autonomy, Maestry, Purpose}) se ha implementado parcialmente el sistema PBL. Mediante los datos y estadísticas de las sesiones de los escaladores se ha adaptado a este modelo convirtiendo los días activos y las rutas completadas en los Puntos y mediante el sistema social se han creado \textit{Leaderboards} entre los amigos añadidos creando un entorno de competitividad que fomenta la constancia en el deporte y motivan a los usuarios a mejorar evitando grandes fases de estancamiento.
+
+Desde el punto de vista de los rocódromos se ha preparado la aplicación para funcionar como una herramienta intuitiva de registro de todas las rutas de los muros del rocódromo, reduciendo al mínimo la fricción necesaria para la creación, modificación o retirada de rutas. De esta forma se garantiza que mantener los rocodromos actualizados sea lo más fácil siendo este uno de los pilares del funcionamiento del proyecto.
+
+Asimismo, la arquitectura tecnológica diseñada para el proyecto ha demostrado ser eficiente para los requisitos de la aplicación. La elección de una arquitectura hexagonal para el backend, apoyada por una base de datos relacional PostgreSQL, reduciendo de esta forma el esfuerzo para mantener o ampliar el códifo en el futuro. Por otro lado, la interfaz de usuario en el frontend, constituida como una aplicación web progresiva y distribuida mediante cualquier navegador o en Google Play gracías a la tecnología Trusted Web Activity, proporciona un acceso universal a la aplicación desde ucalquier dispositivo  e independiente del nivel tecnológico del escalador.
+
+Por último, el enfoque de Diseño Centrado en el Usuario ha resultado indispensable a lo largo del desarrollo de la aplicación. Las evaluaciones iterativas dieron la posibilidad de detectar problemas de manera temprana y priorizar funcionalidades como... (rellenar con los resultados de la última captura)
+
+\section{Trabajo Futuro}
+
+\textit{ClimbIt} es un proyecto que más alla del Trabajo de Fin de Grado se ha desarrollado con la idea de ser una herramienta útil que se pueda seguir utilizando y desarrollando posterior a su entrega. En base a las decisiones de diseño tomadas y los resultados de las pruebas con usuarios realizadas, definimos las siguientes funcionalidades a implementar separadas por bloques temáticos:
+\subsection{Mejoras de calidad de vida}
+(Hay que rellendar con los resultados de las catpuras)
+\begin{itemize}
+    \item \textbf{Refresh token}
+\end{itemize}
+
+\subsection{Rocódromos, Zonas y Rutas}
+\begin{itemize}
+    \item \textbf{Historial} 
+    \item \textbf{Eventos y competiciones:} 
+    \item \textbf{Métricas y analíticas para gestores:} 
+\end{itemize}
+    
+\subsection{Social y Gamificación}
+\begin{itemize}
+    \item \textbf{Expansión del sistema de logros (Badges):} Diseñar e implementar un sistema de logros que premie hitos específicos en la escalada, como completar una cantidad determinada de rutas al flash o alcanzar niveles de dificultad concretos.
+    \item \textbf{Grupos de amigos:} Mejora del apartado social actual creando las estructura de grupos privados. En estos espacios los usuarios podran competir entre sí y comparar fácilmente sus estadísticas y logros.
+\end{itemize}
