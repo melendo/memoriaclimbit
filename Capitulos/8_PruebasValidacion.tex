@@ -1,16 +1,135 @@
 \chapter{Pruebas y Validación}
 \label{cap:pruebasValidacion}
 
-Este capítulo reúne la estrategia de verificación de la solución y la validación de la utilidad de la aplicación.
+Este capítulo reúne la estrategia de verificación de la solución y la validación de la utilidad de la aplicación a lo largo del desarrollo, dividiéndose en dos fases iterativas: la validación del prototipo inicial y la evaluación del Producto Mínimo Viable (MVP).
 
-\section{Estrategia de pruebas técnicas}
+\section{Metodología de Validación y Perfil de Usuarios}
 
-Se definen los tipos de pruebas aplicadas para comprobar el correcto funcionamiento del sistema.
+El desarrollo de la aplicación se ha articulado bajo el paradigma del \textit{Diseño Centrado en el Usuario} (DCU), tal y como se detalló en el \textit{Capítulo 3}. Con el propósito de asegurar que \textit{ClimbIt} no solo cumpla con los requisitos técnicos funcionales, sino que también ofrezca una experiencia de usuario (UX) óptima, fluida y adaptada al contexto real de los dos pilares del sistema (los escaladores y los gestores de rocódromos), se ha diseñado una estrategia de validación iterativa dividida en dos fases principales.
 
-\section{Pruebas con usuarios reales (User Testing)}
+La primera fase de validación se ejecutó tras finalizar el prototipo interactivo de la aplicación. En este punto, el objetivo principal fue evaluar si la navegación propuesta, las funcionalidades iniciales y el diseño de las interfaces cumplían con las expectativas fundamentales de los usuarios. Para ello, se optó por un enfoque cualitativo mediante entrevistas individuales semiestructuradas realizadas a través de videollamada. 
 
-Se describe la validación realizada con usuarios para comprobar usabilidad y adecuación al contexto real.
+Participaron en esta primera fase un grupo de $N_1 = 6$ escaladores, todos ellos con perfiles y niveles de experiencia marcadamente diferenciados, lo que permitió obtener una visión amplia y representativa de las necesidades de la comunidad:
 
-\section{Análisis de Resultados y Mejoras aplicadas}
+\begin{itemize}
+    \item \textbf{Perfil Inicial / Novato ($2$ usuarios):} Escaladores con una frecuencia de práctica baja o muy puntual (desde dos veces al mes hasta práctica esporádica). Su motivación principal es la autosuperación y se plantean la escalada como un reto físico y mental alternativo a otros deportes. Acuden al rocódromo sin rutinas ni disciplina estricta, únicamente como entretenimiento, y suelen registrar su progreso de forma puramente mental.
+    \item \textbf{Perfil Intermedio ($3$ usuarios):} Practicantes habituales que entrenan en rocódromos (con especial enfoque en la modalidad de \textit{boulder} o bloque) entre una y tres veces por semana. Utilizan el smartphone activamente en sus sesiones de entrenamiento (por ejemplo, para grabar sus ascensos en video) y se motivan mediante la resolución de problemas técnicos complejos y la completitud de los bloques propuestos en la sala.
+    \item \textbf{Perfil Experto ($1$ usuario):} Escalador de nivel avanzado con alta frecuencia de entrenamiento en modalidad \textit{outdoor} (roca) y que, además, posee experiencia directa en la gestión operativa de entornos deportivos y rocódromos.
+\end{itemize}
 
-Se sintetizan los resultados obtenidos y los cambios introducidos a partir de ellos.
+La segunda fase de validación se centró en la evaluación de la utilidad, robustez y usabilidad del Producto Mínimo Viable (MVP), empleando para ello la aplicación con las funcionalidades ya implementadas y completamente operativas. La recolección de datos en este punto se ha instrumentalizado a través de un formulario digital estructurado. Este cuestionario se ha diseñado de forma modular para segmentar dinámicamente las preguntas según el tipo de participante, abarcando desde los primeros pasos en la plataforma y la interacción con las rutas, hasta la evaluación técnica orientada a la administración de centros deportivos.
+
+Para esta segunda evaluación, el tamaño de la muestra se incrementó hasta alcanzar un total de $N_2 = \textbf{[Número total de usuarios]}$ participantes. Este aumento en el volumen de usuarios responde a una necesidad metodológica doble:
+
+\begin{itemize}
+    \item \textbf{Análisis cuantitativo y reducción del sesgo:} Al pasar de una evaluación cualitativa sobre el prototipo hacia una métrica empírica sobre el software real, es indispensable contar con una muestra más amplia para reducir el sesgo individual, permitiendo graficar tendencias y obtener datos estadísticamente más fiables sobre la usabilidad del sistema.
+    \item \textbf{Evolución, contraste y nuevos perfiles:} Se incluyeron en este segundo grupo a la totalidad de los 6 usuarios que participaron en las entrevistas de la primera fase, actuando como un grupo de control idóneo para contrastar si las mejoras sugeridas en el prototipo se tradujeron en una mejor UX. A ellos se sumaron nuevos usuarios que se enfrentaban a la interfaz por primera vez y, de manera estratégica, se incorporó un nuevo perfil de usuario: \textit{aquel que no ha escalado nunca}. Esto último tiene como objetivo verificar si el diseño de la aplicación y la gamificación de sus funciones pueden actuar como un elemento motivador que los incentive a iniciarse en la práctica de la escalada.
+\end{itemize}
+
+El perfil demográfico y técnico de los usuarios involucrados en ambas fases del proceso de pruebas queda sintetizado con detalle en la Tabla~\ref{tab:perfilUsuarios}.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{lcp{7.5cm}}
+\hline
+\textbf{Fase de Validación} & \textbf{Participantes} & \textbf{Perfil y Caracterización del Usuario} \\ \hline
+\textbf{Fase 1: Prototipo} & $N_1 = 6$ & \textbf{Novatos (2):} Escalada esporádica, 1 vez por mes o menos. \\
+                           &       & \textbf{Intermedios (3):} Escalada en bloque 1-3 veces/semana. \\
+                           &       & \textbf{Experto (1):} Escalador \textit{outdoor} semanal y gestor técnico. \\ \hline
+\textbf{Fase 2: MVP}       & $N_2 = X$ & \textbf{No Iniciados(x):} Nunca han escalado. \\
+                           &       & \textbf{Novatos (x):} Escalada esporádica, 1 vez por mes o menos. \\
+                           &       & \textbf{Intermedios (x):} Escalada 1-3 veces/semana. \\
+                           &       & \textbf{Experto (x):} Escalada más de 3 veces/semana \\
+                           &       & \textbf{Gestores de Rocódromo (x):} Mantenimiento y gestión de instalaciones. \\ \hline
+\end{tabular}
+\caption{Resumen de la muestra y segmentación por perfiles en las fases de pruebas de ClimbIt.}
+\label{tab:perfilUsuarios}
+\end{table}
+
+\section{Fase 1: Validación del Prototipo Inicial (Entrevistas)}
+
+La primera iteración del proceso de validación se centró en someter el prototipo inicial de \textit{ClimbIt} a una evaluación cualitativa exhaustiva. Esta fase permitió contrastar las hipótesis de diseño tempranas con las expectativas y hábitos de uso de escaladores reales antes de iniciar la implementación del código definitivo.
+
+\subsection{Diseño de las Entrevistas}
+
+Las sesiones se estructuraron de forma individual y se llevaron a cabo mediante una videollamada. La sesión consistió en una prueba de concepto interactiva basada en escenarios orientados a objetivos (\textit{Task-Based Usability Testing}). Para homogeneizar la recolección de datos, a cada uno de los $N_1 = 6$ participantes se le solicitó completar de forma autónoma la siguiente secuencia de tareas en el prototipo:
+
+\begin{enumerate}
+    \item \textbf{Registro y autenticación:} Registrarse con una nueva cuenta en la plataforma.
+    \item \textbf{Suscripción a Rocódromo:} Localizar el rocódromo \textit{``Uadiblock''} y suscribirse a él.
+    \item \textbf{Búsqueda de Ruta:} Buscar una vía específica llamada \textit{"Silence"} con un nivel de dificultad de \textit{9c}.
+    \item \textbf{Registro de actividad:} Marcar la vía como \textit{"Flash"} (Ascenso completado en 1 intento).
+    \item \textbf{Cierre de sesión:} Cerrar sesión en la aplicación.
+\end{enumerate}
+
+Una vez finalizada la secuencia de tareas, se realizó una entrevista semiestructurada dividida en dos bloques esenciales: un bloque de caracterización general del escalador (frecuencia, modalidad de escalada predilecta, nivel de experticia autopercibido y hábitos de registro actuales) y un bloque de evaluación crítica de la interfaz (atractivo visual, usabilidad percibida, carencias y fallos detectados). 
+
+La heterogeneidad de perfiles en la escalada de la muestra garantizó que las deficiencias de usabilidad se evaluaran tanto desde la perspectiva del aprendizaje  como desde la experiencia avanzada.
+
+\subsection{Resultados y Conclusiones}
+
+El análisis cruzado de las anotaciones y de los documentos de resultados de las seis entrevistas individuales desveló un conjunto de fricciones de usabilidad críticas y patrones de comportamiento comunes que redefinieron el alcance del Producto Mínimo Viable (MVP). Los hallazgos más relevantes se clasifican a continuación:
+
+\begin{itemize}
+    \item \textbf{Problema crítico en el flujo de suscripción:} Representó el obstáculo más severo de la interfaz. La gran mayoría de los usuarios (incluyendo a Klaudia, Leo, Moto y Pablo) accedieron directamente al panel del rocódromo para suscribirse y descubrieron con frustración que la opción no estaba integrada dentro de dicha pantalla, obligándoles a retroceder a la portada. Además, existió una disonancia cognitiva con la iconografía: el símbolo del corazón fue interpretado unánimemente como una acción de "marcar como favorito" o dar un "me gusta" social, en lugar de una suscripción formal (asociada por los usuarios a un modelo de pago o membresía).
+    \item \textbf{Navegación y segmentación de zonas mejorable:} Al buscar la ruta \textit{"Silence"}, varios usuarios experimentaron demoras debido a la disposición del catálogo. Al estar las rutas segmentadas estrictamente por zonas aisladas mediante un menú desplegable, el usuario se veía obligado a inspeccionar secuencialmente cada zona si desconocía la ubicación exacta de la ruta. Como contramedida, los participantes sugirieron sustituir el formato de desplegable rígido por un carrusel centralizado y, de forma prioritaria, implementar un buscador global con filtros avanzados por grados de dificultad.
+    \item \textbf{Deficiencias menores y errores técnicos:} Durante el flujo de registro, se detectó la ausencia de la etiqueta técnica \texttt{autocomplete="off"} en el formulario de credenciales, lo que provocaba que los navegadores sugirieran contraseñas antiguas del sistema, penalizando la limpieza estética de la interfaz.
+\end{itemize}
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{lp{6cm}c}
+\hline
+\textbf{Módulo Técnico} & \textbf{Requisito Extraído del Feedback} & \textbf{Prioridad MVP} \\ \hline
+\textit{Core} / Rutas & Cambiar nomenclatura de "Pistas" a "Rutas" y añadir tipado explícito (Vía / Bloque). & Alta \\
+Navegación & Rediseño de zonas en formato carrusel e inclusión de buscador global con filtro de grados. & Alta \\
+Suscripción & Reubicar botón de suscripción dentro del perfil del rocódromo y modificar iconografía del corazón. & Alta \\
+Estadísticas & Desglosar el progreso por dificultades específicas en lugar de métricas de completitud global. & Media \\
+Social & Visualización de amigos que han completado una ruta concreta y gestión de grupos. & Media-Alta \\
+Funcionalidad & Permitir la subida de imágenes con instrucciones (\textit{beta} o pasos clave) y notas por ruta. & Alta \\ \hline
+\end{tabular}
+\caption{Matriz de requisitos refinados y priorizados tras la Fase 1 de entrevistas.}
+\label{tab:requisitosFase1}
+\end{table}
+
+A partir de estas conclusiones, el equipo de desarrollo llevó a cabo un proceso de priorización técnica reflejado en la Tabla~\ref{tab:requisitosFase1}. Destaca la aportación del perfil experto (Javier), quien advirtió que mostrar un porcentaje de completitud global del rocódromo resulta contraproducente y desmotivador tanto para novatos (que ven rutas inalcanzables) como para expertos (que ven bloques demasiado simples); en su lugar, se adoptó el requisito de estructurar las estadísticas del escalador segmentadas estrictamente por rangos de nivel. Asimismo, se decidió de forma unánime reestructurar el vocabulario técnico de la aplicación, sustituyendo el término "Pistas" por "Rutas" para adecuarse fielmente a la jerga real de la comunidad de escaladores.
+
+\section{Fase 2: Validación del Producto Mínimo Viable (MVP)}
+
+Una vez terminado el desarrollo y la implementación del Producto Mínimo Viable (MVP), se realizó la segunda fase de validación. A diferencia de la primera fase, esta segunda buscaba recopilar datos métricos y de usabilidad sobre aplicación. Para ello, se diseñó un formulario de captura de requisitos estructurado.
+
+\subsection{Diseño del Formulario de Evaluación}
+
+El formulario de evaluación fue concebido bajo un enfoque metodológico mixto (cuantitativo y cualitativo) y se implementó mediante una estructura condicional. El objetivo de esta estructura era bifurcar dinámicamente el itinerario de preguntas que visualiza el participante en función de su experiencia previa y su rol dentro del ecosistema de la escalada, evitando la fatiga del usuario y garantizando la recolección de datos específicos.
+
+El cuestionario comienza con una sección introductoria de control donde se garantiza el anonimato de los datos, se explica el marco del TFG en la Universidad Complutense de Madrid y se solicita el apodo dentro de la aplicación con la única finalidad de realizar un cruce de datos sin romper el anonimato. Acto seguido, se presenta la pregunta filtro crítica: \textit{"¿Has utilizado ClimbIt?"}. Si la respuesta es una negativa, se redirige al usuario a una sección del formulario sin preguntas, en la que se incluye una ruta similar a la evaluada por los usuarios de la primera fase, pero con algún detalle adicional enfocado a mostrar las nuevas funcionalidades implementadas en el MVP. Una vez completado el circuito, se continúa a la primera sección del formulario, dividido en los siguientes bloques:
+
+\begin{enumerate}
+    \item \textbf{Bloque de Instalación:} Se evalúa la experiencia del usuario instalando la aplicación, obteniendo también información acerca del dispositivo en el que se ha instalado, el punto desde el que se obtuvo y si experimentó algún tipo de problema durante el proceso
+    \item \textbf{Bloque de Perfil de escalador:} Al igual que en la primera entrevista, se desea conocer los datos de frecuencia y nivel de escalada, para cruzar los resultados. 
+    \item \textbf{Bloque de Experiencia General:} Evalúa la experiencia de usuario durante el uso que le ha dado a la aplicación, analizando la navegación, el diseño, su experiencia y finaliza con preguntas sobre funcionalidades que consideren importantes para el futuro y un condicional de si es gestor de rocódromo o no, para redirigirlo a un bloque específico.
+    \item \textbf{Bloque Especializado para Gestores de Rocódromos:} Aquellos usuarios identificados con un perfil de gestor de rocódromo son los que responden a esa sección. En él se evalúan los procesos de creación y modificación de rutas, así como el perfil del rocódromo y recomendaciones para mejorar proceso de gestión y la visibilidad dentro de la aplicación.
+
+\end{enumerate}
+
+\subsubsection{Métricas y Tipología de Preguntas}
+
+Para garantizar la fiabilidad del análisis de datos, el formulario combina dos metodologías de captura:
+
+\begin{itemize}
+    \item \textbf{Métricas Cuantitativas (Escalas de tipo Likert):} Se utilizan preguntas cerradas con respuestas graduadas en escalas Likert de 1 a 5 (donde 1 representa la valoración más negativa o \textit{"Nada"} y 5 la más positiva o \textit{"Por supuesto"}). Estas escalas se aplican de forma sistemática para medir el grado de utilidad percibida de las pantallas, la facilidad de aprendizaje (\textit{learnability}) y la probabilidad de recomendación de la plataforma.
+    \item \textbf{Métricas Cualitativas (Preguntas de Respuesta Libre):} Estratégicamente situadas al final de cada bloque, permiten al escalador expresarse sin restricciones numéricas. Su objetivo es capturar ideas de los escaladores, recomendaciones mejorar los procesos e interfaces de ClimbIt e identificar posibles \textit{bugs} o fallos de lógica de negocio que hayan pasado desapercibidos antes del despliegue.
+\end{itemize}
+    \subsection{Análisis de Datos Cuantitativos y Cualitativos}
+    % Gráficos de las respuestas del formulario y comentarios de texto libre del nuevo grupo ampliado.
+
+\section{Impacto del Feedback: Mejoras Aplicadas y Trabajo Futuro}
+% El "cierre de ciclo" o Feedback Loop.
+
+    \subsection{Evolución de Prototipo a MVP}
+    % Los cambios reales que hicisteis en la app gracias a las entrevistas de la Fase 1.
+    
+    \subsection{Líneas de Mejora Post-MVP}
+    % Qué cosas están saliendo en los formularios actuales que se quedan como "Trabajo Futuro" o correcciones finales.
