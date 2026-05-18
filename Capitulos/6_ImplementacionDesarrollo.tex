@@ -522,6 +522,31 @@ La implementación del frontend de ClimbIt se apoya en una SPA modular, ligera y
 
 En conjunto, esta implementación proporciona una interfaz consistente con la lógica del backend así como el uso previsto de la aplicación por parte de los usuarios, manteniendo un equilibrio entre simplicidad técnica sin la inclusión de frameworks y riqueza funcional.
 
-\section{Desafíos técnicos encontrados y soluciones}
+\section{Desafíos técnicos superados}
 
-Se recogen los problemas técnicos relevantes que aparecieron durante el desarrollo y cómo se resolvieron.
+A continuación se describen los principales desafíos encontrados durante la implementación del proytecto y las soluciones que se aportaron para solventarlos.
+
+\subsection{Adaptación de la interfaz a móvil y PWA}
+
+Uno de los retos técnicos que se dieron a lo largo del desarrollo fue la adapatación de la interfaz para ser absolutamente responsive en distintos dispositivos móviles sin disponer de las facilidades de un framework que lo resuelve de forma nativa. Esto obligó a implementar manualmente varios comportamientos transversales para garantizar una experiencia consistente en navegadores móviles y en modo instalado como PWA. El \textit{viewport} es diferente en los navegadores debido a la barra de direcciones, el teclado virtual y la orientación del dispositivo, que produce problemas de desajustes al realizarse actualizaciones de la interfaz, por recargas o cambios de orientación.
+
+La solución a este problema fue a través de la gestión de una variable CSS personalizada \texttt{--vh}, que se actualiza dinámicamente en eventos que afectan al \textit{viewport}, recuperándose de nuevo esa altura real y asignándola a la variable y no ver modificada la interfaz por mantener una altura fija.
+
+\subsection{Componente de mapa SVG interactivo}
+
+La implementación del mapa \textit{SVG} interactivo fue uno de los desafíos más exigentes del proyecto. No se trataba únicamente de mostrar una imagen, sino de construir un elemento que pudiera de responder a distintas interacciones como desplazamientos o zoom junto con actualizaciones dinámicas del contenido superpuesto en el propio mapa.
+
+La solución implementada encapsula toda la lógica del en un componente. La gestión de eventos de interacción quedó delegada en la librería \texttt{panzoom}, que proporciona un manejo simplificado de interacciones como pan y zoom y proporciona una experiencia fluida al manipular el mapa \textit{SVG}. Para cargar el contenido de la zona correspondiente, se aprovechan los elementos cacheados previamente a la construcción del mapa, obtenidos al cargar la información para la vista, optimizando el rendimiento y evitando recargas innecesarias de los recursos. La arquitectura separa la estructura del mapa base del contenido dinámico permitiendo reutilizarlo en diferentes vistas que requieren un contenido diferente, como en la vista de creación de ruta, en la que, aparte de cargar las rutas de la zona, se añade un nuevo componente, que posiciona en un punto del mapa donde se pulse un elemento que representa la ubicación de la nueva ruta que se quiere añadir.
+
+En resumen, la implementación del mapa \textit{SVG} requirió combinar gestión de recursos del DOM, la integración con una librería externa para la gestión de eventos de interacción y la optimización de la carga del contenido para garantizar una experiencia fluida y satisfactoria para los usuarios.
+
+
+\section{Sistemas de cacheo y modo offline}
+
+Para terminar con esta sección, uno de los retos más desafiantes fue garantizar que la aplicación siguiera siendo útil cuando el dispositivo se encuentre \textit{offline}. Para ello se definió una estrategia de cacheo híbrida que combina el almacenamiento de recursos estáticos con la persistencia local del estado de la interfaz, de forma que el usuario pueda seguir navegando por la información ya cargada aunque no pueda consultar el servidor en ese momento. Esta aproximación fue especialmente importante en una aplicación pensada para usarse en movilidad, donde la cobertura de red no siempre está asegurada.
+
+La solución se apoyó en la capacidad de la PWA para conservar recursos previamente descargados y en la lógica común del cliente HTTP para distinguir entre operaciones de lectura y de escritura. Cuando la aplicación detecta que no hay conexión, mantiene disponibles las vistas que pueden construirse con datos ya cacheados, muestra un aviso de estado y limita las acciones que dependen de una persistencia inmediata en el backend. De este modo, el sistema conserva una parte significativa de su funcionalidad sin comprometer la coherencia de los datos.
+
+Para evitar incoherencias entre la información local y la remota, se aplicó una política conservadora de sincronización al recuperar la conexión. En ese momento, la aplicación valida el estado de los recursos, actualiza la información necesaria y resuelve los posibles conflictos priorizando la integridad de los datos frente a la inmediatez de la actualización. Además, se controló con especial cuidado la vigencia de los elementos cacheados para equilibrar rapidez de carga y frescura de la información, evitando que el usuario trabaje con contenido obsoleto durante más tiempo del necesario.
+
+En conjunto, este sistema de cacheo y funcionamiento offline refuerza el carácter móvil de la aplicación y aporta resiliencia frente a fallos de conectividad, manteniendo una experiencia de uso coherente incluso fuera de línea.
