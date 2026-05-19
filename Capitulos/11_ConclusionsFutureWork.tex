@@ -1,7 +1,49 @@
-\chapter*{Conclusions and Future Work}
-\label{cap:conclusions}
+\chapter{Conclusions and Future Work} 
+\label{cap:conclusiones}
 \addcontentsline{toc}{chapter}{Conclusions and Future Work}
 
-Conclusions and future lines of work. This chapter contains the translation of Chapter \ref{cap:conclusiones}.
+This chapter provides a comprehensive reflection on the results obtained after the design, development, and testing of ClimbIt. The initially defined goals are compared with the implemented solutions, and finally, different lines of future work are proposed to improve the \textit{ClimbIt} application in subsequent iterations. 
 
+\section{Conclusions} 
 
+The development of the \textit{ClimbIt} application has been a challenge composed of numerous phases, from the analysis of the current climbing context, through the specification of a solution that satisfies user needs, and concluding with the implementation of the product and validation tests conducted with real users. Once these previously described tests were completed, it can be determined that the resulting application meets the objectives defined at the beginning of the project. 
+
+First, a tracking system for climbers has been successfully developed, allowing session logs to be kept easily and effectively, enabling users to indicate the status of each route (among Completed, Project, and Flash) and rate it according to their own criteria. Furthermore, using this session data, personalized statistics have been implemented for each climber, allowing them to visualize their progress automatically, influencing their motivation and consistency. These statistics can be viewed in the profile, which is customizable, allowing its appearance to be changed to convey a sense of uniqueness. 
+
+A climber tracking system has also been implemented based on the already defined gamification mechanics, so that, based on the RAMP (\textit{Relatedness, Autonomy, Mastery, Purpose}) model, the PBL system has been partially implemented. Through the data and statistics of the climbers' sessions, this model has been adapted, converting active days and completed routes into points, and, through the social system, \textit{Leaderboards} have been created among added friends, establishing a competitive environment that fosters consistency in the sport and motivates users to improve, preventing prolonged plateau phases. 
+
+From the climbing gyms' point of view, the application has been prepared to function as an intuitive tool for registering all routes on the gym's walls, minimizing the friction required for creating, modifying, or removing routes. In this way, keeping the climbing gyms updated is guaranteed to be as easy as possible, which is one of the pillars of the project's operation. 
+
+Likewise, the technological architecture designed for the project has proven to be efficient for the application's requirements. The choice of a hexagonal architecture for the backend, supported by a PostgreSQL relational database, thus reduces the effort required to maintain or extend the code in the future. On the other hand, the user interface in the frontend, established as a Progressive Web App and distributed via any browser or on Google Play thanks to Trusted Web Activity technology, provides universal access to the application from any device and regardless of the climber's technological level. 
+
+Lastly, the User-Centered Design approach has proven indispensable throughout the development of the application. Iterative evaluations provided the opportunity to detect problems early and prioritize functionalities such as social enhancements or user experience improvements when marking user progress, resulting in an application that is not only functional but also attractive and easy to use for climbers. 
+
+In short, \textit{ClimbIt} has transcended being just a Final Degree Project to establish itself as a robust, scalable project with high potential for integration into the real sports ecosystem. By combining a solid architecture, gamification strategies, and user-centered methodologies, a platform has been successfully built that benefits both the internal management of climbing gyms and the motivation of climbers. The great reception of this first version lays excellent foundations for addressing future lines of work, ensuring that the application can continue to grow, adapt, and bring technological value to a constantly expanding climbing community. 
+
+\section{Future Work} 
+
+\textit{ClimbIt} is a project that, beyond the Final Degree Project, has been developed with the idea of being a useful tool that can continue to be used and evolved after its submission. Thanks to user \textit{feedback} and the technical and gamification decisions planned for the project, the following functionalities to be implemented have been defined, separated by thematic blocks and not in order of priority: 
+
+\subsection{Quality of Life and Stability Improvements} This block encompasses optimizations at the architecture, performance, and user experience levels aimed at refining daily interaction with the application: 
+
+\begin{itemize}
+\item \textbf{Interface Optimization (UX):} The map will automatically minimize or hide when \textit{scrolling} down, giving way to the route cards to improve readability in lists. \item \textbf{Technical Debt Resolution:} The refactoring of the database and the \textit{backend} postponed during the development of the MVP will be carried out. This will involve the complete and definitive migration of the \texttt{Pista} entity to \texttt{Ruta} across all tables, controllers, and remaining files. \item \textbf{Performance Optimization:} Work will be done to improve loading times and asynchronous processing in image uploads to resolve latencies and slowness issues reported by some users. \item \textbf{Secure Session Management:} Implementation of a \textit{Refresh Token} system in the \textit{backend} to guarantee secure session persistence without penalizing user experience by forcing them to log in daily. 
+\end{itemize}
+
+\subsection{Climbing Gyms, Zones, and Routes} Fundamental improvements are contemplated to enrich the administration of climbing gyms and the tracking of activities within them: 
+
+\begin{itemize}
+\item \textbf{History and Log of Attempts:} Evolve the current ascent system to enable the counting of attempts until a route is completed and allow multiple logs for the same route or boulder problem. \item \textbf{Climbing Gym Management Panel:} Implement an advanced control panel for managers that allows applying CRUD operations to multiple routes simultaneously, streamlining management processes. \item \textbf{Retention and \textit{Push} Notifications:} Integration of an automated notification system to instantly alert subscribed users about the creation of new routes or their removal in their favorite climbing gyms. \item \textbf{Metrics and Analytics for Managers:} Provide climbing gyms with data dashboards where they can visualize which zones and routes in their facilities have the most traffic, completion rates, or the highest-rated routes. \item \textbf{Events and Competitions (Leagues):} Being able to use \textit{ClimbIt} to manage internal competitions (tournaments or leagues) and create subgroups to manage guided classes or the gym's own events. 
+\end{itemize}
+
+\subsection{Social and Gamification} Responding to the near-unanimous requests from the surveyed community, the core of post-MVP development will focus on enhancing social interaction and advanced tracking for athletes: 
+
+\begin{itemize}
+\item \textbf{Friend Groups:} Extend the social section to allow the creation of private groups to foster friendly competition, by easily comparing statistics with their close circle and challenging each other. \item \textbf{Implementation of an Achievement System (Badges):} Design and implement a system of achievements and badges that rewards specific milestones in climbing and user interactions within the application, such as completing a certain number of routes as \textit{flash} or linking several active days in climbing gyms. \item \textbf{Personalized Challenges and Goals:} Allow users to set their own goals (for example, completing a number of boulder problems in a limited period of time) and receive rewards upon overcoming them. \item \textbf{Advanced Statistics:} Expand the statistics sections to include higher-value charts for climbers, improving existing statistics to be more useful and visual, while removing irrelevant information for climbers. 
+\end{itemize}
+
+\subsection{Non-Functional Improvements} These improvements do not directly affect the functionality of the application, but they do affect its scope and usability: 
+
+\begin{itemize}
+\item \textbf{Accessibility:} Improve the accessibility of the application following the WCAG 2.2 guidelines to ensure an inclusive experience for all users. \item \textbf{Server Migration:} Investigate the feasibility of migrating the \textit{backend} to a cloud service such as AWS or Google Cloud to improve the scalability and availability of the service, compared to the option of maintaining it on a physical server but upgrading from the Raspberry Pi to a dedicated server. \item \textbf{Process Parallelization:} Implement parallelization techniques in image processing and updates to improve the overall performance of the application and the user experience. \item \textbf{Expansion of the Climbing Gym Catalog:} Continue contacting different climbing gyms to expand the user and content base of the application, which will allow obtaining a greater amount of data to apply more and better functionalities, as well as improving the experience of users by having more options to choose from. \item \textbf{Test Automation:} Develop an automated testing system for the frontend of the application without abandoning manual testing for the usability part, maintaining a hybrid system that guarantees product quality as new functionalities are implemented. 
+\end{itemize}
