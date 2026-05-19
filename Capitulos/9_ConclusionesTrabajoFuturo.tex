@@ -17,6 +17,8 @@ Asimismo, la arquitectura tecnológica diseñada para el proyecto ha demostrado 
 
 Por último, el enfoque de Diseño Centrado en el Usuario ha resultado indispensable a lo largo del desarrollo de la aplicación. Las evaluaciones iterativas dieron la posibilidad de detectar problemas de manera temprana y priorizar funcionalidades como las mejoras sociales o de experiencia al marcar el progreso de los usuarios, lo que se ha traducido en una aplicación que no solo es funcional, sino también atractiva y fácil de usar para los escaladores.
 
+En definitiva, \textit{ClimbIt} ha trascendido la concepción de ser un Trabajo de Fin de Grado a consolidarse como un proyecto robusto, escalable y con un alto potencial de inserción en el ecosistema deportivo real. Al combinar una sólida arquitectura, estrategias de gamificación y metodologías centradas en el usuario, se ha logrado construir una plataforma que beneficia tanto a la gestión interna de los rocódromos como a la motivación de los escaladores. La gran acogida de esta primera versión sienta unos cimientos inmejorables para abordar las líneas de trabajo futuro, garantizando que la aplicación pueda seguir creciendo, adaptándose y aportar valor tecnológico a una comunidad de escaladores en constante expansión.
+
 \section{Trabajo Futuro}
 
 \textit{ClimbIt} es un proyecto que, más allá del Trabajo de Fin de Grado, se ha desarrollado con la idea de ser una herramienta útil que se pueda seguir utilizando y evolucionando tras su entrega. Gracias al \textit{feedback} por los usuarios y las decisiones técnicas y de gamificación planteadas para el proyecto, se han definido las siguientes funcionalidades a implementar, separadas por bloques temáticos y no en orden de prioridad:
@@ -50,4 +52,16 @@ Dando respuesta a las peticiones casi unánimes de la comunidad encuestada, el n
     \item \textbf{Implantación de un Sistema de Logros (Badges):} Diseñar e implementar un sistema de logros e insignias que premie hitos específicos en la escalada y con iteraciones dentro de la aplicación, como completar una cantidad determinada de rutas como \textit{flash} o encadenar varios días activo en rocódromos.
     \item \textbf{Retos y Objetivos Personalizados:} Permitir a los usuarios establecer metas propias (por ejemplo, completar un número de bloques en un periodo acotado de tiempo) y recibir recompensas al superarlos.
     \item \textbf{Estadísticas Avanzadas:} Ampliar las secciones de estadísticas para incluir gráficas de mayor valor para los escaladores, mejorar las estadísticas existentes para ser más útiles y visuales, eliminando información irrelevante para los escaladores.
+\end{itemize}
+
+
+\subsection{Mejoras no Funcionales}
+Estas mejoras no afectan directamente a la funcionalidad de la aplicación, pero sí a su alcance y usabilidad:
+
+\begin{itemize}
+    \item \textbf{Accesibilidad:} Mejorar la accesibilidad de la aplicación siguiendo las pautas WCAG 2.2 para garantizar una experiencia inclusiva a todos los usuarios.
+    \item \textbf{Migración de servidor:} Investigar la viabilidad de migrar el \textit{backend} a un servicio en la nube como AWS o Google Cloud para mejorar la escalabilidad y disponibilidad del servicio frente a la opción de mantenerlo en un servidor físico pero cambiando de la Raspberry Pi a un servidor dedicado.
+    \item \textbf{Paralelización de Procesos:} Implementar técnicas de paralelización en el procesamiento de imágenes y la actualización para mejorar el rendimiento general de la aplicación y la experiencia del usuario. 
+    \item \textbf{Ampliación del catálogo de Rocódromos:} Continuar contactando con distintos rocódromos para ampliar la base de usuarios y de contenido de la aplicación, que permitirá obtener un mayor número de datos para aplicar más y mejores funcionalidades, así como mejorar la experiencia de los usuarios al tener más opciones para elegir. 
+    \item \textbf{Automatización de Pruebas:} Desarrollar un sistema de testing automatizado para el frontend de la aplicación y sin abandonar el testing manual para la parte de usabilidad, manteniendo un sistema híbrido que permita garantizar la calidad del producto a medida que se vayan implementando nuevas funcionalidades. 
 \end{itemize}
