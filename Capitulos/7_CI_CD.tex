@@ -1,8 +1,15 @@
 \chapter{Integración Continua, Despliegue y DevOps}
 \label{cap:cicd}
 
-En este capítulo se explica cómo se ha realizado la automatización de la entrega continua de software y el despliegue de la infraestructura para los diferentes entornos de \textit{ClimbIt}. Se han empleado metodologías de Integración Continua (CI) y Despliegue Continuo (CD) basadas en la filosofía de DevOps, para la revisión de los nuevos cambios en el código y su correcta integración de manera segura.
+Para facilitar la validación de las decisiones de diseño en la IU y de los prototipos funcionales, durante el proyecto se han integrado los conceptos de CI/CD, lo que ha permitido agilizar el despliegue de la aplicación durante todo el proceso de desarrollo. En este sentido, en este capítulo se explica cómo se ha realizado la automatización de la entrega continua de software y la infraestructura para los diferentes entornos de \textit{ClimbIt}, empleando metodologías basadas en la filosofía de DevOps para integrar los nuevos cambios de manera segura.
 
+Dada la carga técnica de estos procesos, este capítulo se estructura en tres bloques principales para guiar su lectura:
+
+\begin{itemize}
+    \item \textbf{Diseño de la Integración Continua:} Se detalla cómo se evalúa la calidad del código y se automatizan las pruebas previas a la subida de cualquier cambio.
+    \item \textbf{Entornos e Infraestructura:} Se describen los espacios de desarrollo, preproducción y producción, abordando la decisión de utilizar un servidor físico propio (\textit{self-hosted}) y la orquestación de la arquitectura mediante contenedores.
+    \item \textbf{Empaquetado y subida a Google Play:} Finalmente, se aborda la decisión poco habitual de distribuir la aplicación web ClimbIt a través de la plataforma de Google Play. Se explicará el porqué de esta necesidad operativa para reducir la fricción en la instalación de los usuarios, detallando la tecnología (\textit{Trusted Web Activity}) utilizada para lograrlo.
+\end{itemize}
 \section{Diseño de la Integración Continua}
 
 La integración continua (CI) es una práctica que permite fusionar nuevo código desarrollado en producción de forma segura y eficiente. En \textit{ClimbIt} se han implementado dos mecanismos para lograr esta integración.
