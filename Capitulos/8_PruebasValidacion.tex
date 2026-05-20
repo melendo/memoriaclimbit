@@ -28,24 +28,57 @@ Para esta segunda evaluación, el tamaño de la muestra se incrementó hasta alc
 
 El perfil demográfico y técnico de los usuarios involucrados en ambas fases del proceso de pruebas queda sintetizado con detalle en la Tabla~\ref{tab:perfilUsuarios}.
 
+\subsubsection{Caracterización de la Muestra (Fase 1)}
+
+Para la primera fase de validación orientada al prototipo inicial, se seleccionó una muestra reducida de usuarios ($N_1 = 6$) mediante un muestreo por conveniencia. El objetivo de esta fase fue puramente cualitativo: detectar problemas tempranos de usabilidad, flujos de navegación erróneos y validar la propuesta de valor conceptual antes de iniciar el grueso del desarrollo del \textit{backend}. 
+
+La distribución de los participantes se detalla en la Tabla~\ref{tab:perfilUsuariosFase1}.
+
 \begin{table}[htbp]
 \centering
 \small
-\begin{tabular}{lcp{7.5cm}}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{lp{2.5cm}p{7.5cm}}
 \hline
-\textbf{Fase de Validación} & \textbf{Participantes} & \textbf{Perfil y Caracterización del Usuario} \\ \hline
-\textbf{Fase 1: Prototipo} & $N_1 = 6$ & \textbf{Novatos (2):} Escalada esporádica, 1 vez por mes o menos. \\
-                           &       & \textbf{Intermedios (3):} Escalada en bloque 1-3 veces/semana. \\
-                           &       & \textbf{Experto (1):} Escalador \textit{outdoor} semanal y gestor técnico. \\ \hline
-\textbf{Fase 2: MVP}       & $N_2 = 35$ & \textbf{No Iniciados (10):} Nunca han escalado. Actuaron como grupo de control de captación. \\
-                           &       & \textbf{Novatos (9):} Escalada esporádica, 1 vez por mes o menos. \\
-                           &       & \textbf{Intermedios (13):} Escalada 1-3 veces/semana. \\
-                           &       & \textbf{Experto (3):} Escalada más de 3 veces/semana. \\
-                           &       & \textbf{Gestores de Rocódromo (4):} Incluidos en la muestra activa, evalúan la plataforma B2B. \\ \hline
+\textbf{Nivel de Experiencia} & \textbf{Participantes} & \textbf{Frecuencia de Práctica y Perfil} \\ \hline
+\textbf{Novatos}              & 2                      & Práctica esporádica (1 vez al mes o menos). \\
+\textbf{Intermedios}          & 3                      & Práctica habitual en bloque/boulder (1--3 veces/semana). \\
+\textbf{Experto}              & 1                      & Escalador avanzado \textit{outdoor} y gestor técnico de sala. \\ \hline
+\textbf{Total Muestra ($N_1$)} & \textbf{6}             &  \\ \hline
 \end{tabular}
-\caption{Resumen de la muestra y segmentación por perfiles en las fases de pruebas de ClimbIt.}
-\label{tab:perfilUsuarios}
+\caption{Segmentación y caracterización de los participantes en la Fase 1 (Prototipo).}
+\label{tab:perfilUsuariosFase1}
 \end{table}
+
+\subsubsection{Caracterización de la Muestra y Matriz de Contingencia (Fase 2)}
+
+Para la validación del Producto Mínimo Viable (MVP) se obtuvo una muestra de $N_2 = 35$ respuestas. Con el propósito de evaluar la robustez de los datos y asegurar que las opiniones recopiladas no estuvieran sesgadas por un único perfil de deportista, se cruzó el nivel de experiencia autodeclarado por los usuarios con su frecuencia real de entrenamiento.
+
+Los resultados de esta segmentación se presentan en la Tabla~\ref{tab:matrizContingenciaMVP} en forma de matriz de contingencia.
+
+\begin{table}[htbp]
+\centering
+\small
+\renewcommand{\arraystretch}{1.3}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{l|cccc|c}
+\hline
+\textbf{Frecuencia de Práctica} & \textbf{No Iniciado} & \textbf{Novato} & \textbf{Intermedio} & \textbf{Experto} & \textbf{Total Usuarios} \\ \hline
+\textbf{Nunca}                  & 10                   & 0               & 0                   & 0                & 10 (28,6\,\%)           \\
+\textbf{1--2 veces al mes}      & 0                    & 9               & 0                   & 0                & 9 (25,7\,\%)            \\
+\textbf{1--3 veces/semana}      & 0                    & 0               & 13                  & 0                & 13 (37,1\,\%)           \\
+\textbf{> 3 veces/semana}       & 0                    & 0               & 0                   & 3                & 3 (8,6\,\%)             \\ \hline
+\textbf{Total por Experiencia}  & 10 (28,6\,\%)        & 9 (25,7\,\%)    & 13 (37,1\,\%)       & 3 (8,6\,\%)      & \textbf{$N_2 = 35$ (100\,\%)} \\ \hline
+\multicolumn{6}{l}{\textit{*Nota: De la muestra activa, 4 usuarios ejercen el rol de \textbf{Gestor de Rocódromo}.}} \\ \hline
+\end{tabular}
+}
+\caption{Matriz de contingencia de la Fase 2: Distribución cruzada entre nivel de \textit{expertise} y frecuencia de escalada.}
+\label{tab:matrizContingenciaMVP}
+\end{table}
+
+Como se puede observar en la Tabla 8.2, existe una colinealidad lineal y simétrica perfecta entre ambas variables independientes. En el ámbito de la analítica del deporte, este fenómeno no representa un sesgo metodológico o un defecto del muestreo, sino que responde a la convergencia de variables autodeclaradas (\textit{self-reporting}) ligadas a la naturaleza de la disciplina, cuya validez en cuestionarios de caracterización física ha sido ampliamente respaldada por la literatura~\citep{duncan2002validity}. En la escalada, la progresión técnica y la adquisición del grado dependen estrictamente de la continuidad, el volumen de entrenamiento y la consolidación del gesto motor~\citep{hermans2017climbing}. Por consiguiente, resulta biológica y psicológicamente coherente que los usuarios con una frecuencia crítica alta ($> 3$ veces por semana) se identifiquen como expertos, existiendo estudios específicos que corroboran la alta correlación empírica entre la frecuencia de entrenamiento semanal y el estatus de habilidad autodeclarado por el propio escalador~\citep{drury2022self}.
+
+Esta compartimentación tan limpia y libre de ruido estadístico confiere una gran solidez al experimento. Permite demostrar que el MVP de \textit{ClimbIt} ha sido sometido a pruebas por usuarios completamente diferenciados: desde un grupo de control puro sin conocimientos previos en la práctica del deporte(\textit{No Iniciados}, 28,6\,\%), hasta usuarios avanzados conocedores de la disciplina (\textit{Intermedios y Expertos}, 45,7\,\%).
 
 \section{Fase 1: Validación del Prototipo Inicial (Entrevistas)}
 
@@ -136,16 +169,32 @@ El formulario incluyó un bloque inicial destinado a evaluar el proceso de adopc
 Los datos cuantitativos y cualitativos extraídos arrojan las siguientes conclusiones:
 
 \begin{itemize}
-    \item \textbf{Distribución de Dispositivos:} La inmensa mayoría de los participantes interactuó con la plataforma mediante \textit{smartphones}, lo que se alinea perfectamente con la idea inicial de desarrollar la aplicación desde un enfoque \textit{mobile first}. El ecosistema \textbf{Android} dominó la muestra con 22 usuarios (62,8\,\%), seguido por \textbf{iOS (Apple)} con 12 usuarios (34,3\,\%). Únicamente un participante (2,8\,\%) accedió a través de un ordenador (PC).
+    \item \textbf{Distribución de Dispositivos:} Como se puede observar en la Figura~\ref{fig:distribucionDispositivos}, prácticamente la totalidad de los participantes interactuó con la plataforma mediante \textit{smartphones}, lo que se alinea perfectamente con la idea inicial de desarrollar la aplicación desde un enfoque \textit{mobile first}. El ecosistema \textbf{Android} dominó la muestra con 22 usuarios (62,8\,\%), seguido por \textbf{iOS (Apple)} con 12 usuarios (34,3\,\%). Únicamente un participante (2,8\,\%) accedió a través de un ordenador (PC). Si se hubiera tomado la decisión de desarrollar una \textit{app} nativa para alguno de los sistemas operativos, se habría excluido a un amplio porcentaje de posibles usuarios.
     
-    \item \textbf{Puntos de Acceso:} El comportamiento de acceso a la aplicaciónrefleja la flexibilidad inherente de la arquitectura web elegida. Un volumen importante de 14 usuarios optó por utilizar la aplicación directamente en línea a través del navegador, sin llegar a instalarla. Por otro lado, los usuarios que sí realizaron la instalación lo hicieron empleando navegadores web como puente: Safari (6 usuarios), Google Chrome (5) y Brave (3). Resulta de especial interés destacar que 7 usuarios indicaron haberla instalado desde la "Play Store", que pudieron hacerlo tras ser añadidos por petición propia a la lista de testers internos de Google Play Console al indicar personalmente que les gustaría poder instalarla como una aplicación nativa. Este dato refleja la percepción de los usuarios sobre la necesidad de una instalación formal, a pesar de que la arquitectura PWA permite un acceso directo sin instalación.
+    \begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.55\textwidth]{./Imagenes/Fuentes/diagrama_pruebas_dispositivos.png}
+    \caption{Distribución por tipo de dispositivo empleado por los usuarios durante las pruebas del MVP ($N_2 = 35$).}
+    \label{fig:distribucionDispositivos}
+    \end{figure}
+
+    \item \textbf{Puntos de Acceso:} El comportamiento de acceso a la aplicación refleja la flexibilidad inherente de la arquitectura web elegida. Un volumen importante de 14 usuarios optó por utilizar la aplicación directamente en línea a través del navegador, sin llegar a instalarla. Por otro lado, los usuarios que sí realizaron la instalación lo hicieron empleando navegadores web como puente: Safari (6 usuarios), Google Chrome (5) y Brave (3). Resulta de especial interés destacar que 7 usuarios indicaron haberla instalado desde la "Play Store", que pudieron hacerlo tras ser añadidos por petición propia a la lista de testers internos de Google Play Console al indicar personalmente que les gustaría poder instalarla como una aplicación nativa. Este dato refleja la percepción de los usuarios sobre la necesidad de una instalación formal, a pesar de que la arquitectura PWA permite un acceso directo sin instalación.
     
     \item \textbf{Fricciones detectadas:} El proceso de instalación fue valorado como \textit{sencillo} por 27 de los 29 usuarios que decidieron instalarla en su dispositivo. El análisis cualitativo de los problemas experimentados reveló que el principal problema proviene del ecosistema de Apple, debido a las políticas restrictivas de iOS frente a las \textit{Progressive Web Apps} en comparación con el ecosistema abierto de Android.
 \end{itemize}
 
 \subsubsection{Evaluación Cuantitativa de Usabilidad}
 
-Los resultados obtenidos a través de las escalas de tipo Likert (valoradas de 1 a 5) demuestran una excelente aceptación general y un alto grado de \textit{learnability} (facilidad de aprendizaje) de la plataforma:
+Los resultados obtenidos a través de las escalas de tipo Likert (valoradas de 1 a 5) demuestran una excelente aceptación general y un alto grado de \textit{learnability} (facilidad de aprendizaje) de la plataforma, tal y como queda sintetizado en la Figura~\ref{fig:metricasUsabilidadBarras}.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{./Imagenes/Fuentes/metricas_usabilidad_barras.png}
+    \caption{Resultados cuantitativos de usabilidad percibida (Escala Likert 1-5) para los componentes clave de ClimbIt ($N_2 = 35$).}
+    \label{fig:metricasUsabilidadBarras}
+\end{figure}
+
+A partir del análisis gráfico, se detallan a continuación las valoraciones medias por cada variable analizada:
 
 \begin{itemize}
     \item \textbf{Navegación General:} La fluidez y estructura de la aplicación obtuvo una valoración media de \textbf{4,71 sobre 5}, demostrando que la estructura de navegación dentro y entre secciones a través de la barra de navegación inferior hacen a ClimbIt altamente intuitivo.

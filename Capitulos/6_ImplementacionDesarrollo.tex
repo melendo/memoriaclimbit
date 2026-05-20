@@ -1,10 +1,9 @@
 \chapter{Implementación y Desarrollo}
 \label{cap:implementacion}
 
-Este capítulo documenta la construcción práctica de la solución y las decisiones tomadas durante su desarrollo.
+Todos los detalles del código completo del proyecto pueden consultarse en el repositorio~\footnote{Repositorio de código de ClimbIt: (\url{https://github.com/Melendo/Climbit})} donde se ha llevado a cabo todo el desarrollo. Este capítulo documenta el paso de la aplicación del diseño conceptual a una solución práctica y real. Lejos de ser una descripción del código, las siguientes páginas desvelan las implementaciones tecnológicas y flujos de \textit{ClimbIt}: desde el aislamiento y la testabilidad que aporta la arquitectura hexagonal en el backend, hasta la ligereza de un frontend modular enfocado en la experiencia móvil. Asimismo, se detallará la resolución de los mayores desafíos de que han surgido durante el desarrollo del proyecto: la adaptación de la interfaz para responder correctamente en dispositivos móviles, la manipulación dinámica de mapas interactivos SVG y el diseño de una estrategia de cacheo híbrida para garantizar el funcionamiento de la app en entornos sin conectividad.
 
 \section{Implementación del backend}
-\label{sec:implementacion-backend}
 
 Para cumplir con los requisitos que se marcaron para el proyecto, el backend se desarrolló como una API REST 
 que encapsule la lógica de negocio necesaria para gestionar los recursos principales de la aplicación y servirlos al frontend.
@@ -16,8 +15,15 @@ El alcance tratado en esta sección se limita a la implementación funcional y e
 
 \subsection{Arquitectura hexagonal}
 
-La implementación del backend sigue un enfoque de arquitectura hexagonal, que favorece la separación de responsabilidades, 
+La implementación del backend sigue un enfoque de arquitectura hexagonal, representado en la figura \ref{fig:arquitectura-hexagonal}, que favorece la separación de responsabilidades, 
 facilita el testing y mejora la mantenibilidad del código. Cada capa tiene un rol específico y bien delimitado:
+
+    \begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{./Imagenes/Fuentes/arquitectura_hexagonal.png}
+    \caption{Arquitectura hexagonal del backend.}
+    \label{fig:arquitectura-hexagonal}
+    \end{figure}
 
 \subsubsection{\textit{Domain} — Entidades y Contratos}
 
@@ -206,7 +212,7 @@ Es el punto de salida final donde todos los errores capturados en la aplicación
   \item \textbf{Consistencia}: Todas las respuestas de error siguen el mismo formato JSON.
   \item \textbf{Testabilidad}: Se puede mockear errores específicos para utilizarlos en tests.
   \item \textbf{Debugging}: Se preserva el error original en \texttt{cause} sin exponerlo al cliente.
-  \item \textbf{Escalabilidad}:Añadir nuevos tipos de error es trivial: extender AppError y mapear en dbErrorHandler.
+  \item \textbf{Escalabilidad}: Añadir nuevos tipos de error es trivial: extender AppError y mapear en dbErrorHandler.
 \end{itemize}
 
 \subsection{Autenticación y seguridad}
@@ -271,7 +277,7 @@ pertenecen:
   \item \textbf{Mapas de zonas}: \texttt{/uploads/mapas\_zonas/}.
 \end{itemize}
 
-\paragraph{seguridad en archivos:}
+\paragraph{Seguridad en archivos:}
 
 \begin{itemize}
   \item \textbf{Validación de tipo}: Se usa la librería \texttt{file-type} para verificar la firma real del archivo y no confiar solo en el MIME ni en la extensión.
@@ -302,8 +308,7 @@ Para realizar los test se ha utilizado la librería \texttt{Jest} que permite el
 integrable en la arquitectura implementada. En el caso de los test E2E, se ha utilizado \texttt{supertest} para simular 
 peticiones HTTP a la aplicación y validar las respuestas. 
 
-Para garantizar el nivel de calidad propuesto para el proyecto y eliminar riesgos de errores al refactorizar y añadir funcionalidades 
-al proyecto, se estableció una política de cobertura de código mínima del 80\% en líneas, ramas y funciones en todos los archivos,
+Para garantizar el nivel de calidad propuesto para el proyecto y eliminar riesgos de errores al refactorizar y añadir funcionalidades, se estableció una política de cobertura de código mínima del 80\% en líneas, ramas y funciones en todos los archivos,
 excluyendo archivos de configuración, migraciones y modelos de Sequelize. Esta configuración se encuentra en el archivo \texttt{jest.config.js}
 situado en \texttt{apps/backend}.
 
@@ -317,16 +322,15 @@ separación de responsabilidades, testabilidad y flexibilidad.
 \begin{itemize}
   \item \textbf{Arquitectura por capas}: Domain → Application → Infrastructure, con clara separación de concerns.
   \item \textbf{Casos de uso encapsulados}: la lógica de negocio está centralizada, facilitando cambios y reutilización.
-  \item \textbf{Inyección de dependencias}: flexibilidad para cambiar implementaciones (repositorios, servicios) sin alterar 
-  casos de uso.
-  \item \textbf{Seguridad}: autenticación por JWT, hashing de contraseñas con bcryptjs, analisis de imagenes con file-type 
+  \item \textbf{Inyección de dependencias}: flexibilidad para cambiar implementaciones (repositorios, servicios) sin alterar casos de uso.
+  \item \textbf{Seguridad}: autenticación por JWT, hashing de contraseñas con bcryptjs, análisis de imágenes con file-type 
   y validación de acceso a endpoints exhaustiva.
   \item \textbf{Mejora de rendimiento}: conversión de imágenes a WebP mediante FFmpeg para reducir los tiempos de carga 
   y el consumo de espacio.
   \item \textbf{Manejo de errores}: excepciones específicas del negocio traducidas a respuestas HTTP claras.
   \item \textbf{Testing}: estrategia multicapa con tests unitarios y e2e, umbrales de cobertura del 80\%.
   \item \textbf{Escalabilidad}: la estructura de carpetas y composición permite añadir nuevos casos de uso, repositorios y 
-  controladores sin refactorización mayor.
+  controladores sin una refactorización mayor.
 \end{itemize}
 
 
@@ -448,7 +452,7 @@ A continuación se describen los principales desafíos encontrados durante la im
 
 \subsection{Adaptación de la interfaz a móvil y PWA}
 
-Uno de los retos técnicos que se dieron a lo largo del desarrollo fue la adapatación de la interfaz para ser absolutamente responsive en distintos dispositivos móviles sin disponer de las facilidades de un framework que lo resuelve de forma nativa. Esto obligó a implementar manualmente varios comportamientos transversales para garantizar una experiencia consistente en navegadores móviles y en modo instalado como PWA. El \textit{viewport} es diferente en los navegadores debido a la barra de direcciones, el teclado virtual y la orientación del dispositivo, que produce problemas de desajustes al realizarse actualizaciones de la interfaz, por recargas o cambios de orientación.
+Uno de los retos técnicos que se dieron a lo largo del desarrollo fue la adaptación de la interfaz para ser absolutamente responsive en distintos dispositivos móviles sin disponer de las facilidades de un framework que lo resuelve de forma nativa. Esto obligó a implementar manualmente varios comportamientos transversales a toda la aplicación para garantizar una experiencia consistente en navegadores móviles y en modo instalado como PWA. El \textit{viewport} es diferente en los navegadores debido a la barra de direcciones, el teclado virtual y la orientación del dispositivo, que produce problemas de desajustes al realizarse actualizaciones de la interfaz, por recargas o cambios de orientación.
 
 La solución a este problema fue a través de la gestión de una variable CSS personalizada \texttt{--vh}, que se actualiza dinámicamente en eventos que afectan al \textit{viewport}, recuperándose de nuevo esa altura real y asignándola a la variable y no ver modificada la interfaz por mantener una altura fija.
 
