@@ -122,7 +122,7 @@ El contenedor es una función asíncrona que:
   \item Instancia los otros servicios de infraestructura: \texttt{passwordService}, \texttt{tokenService}.
   \item Instancia cada caso de uso, inyectándole el repository y las dependencias que utilice:\\ \texttt{new CrearEscalador(escaladorRepository, passwordService, tokenService)}..
   \item Instancia los controladores, inyectándoles los casos de uso relacionados con la entidad que representan agrupados.
-  \item Exporta los controladores para ser utilizados por los routers al ercibir las peticipones HTTP correspondientes.
+  \item Exporta los controladores para ser utilizados por los routers al recibir las peticiones HTTP correspondientes.
 \end{enumerate}
 
 \paragraph{Ventajas de este enfoque:}
