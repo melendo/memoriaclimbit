@@ -1,10 +1,9 @@
 \chapter{Implementación y Desarrollo}
 \label{cap:implementacion}
 
-Este capítulo documenta la construcción práctica de la solución y las decisiones tomadas durante su desarrollo.
+Todos los detalles del código completo del proyecto pueden consultarse en el repositorio~\footnote{Repositorio de código de ClimbIt: (\url{https://github.com/Melendo/Climbit})} donde se ha llevado a cabo todo el desarrollo. Este capítulo documenta el paso de la aplicación del diseño conceptual a una solución práctica y real. Lejos de ser una descripción del código, las siguientes páginas desvelan las implementaciones tecnológicas y flujos de \textit{ClimbIt}: desde el aislamiento y la testabilidad que aporta la arquitectura hexagonal en el backend, hasta la ligereza de un frontend modular enfocado en la experiencia móvil. Asimismo, se detallará la resolución de los mayores desafíos de que han surgido durante el desarrollo del proyecto: la adaptación de la interfaz para responder correctamente en dispositivos móviles, la manipulación dinámica de mapas interactivos SVG y el diseño de una estrategia de cacheo híbrida para garantizar el funcionamiento de la app en entornos sin conectividad.
 
 \section{Implementación del backend}
-\label{sec:implementacion-backend}
 
 Para cumplir con los requisitos que se marcaron para el proyecto, el backend se desarrolló como una API REST 
 que encapsule la lógica de negocio necesaria para gestionar los recursos principales de la aplicación y servirlos al frontend.
@@ -16,8 +15,15 @@ El alcance tratado en esta sección se limita a la implementación funcional y e
 
 \subsection{Arquitectura hexagonal}
 
-La implementación del backend sigue un enfoque de arquitectura hexagonal, que favorece la separación de responsabilidades, 
+La implementación del backend sigue un enfoque de arquitectura hexagonal, representado en la figura \ref{fig:arquitectura-hexagonal}, que favorece la separación de responsabilidades, 
 facilita el testing y mejora la mantenibilidad del código. Cada capa tiene un rol específico y bien delimitado:
+
+    \begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{./Imagenes/Fuentes/arquitectura_hexagonal.png}
+    \caption{Arquitectura hexagonal del backend.}
+    \label{fig:arquitectura-hexagonal}
+    \end{figure}
 
 \subsubsection{\textit{Domain} — Entidades y Contratos}
 
@@ -104,7 +110,7 @@ retorna \textit{201 Created} con el token, o un código de error 4xx/5xx si fall
 
 \subsection{Composición e inyección de dependencias}
 
-El contenedor de inyección de dependencias se encuentra implementado en el archivo \textit{src/infrastructure/container.js} y es el punto central donde se instancian todos los objetos de la aplicación. En él se inyectan y se conectan las dependencias necesarias. Este patrón permite que los casos de uso y controladores no tengan que crear directamente sus dependencias, sino que las reciben ya construidas como se comentó en la sección de decisiones de diseño.
+El contenedor de inyección de dependencias se encuentra implementado en el archivo \textit{src/infrastructure/container.js} y es el punto central donde se instancian todos los objetos de la aplicación y se les inyectan las dependencias necesarias. Este patrón permite que los repositorios, casos de uso y controladores no tengan que crear directamente sus dependencias, sino que las reciben ya construidas como se comentó en capitulo \ref{cap:disenoSistema} sección de decisiones de diseño.
 
 \paragraph{\textbf{Estructura del contenedor:}}
 
@@ -114,13 +120,12 @@ El contenedor es una función asíncrona que:
   \item Espera a que se carguen los modelos de Sequelize desde la base de datos.
   \item Instancia los repositorios, inyectándoles el modelo correspondiente:\\ \texttt{new EscaladorRepositoryPostgres(db.Escalador)}.
   \item Instancia los otros servicios de infraestructura: \texttt{passwordService}, \texttt{tokenService}.
-  \item Instancia cada caso de uso, inyectándole sus dependencias:\\ \texttt{new CrearEscalador(escaladorRepository, passwordService, tokenService)}.
-  \item Agrupa los casos de uso en objetos por dominio (escaladores, pistas, rocodromos, amistades).
-  \item Instancia los controladores, inyectándoles los casos de uso agrupados.
-  \item Exporta todo lo necesario para que las rutas accedan a los controladores.
+  \item Instancia cada caso de uso, inyectándole el repository y las dependencias que utilice:\\ \texttt{new CrearEscalador(escaladorRepository, passwordService, tokenService)}..
+  \item Instancia los controladores, inyectándoles los casos de uso relacionados con la entidad que representan agrupados.
+  \item Exporta los controladores para ser utilizados por los routers al ercibir las peticipones HTTP correspondientes.
 \end{enumerate}
 
-\textbf{Ventajas de este enfoque:}
+\paragraph{Ventajas de este enfoque:}
 
 \begin{itemize}
   \item \textbf{Testabilidad}: en tests unitarios, se puede pasar un mock del repositorio al caso de uso, sin tocar la base de datos real.
@@ -128,19 +133,6 @@ El contenedor es una función asíncrona que:
   se requiere cambios en el contenedor y en la clase la implementación concreta del repositorio, no en los casos de uso.
   \item \textbf{Centralización}: todas las dependencias e instancias se crean en un único lugar, facilitando el mantenimiento y la visualización de dependencias.
 \end{itemize}
-
-\subsection{Interfaces HTTP (controladores y rutas)}
-
-Los controladores actúan como adaptadores entre el protocolo HTTP y los casos de uso de negocio. Su responsabilidad es validar las peticiones entrantes, invocar el caso de uso, y transformar el resultado en una respuesta HTTP. La recepción y respuesta de peticiones HTTP sigue el siguiente flujo:
-
-\begin{enumerate}
-  \item El router recibe la petición HTTP con los parámetros (body, query, params).
-  \item Valida los parámetros usando \texttt{express-validator} y el resto de middlewares implicados en la petición.
-  \item Redirige al controlador.
-  \item Invoca el caso de uso correspondiente con los datos validados.
-  \item Maneja excepciones del caso de uso y traduce a códigos HTTP:
-  \item Retorna el resultado serializado a JSON.
-\end{enumerate}
 
 \subsection{Manejo de errores}
 
@@ -172,21 +164,18 @@ A partir de \texttt{AppError}, se definen subclases específicas:
 
 \subsubsection*{Patrón Adapter: Traducción de errores de repositorio}
 
-Los repositorios interactúan con la bd a través de Sequelize, que lanza excepciones específicas como 
-\texttt{SequelizeUniqueConstraintError} o \texttt{SequelizeValidationError}. Estas excepciones técnicas no 
-son de utilidad a los casos de uso o al cliente, por lo que se traducen mediante un adaptador: la función 
-\texttt{mapRepositoryError()} localizada en \texttt{infrastructure/repositories/dbErrorHandler.js}. Esta función:
+Sequelize puede lanzar excepciones específicas como \texttt{SequelizeUniqueConstraintError} o \texttt{SequelizeValidationError}, cuyo contenido no es de utilidad a los casos de uso o al cliente, por lo que se traducen mediante un adaptador: la función \texttt{mapRepositoryError()} localizada en \texttt{infrastructure/repositories/dbErrorHandler.js}. Esta función:
 
 \begin{enumerate}
   \item Recibe el error original lanzado por Sequelize.
-  \item Detecta el tipo de error (violación de restricción única, validación, etc.) inspeccionando su nombre y mensaje.
+  \item Detecta el tipo de error inspeccionando su nombre y mensaje.
   \item Traduce a la clase \texttt{AppError} correspondiente:
     \begin{itemize}
       \item Sequelize UNIQUE CONSTRAINT → \texttt{ConflictError} (409).
       \item Sequelize VALIDATION ERROR → \texttt{ValidationError} (422).
       \item Otros errores BD → \texttt{InternalServerError} (500).
     \end{itemize}
-  \item Preserva el error original en la propiedad \texttt{cause} para trazabilidad en logs.
+  \item Preserva el error original en la propiedad \texttt{cause} para trazabilidad en caso de ser necesario.
   \item Retorna la excepción de dominio mapeada.
 \end{enumerate}
 
@@ -195,42 +184,35 @@ son de utilidad a los casos de uso o al cliente, por lo que se traducen mediante
 En el archivo \texttt{src/interfaces/http/server.js} se han definido dos middlewares de captura de errores 
 que se ejecutan secuencialmente:
 
-\textbf{Primer middleware: Errores de Multer y Upload}
+\textbf{Errores de Multer y de Carga de archivos}
 
 Intercepta errores específicos del procesamiento de archivos:
 
 \begin{itemize}
   \item \texttt{MulterError} con code \texttt{LIMIT\_FILE\_SIZE}: archivo excede tamaño máximo (413 Payload Too Large).
-  \item Errores de validación de tipo MIME o FFmpeg: retorna 400 o el status definido en el error.
+  \item Errores de validación de tipo MIME o FFmpeg: retorna 400 Bad Request o el status definido en el error.
 \end{itemize}
 
-\textbf{Segundo middleware: Manejo genérico de AppError}
+\textbf{Manejo genérico de AppError}
 
-Es el punto de salida final donde todos los errores (del negocio, de la BD, etc.) se traducen a respuestas JSON:
+Es el punto de salida final donde todos los errores capturados en la aplicación se traducen a respuestas JSON:
 
 \begin{enumerate}
   \item Detecta si el error es instancia de \texttt{AppError}.
   \item Si es AppError: extrae su \texttt{statusCode} y \texttt{code}.
   \item Si no: asume 500 Internal Server Error.
-  \item Construye la respuesta JSON:
-    \begin{verbatim}
-{
-  error: "Mensaje descriptivo",
-  code: "ERROR_CODE"  // solo si es AppError
-}
-    \end{verbatim}
-  \item Devuelve la respuesta con el statusCode correspondiente.
+  \item Construye la respuesta JSON y la devuelve con el statusCode correspondiente.
 \end{enumerate}
 
 
 \subsubsection*{Ventajas de este enfoque de manejo de errores:}
 
 \begin{itemize}
-  \item \textbf{Separación de concerns}: Los errores técnicos no contaminan lógica de negocio.
+  \item \textbf{Separación de concerns}: Los errores no contaminan lógica de negocio.
   \item \textbf{Consistencia}: Todas las respuestas de error siguen el mismo formato JSON.
-  \item \textbf{Testabilidad}: Se puede mockear errores específicos para inyectarlos en tests.
+  \item \textbf{Testabilidad}: Se puede mockear errores específicos para utilizarlos en tests.
   \item \textbf{Debugging}: Se preserva el error original en \texttt{cause} sin exponerlo al cliente.
-  \item \textbf{Escalabilidad}:Añadir nuevos tipos de error es trivial: extender AppError y mapear en dbErrorHandler.
+  \item \textbf{Escalabilidad}: Añadir nuevos tipos de error es trivial: extender AppError y mapear en dbErrorHandler.
 \end{itemize}
 
 \subsection{Autenticación y seguridad}
@@ -240,125 +222,69 @@ Es el punto de salida final donde todos los errores (del negocio, de la BD, etc.
 La autenticación en la aplicación se implementa mediante JWT (JSON Web Tokens). El flujo es:
 
 \begin{enumerate}
-  \item El usuario se registra proporcionando correo, contraseña y datos de perfil.
-  \item El caso de uso \texttt{CrearEscalador} valida que el correo sea único.
-  \item La contraseña se hashea usando \texttt{bcryptjs}.
-  \item Se almacena el hash (nunca la contraseña en texto plano).
-  \item En la autenticación, el usuario proporciona correo y contraseña.
+  \item El usuario intenta iniciar sesión proporcionando correo, contraseña.
   \item El caso de uso \texttt{AutenticarEscalador} recupera el escalador por correo.
   \item Compara la contraseña proporcionada con el hash almacenado en la base de datos usando \texttt{bcryptjs.compare()}.
   \item Si coincide, genera un JWT firmado con una clave secreta, incluyendo correo, el apodo y el rol: Escalador, Admin o Gestor. En caso de ser gestor, se incluye un array con los ids de los rocódromos que gestione.
-  \item El cliente almacena el JWT y lo envía en el header \texttt{Authorization: Bearer <token>} en futuras peticiones.
-  \item Un middleware verifica y decodifica el JWT, adjuntando los datos del usuario a la petición.
-  \item Las rutas protegidas validan que el usuario esté autenticado y tenga el rol necesario para acceder al recurso.
+  \item El cliente almacena el JWT para enviarlo en el header \texttt{Authorization: Bearer <token>} de futuras peticiones.
 \end{enumerate}
 
-\textbf{Middleware de autenticación:}
+\paragraph{Middleware de autenticación:}
 
-Cada ruta protegida (p. ej. obtener perfil, actualizar datos) valida que exista un JWT válido antes de procesar la petición. Si el token es inválido o expirado, se retorna 401 Unauthorized.
+Cada ruta protegida (p. ej. obtener perfil, actualizar datos) valida que exista un JWT válido antes de procesar la petición. Si el token es inválido o expirado, se retorna 401 Unauthorized. Todas las rutas salvo las de inicio de sesión y registro se encuentran protegidas y deben pasar esta validación para continuar.
 
 \textbf{Validaciones de entrada:}
 
-Todas las rutas validan los parámetros de entrada usando \texttt{express-validator}:
+Todas las rutas validan los parámetros de entrada usando \texttt{express-validator}. Algunas de las validaciones que se realizan son las siguientes:
 
 \begin{itemize}
   \item \textbf{Correos}: validación de formato de email.
   \item \textbf{Contraseñas}: longitud mínima, tipos de caracteres...
   \item \textbf{IDs}: validación de que sean números o UUIDs según el formato esperado.
-  \item \textbf{Archivos}: validación de tipo MIME y tamaño máximo.
+  \item \textbf{Archivos}: validación de MIME-type y tamaño máximo.
 \end{itemize}
 
-Las validaciones fallidas retornan un código 400 Bad Request con detalles del error.
+Las validaciones fallidas retornan un código 422 Invalid Request con detalles de error que lo produce(p.e. longitud de la contraseña insuficiente) o 500 Internal Server Error si en el proceso de subir una imagen se suceden errores.
 
-\textbf{Consideraciones de seguridad:}
+\paragraph{Consideraciones de seguridad:}
 
 \begin{itemize}
   \item Las contraseñas nunca se almacenan en texto plano.
-  \item Los tokens JWT tienen un tiempo de expiración de 12h para limitar riesgos de compromiso.
+  \item Los tokens JWT tienen un tiempo de expiración de 12h para mitigar riesgos de compromiso.
   \item Los secretos (clave de JWT, credenciales de la bd) se almacenan en variables de entorno, nunca en el código.
   \item Los errores de autenticación no revelan si el correo existe o no, para prevenir enumeración de usuarios.
 \end{itemize}
 
-\subsection{Gestión de archivos y multimedia}
+\subsection{Gestión de archivos multimedia}
 
-\textbf{Tipos de archivos gestionados:}
+A través del middleware \texttt{Multer} se reciben los archivos de tipo \texttt{multipart/form-data} en el backend. Una vez obtenidos se les pasa una primera validación de MIME-type y tamaño máximo de los archivos como filtro antes de proceder a una evaluación más exhaustiva. Una vez superada esa primera validación, a través de la librería \texttt{file-type} se obtiene el tipo real del archivo leyendo sus \textit{magic bytes} para prevenir posibles brechas de seguridad con los archivos recibidos. 
 
-La aplicación almacena dos tipos de archivos, svg para los mapas de las zonas y webp para el resto de imágenes. Todas
+Una vez validadas se convierten al formato WebP utilizando \texttt{FFmpeg}, garantizando una comprensión eficiente que permite reducir su tamaño sin perdida de calidad apreciable. Esto se traduce en una mejora de rendimiento a la hora de servir las imágenes y un menor consumo de espacio en disco.
+
+Si el endpoint al que se intenta subir una imagen es \texttt{POST /zonas/:id/mapa}, el flujo cambia. Se valida que el formato sea svg exclusivamente. Cualquier otro formato es rechazado por decisión técnica de negocio. Estos mapas se renderizan en el frontend y se requiere que sean vectoriales para mantener su calidad al manipularlos desde la interfaz. Por ende, estas imágenes tampoco son procesadas por FFmpeg, sino que se almacenan directamente en formato svg después de validar su tipo real con \texttt{file-type}.
+
+
+\paragraph{Tipos de archivos gestionados:}
+
+La aplicación  y sirve dos tipos de archivos, svg para los mapas de las zonas y webp para el resto de imágenes. Todas
 las imágenes se almacenan en distintas carpetas dentro del directorio \texttt{/app/backend/uploads/} según la entidad a la que
 pertenecen:
 
 \begin{itemize}
   \item \textbf{Fotos de perfil}: \texttt{/uploads/fotos\_perfil/}.
-  \item \textbf{Imágenes de pistas}: \texttt{/uploads/imagenes\_pistas/}.
+  \item \textbf{Imágenes de rutas}: \texttt{/uploads/imagenes\_pistas/}.
   \item \textbf{Logos de rocódromos}: \texttt{/uploads/logos\_rocodromos/}.
   \item \textbf{Mapas de zonas}: \texttt{/uploads/mapas\_zonas/}.
 \end{itemize}
 
-Todas las imágenes son analizadas para validar su tipo real a través de la librería \texttt{file-type}. Una vez validadas se convierten al formato WebP utilizando \texttt{FFmpeg}, garantizando una comprensión eficiente que permite reducir su tamaño sin perdida de calidad apreciable. Esto se traduce en una mejora de rendimiento a la hora de servir las imágenes y un menor consumo de espacio en disco.
-
-Si el endpoint al que se intenta subir una imagen es \texttt{POST /zonas/:id/mapa}, el flujo cambia. Se valida que el formato sea svg exclusivamente. Cualquier otro formato es rechazado por decisión técnica de negocio. Estos mapas se renderizan en el frontend y se requiere que sean vectoriales para mantener su calidad al manipularlo para verlo en profundidad. Por ende, estas imágenes tampoco son procesadas por FFmpeg, sino que se almacenan directamente en formato svg después de validar su tipo real con \texttt{file-type}.
-
-\textbf{Validaciones de seguridad en archivos:}
+\paragraph{Seguridad en archivos:}
 
 \begin{itemize}
   \item \textbf{Validación de tipo}: Se usa la librería \texttt{file-type} para verificar la firma real del archivo y no confiar solo en el MIME ni en la extensión.
-  \item \textbf{Límite de tamaño}: Previene ataques de negación de servicio (llenado de disco).
+  \item \textbf{Límite de tamaño}: Previene ataques de denegación de servicio (llenado de disco).
   \item \textbf{Nombres sanitizados}: Los archivos se renombran para evitar problemas de seguridad y privacidad.
   \item \textbf{Almacenamiento seguro}: Los archivos se sirven a través de rutas controladas, no directamente del filesystem.
 \end{itemize}
-
-\textbf{Flujo de subida de archivos:}
-
-\begin{enumerate}
-  \item El cliente envía una petición \texttt{multipart/form-data} a uno de los endpoints para subir imágenes a la app
-  incluyendo el archivo en el campo \texttt{foto} del payload y el header \texttt{Authorization: Bearer <token>}.
-    
-  \item La ruta encargada intercepta la petición y ejecuta middlewares de validación:
-    \begin{itemize}
-      \item \texttt{verifyToken()}: valida que el JWT sea válido y no esté expirado.
-      \item \texttt{authorizeRocodromoAccess()}: verifica permisos del usuario, ya que se requiere rol de admin o 
-      gestor según el recurso.
-    \end{itemize}
-  
-  \item El middleware \texttt{uploadImages(...).single('foto')} de Multer intercepta la petición.
-  
-  \item Multer almacena el archivo temporalmente en el directorio configurado con un nombre aleatorio generado usando UUID.  
-    
-  \item Se genera un objeto \texttt{req.file} con propiedades: \texttt{path} (ruta temporal), \texttt{filename} (nombre 
-  del archivo), \texttt{mimetype} (tipo MIME declarado por el cliente), y \texttt{size} (tamaño en bytes).
-    
-  \item El middleware \texttt{validateUploadedFileType()} valida la integridad del archivo:
-    \begin{itemize}
-      \item Detecta la firma real del archivo (magic bytes) usando \texttt{fileTypeFromFile()}, independientemente 
-      de la extensión.
-      \item Verifica que el tipo MIME detectado esté en la lista de permitidos (JPG, JPEG, PNG, WebP).
-      \item Rechaza intentos de spoofing (p. ej. un archivo ejecutable con extensión .jpg).
-    \end{itemize}
-  
-  \item Se añade la propiedad \texttt{detectedMimeType} a \texttt{req.file} con el tipo real detectado.
-  
-  \item El middleware \texttt{processUploadedRasterToWebp()} detecta si el archivo es una imagen raster (JPG, JPEG, PNG o WebP).
-  
-  \item Se ejecuta \texttt{FFmpeg} para convertir la imagen a WebP y eliminar metadatos EXIF por privacidad. 
-  
-  \item Se elimina el archivo original que se almacenó temporalmente.
-  
-  \item El objeto \texttt{req.file} se actualiza con la nueva ruta.
-  
-  \item El controlador recibe la petición y valida que \texttt{req.file} exista; si no, lanza un \texttt{BadRequestError}. 
-  Después construye e invoca al caso de uso correspondiente.
-  
-  \item El caso de uso verifica que la URL no esté vacía y delega la persistencia al repositorio.
-    
-  \item El repositorio ejecuta una sentencia de Sequelize para introducir la nueva imagen a la entidad correspondiente y 
-  retorna el resultado.
-  
-  \item El caso de uso retorna el resultado al controlador.
-  
-  \item El controlador devuelve una respuesta HTTP \texttt{201 Created} con la url de la imagen almacenada.
-  
-  \item El cliente recibe la respuesta y puede acceder a la imagen mediante peticiones GET.
-\end{enumerate}
 
 \subsection{Testing y calidad}
 
@@ -375,42 +301,40 @@ para comprobar lógica de negocio, validaciones, manejo de errores y persistenci
 
 \item Los \textbf{tests e2e} cubren flujos completos de las funciones reales de la aplicación. 
 Se cubren todos los casos posibles especificados en las Historias de Usuario. Los tests E2E se ejecutan contra bases de datos
-identicas a las de producción gracias a las migraciones de Sequelize. 
+idénticas a las de producción gracias a las migraciones de Sequelize. 
 \end{itemize}
 
 Para realizar los test se ha utilizado la librería \texttt{Jest} que permite el uso de mocks y aserciones, perfectamente 
 integrable en la arquitectura implementada. En el caso de los test E2E, se ha utilizado \texttt{supertest} para simular 
 peticiones HTTP a la aplicación y validar las respuestas. 
 
-Para garantizar el nivel de calidad propuesto para el proyecto y eliminar riesgos de errores al refactorizar y añadir funcionalades 
-al proyecto, se estableció una política de cobertura de código mínima del 80\% en líneas, ramas y funciones en todos los archivos,
+Para garantizar el nivel de calidad propuesto para el proyecto y eliminar riesgos de errores al refactorizar y añadir funcionalidades, se estableció una política de cobertura de código mínima del 80\% en líneas, ramas y funciones en todos los archivos,
 excluyendo archivos de configuración, migraciones y modelos de Sequelize. Esta configuración se encuentra en el archivo \texttt{jest.config.js}
 situado en \texttt{apps/backend}.
 
 \subsection{Resumen}
 
-La implementación del backend de ClimbIt se estructura siguiendo principios de arquitectura hexagonal, garantizando 
+La implementación del backend se estructura siguiendo principios de arquitectura hexagonal, garantizando 
 separación de responsabilidades, testabilidad y flexibilidad.
 
-\textbf{Puntos fuertes de la implementación:}
+\paragraph{Puntos fuertes de la implementación:}
 
 \begin{itemize}
   \item \textbf{Arquitectura por capas}: Domain → Application → Infrastructure, con clara separación de concerns.
   \item \textbf{Casos de uso encapsulados}: la lógica de negocio está centralizada, facilitando cambios y reutilización.
-  \item \textbf{Inyección de dependencias}: flexibilidad para cambiar implementaciones (repositorios, servicios) sin alterar 
-  casos de uso.
-  \item \textbf{Seguridad}: autenticación por JWT, hashing de contraseñas con bcryptjs, analisis de imagenes con file-type 
+  \item \textbf{Inyección de dependencias}: flexibilidad para cambiar implementaciones (repositorios, servicios) sin alterar casos de uso.
+  \item \textbf{Seguridad}: autenticación por JWT, hashing de contraseñas con bcryptjs, análisis de imágenes con file-type 
   y validación de acceso a endpoints exhaustiva.
   \item \textbf{Mejora de rendimiento}: conversión de imágenes a WebP mediante FFmpeg para reducir los tiempos de carga 
   y el consumo de espacio.
   \item \textbf{Manejo de errores}: excepciones específicas del negocio traducidas a respuestas HTTP claras.
   \item \textbf{Testing}: estrategia multicapa con tests unitarios y e2e, umbrales de cobertura del 80\%.
   \item \textbf{Escalabilidad}: la estructura de carpetas y composición permite añadir nuevos casos de uso, repositorios y 
-  controladores sin refactorización mayor.
+  controladores sin una refactorización mayor.
 \end{itemize}
 
 
-Esta implementación proporciona una base sólida, mantenible y escalable para la API REST de ClimbIt.
+Esta implementación proporciona una base sólida, mantenible y escalable para el futuro de ClimbIt.
 
 
 \section{Implementación del Frontend}
@@ -502,7 +426,7 @@ La coherencia visual se apoya en dos decisiones: por un lado, reutilizar Bootstr
 
 \subsection{Calidad y verificación}
 
-Para el frontend no se ha implementado una estrategia de testing automatizado, sino que se ha optado por una validación manual de las Historias de Usuario sumada a la ejecución de pruebas regresivas en las zonas afectadas con la introducción de nuevas funcionalidades. Debido a la naturaleza iterativa del proyecto sujeta a las validaciones de los usuarios y la implementación progresiva de las funcionalidades, se consideró que la adopción y mantenimientos de un sistema automatizado de testing sería contraproducente debido al esfuerzo de implementación y mantenimiento requerido en contraposición al alcance establecido. La estructura de estas pruebas se basa en la ejecución de flujos concretos de las funcionalidades implementadas alineadas con los criterios de aceptación de las Historias de Usuario, desglosadas en el \textit{Apéndice A}. Si bien no se han implementado pruebas automáticas a este punto, sí se plantea en la sección de \textit{Conclusiones y trabajo futuro} como una línea de mejora una vez se estabilicen los requisitos y el proyecto alcance un nivel de madurez suficiente.
+Para el frontend no se ha implementado una estrategia de testing automatizado, sino que se ha optado por una validación manual de las Historias de Usuario sumada a la ejecución de pruebas regresivas en las zonas afectadas por la adición de nuevas funcionalidades. Debido a la naturaleza iterativa del proyecto sujeta a las validaciones de los usuarios y la implementación progresiva de las funcionalidades, se consideró que la adopción y mantenimientos de un sistema automatizado de testing sería contraproducente debido al esfuerzo de implementación y mantenimiento requerido en contraposición al alcance establecido. La estructura de estas pruebas se basa en la ejecución de flujos concretos de las funcionalidades implementadas alineadas con los criterios de aceptación de las Historias de Usuario, desglosadas en el \textit{Apéndice A}. Si bien no se han implementado pruebas automáticas a este punto, sí se plantea en la sección de \textit{Conclusiones y trabajo futuro} como una línea de mejora una vez se estabilicen los requisitos y el proyecto alcance un nivel de madurez suficiente.
 
 \subsection{Resumen}
 
@@ -528,7 +452,7 @@ A continuación se describen los principales desafíos encontrados durante la im
 
 \subsection{Adaptación de la interfaz a móvil y PWA}
 
-Uno de los retos técnicos que se dieron a lo largo del desarrollo fue la adapatación de la interfaz para ser absolutamente responsive en distintos dispositivos móviles sin disponer de las facilidades de un framework que lo resuelve de forma nativa. Esto obligó a implementar manualmente varios comportamientos transversales para garantizar una experiencia consistente en navegadores móviles y en modo instalado como PWA. El \textit{viewport} es diferente en los navegadores debido a la barra de direcciones, el teclado virtual y la orientación del dispositivo, que produce problemas de desajustes al realizarse actualizaciones de la interfaz, por recargas o cambios de orientación.
+Uno de los retos técnicos que se dieron a lo largo del desarrollo fue la adaptación de la interfaz para ser absolutamente responsive en distintos dispositivos móviles sin disponer de las facilidades de un framework que lo resuelve de forma nativa. Esto obligó a implementar manualmente varios comportamientos transversales a toda la aplicación para garantizar una experiencia consistente en navegadores móviles y en modo instalado como PWA. El \textit{viewport} es diferente en los navegadores debido a la barra de direcciones, el teclado virtual y la orientación del dispositivo, que produce problemas de desajustes al realizarse actualizaciones de la interfaz, por recargas o cambios de orientación.
 
 La solución a este problema fue a través de la gestión de una variable CSS personalizada \texttt{--vh}, que se actualiza dinámicamente en eventos que afectan al \textit{viewport}, recuperándose de nuevo esa altura real y asignándola a la variable y no ver modificada la interfaz por mantener una altura fija.
 

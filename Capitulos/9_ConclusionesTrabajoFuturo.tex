@@ -15,27 +15,53 @@ Desde el punto de vista de los rocódromos, se ha preparado la aplicación para 
 
 Asimismo, la arquitectura tecnológica diseñada para el proyecto ha demostrado ser eficiente para los requisitos de la aplicación. La elección de una arquitectura hexagonal para el backend, apoyada por una base de datos relacional PostgreSQL, reduce de esta forma el esfuerzo para mantener o ampliar el código en el futuro. Por otro lado, la interfaz de usuario en el frontend, constituida como una aplicación web progresiva y distribuida mediante cualquier navegador o en Google Play gracias a la tecnología Trusted Web Activity, proporciona un acceso universal a la aplicación desde cualquier dispositivo e independientemente del nivel tecnológico del escalador.
 
-Por último, el enfoque de Diseño Centrado en el Usuario ha resultado indispensable a lo largo del desarrollo de la aplicación. Las evaluaciones iterativas dieron la posibilidad de detectar problemas de manera temprana y priorizar funcionalidades como... (rellenar con los resultados de la última captura)
+Por último, el enfoque de Diseño Centrado en el Usuario ha resultado indispensable a lo largo del desarrollo de la aplicación. Las evaluaciones iterativas dieron la posibilidad de detectar problemas de manera temprana y priorizar funcionalidades como las mejoras sociales o de experiencia al marcar el progreso de los usuarios, lo que se ha traducido en una aplicación que no solo es funcional, sino también atractiva y fácil de usar para los escaladores.
+
+En definitiva, \textit{ClimbIt} ha trascendido de ser un Trabajo de Fin de Grado a consolidarse como un proyecto robusto, escalable y con un alto potencial de inserción en el ecosistema deportivo real. Al combinar una sólida arquitectura, estrategias de gamificación y metodologías centradas en el usuario, se ha logrado construir una plataforma que beneficia tanto a la gestión interna de los rocódromos como a la motivación de los escaladores. La gran acogida de esta primera versión sienta unos cimientos inmejorables para abordar las líneas de trabajo futuro, garantizando que la aplicación pueda seguir creciendo, adaptándose y aportar valor tecnológico a una comunidad de escaladores en constante expansión.
 
 \section{Trabajo Futuro}
 
-\textit{ClimbIt} es un proyecto que, más allá del Trabajo de Fin de Grado, se ha desarrollado con la idea de ser una herramienta útil que se pueda seguir utilizando y desarrollando tras su entrega. En base a las decisiones de diseño tomadas y los resultados de las pruebas con usuarios realizadas, definimos las siguientes funcionalidades a implementar separadas por bloques temáticos:
+\textit{ClimbIt} es un proyecto que, más allá del Trabajo de Fin de Grado, se ha desarrollado con la idea de ser una herramienta útil que se pueda seguir utilizando y evolucionando tras su entrega. Gracias al \textit{feedback} por los usuarios y las decisiones técnicas y de gamificación planteadas para el proyecto, se han definido las siguientes funcionalidades a implementar, separadas por bloques temáticos y no en orden de prioridad:
 
-\subsection{Mejoras de calidad de vida}
-(Hay que rellenar con los resultados de las capturas)
+\subsection{Mejoras de calidad de vida y Estabilidad}
+Este bloque engloba las optimizaciones a nivel de arquitectura, rendimiento y experiencia de usuario orientadas a refinar la interacción diaria con la aplicación:
+
 \begin{itemize}
-\item \textbf{Refresh token}
+    \item \textbf{Optimización de la Interfaz (UX):} El mapa se minimizará u ocultará automáticamente al hacer \textit{scroll} hacia abajo, cediendo el espacio a las tarjetas de las rutas para mejorar la legibilidad en los listados.
+    \item \textbf{Resolución de Deuda Técnica:} Se realizará la refactorización de la base de datos y del \textit{backend} aplazada durante el desarrollo del MVP. Esto implicará la migración completa y definitiva de la entidad \texttt{Pista} a \texttt{Ruta} en todas las tablas, controladores y el resto de archivos.
+    \item \textbf{Optimización de Rendimiento:} Se trabajará en mejorar los tiempos de carga y procesamiento asíncrono en la subida de imágenes para resolver las latencias y problemas de lentitud reportados por algunos usuarios.
+    \item \textbf{Gestión de Sesiones Seguras:} Implementación de un sistema de \textit{Refresh Token} en el \textit{backend} para garantizar una persistencia de sesión segura sin penalizar la experiencia del usuario obligándole a iniciar sesión diariamente.
 \end{itemize}
 
 \subsection{Rocódromos, Zonas y Rutas}
+Se contemplan mejoras fundamentales para enriquecer la administración de los rocódromos y el seguimiento de las actividades en ellos:
+
 \begin{itemize}
-\item \textbf{Historial}
-\item \textbf{Eventos y competiciones:}
-\item \textbf{Métricas y analíticas para gestores:}
+    \item \textbf{Historial y Registro de Intentos:} Evolucionar el sistema de ascensos actual para habilitar una contabilización de intentos hasta completar una ruta y permitir el registro múltiple de una misma vía o bloque.
+    \item \textbf{Panel de Gestión de Rocódromos:} Implementar de un panel de control avanzado para los gestores que permita aplicar operaciones CRUD a múltiples rutas a la vez, agilizando los procesos de gestión.
+    \item \textbf{Fidelización y Notificaciones \textit{Push}:} Integración de un sistema de notificaciones automatizadas para avisar instantáneamente a los usuarios suscritos sobre la creación de nuevas rutas o la retirada de las mismas en sus rocódromos favoritos.
+    \item \textbf{Métricas y Analíticas para Gestores:} Proveer a los rocódromos de paneles de datos donde puedan visualizar qué zonas y rutas de sus instalaciones tienen más afluencia, tasas de completitud o las rutas con mejores valoraciones.
+    \item \textbf{Eventos y Competiciones (Ligas):} Poder utilizar \textit{ClimbIt} para gestionar competiciones internas (torneos o liguillas) y crear subgrupos para administrar las clases dirigidas o eventos propios del racódromo.
 \end{itemize}
 
 \subsection{Social y Gamificación}
+Dando respuesta a las peticiones casi unánimes de la comunidad encuestada, el núcleo del desarrollo post-MVP se centrará en potenciar la interacción social y el registro avanzado de los deportistas:
+
 \begin{itemize}
-\item \textbf{Expansión del sistema de logros (Badges):} Diseñar e implementar un sistema de logros que premie hitos específicos en la escalada, como completar una cantidad determinada de rutas al flash o alcanzar niveles de dificultad concretos.
-\item \textbf{Grupos de amigos:} Mejora del apartado social actual creando la estructura de grupos privados. En estos espacios los usuarios podrán competir entre sí y comparar fácilmente sus estadísticas y logros.
+    \item \textbf{Grupos de Amigos:} Ampliar del apartado social para permitir la creación de grupos privados fomentar la competitividad amistosa, al comparar fácilmente sus estadísticas con su círculo cercano y proponiéndose retos entre ellos.
+    \item \textbf{Implantación de un Sistema de Logros (Badges):} Diseñar e implementar un sistema de logros e insignias que premie hitos específicos en la escalada y con iteraciones dentro de la aplicación, como completar una cantidad determinada de rutas como \textit{flash} o encadenar varios días activo en rocódromos.
+    \item \textbf{Retos y Objetivos Personalizados:} Permitir a los usuarios establecer metas propias (por ejemplo, completar un número de bloques en un periodo acotado de tiempo) y recibir recompensas al superarlos.
+    \item \textbf{Estadísticas Avanzadas:} Ampliar las secciones de estadísticas para incluir gráficas de mayor valor para los escaladores, mejorar las estadísticas existentes para ser más útiles y visuales, eliminando información irrelevante para los escaladores.
+\end{itemize}
+
+
+\subsection{Mejoras no Funcionales}
+Estas mejoras no afectan directamente a la funcionalidad de la aplicación, pero sí a su alcance y usabilidad:
+
+\begin{itemize}
+    \item \textbf{Accesibilidad:} Mejorar la accesibilidad de la aplicación siguiendo las pautas WCAG 2.2 para garantizar una experiencia inclusiva a todos los usuarios.
+    \item \textbf{Migración de servidor:} Investigar la viabilidad de migrar el \textit{backend} a un servicio en la nube como AWS o Google Cloud para mejorar la escalabilidad y disponibilidad del servicio frente a la opción de mantenerlo en un servidor físico pero cambiando de la Raspberry Pi a un servidor dedicado.
+    \item \textbf{Paralelización de Procesos:} Implementar técnicas de paralelización en el procesamiento de imágenes y la actualización para mejorar el rendimiento general de la aplicación y la experiencia del usuario. 
+    \item \textbf{Ampliación del catálogo de Rocódromos:} Continuar contactando con distintos rocódromos para ampliar la base de usuarios y de contenido de la aplicación, que permitirá obtener un mayor número de datos para aplicar más y mejores funcionalidades, así como mejorar la experiencia de los usuarios al tener más opciones para elegir. 
+    \item \textbf{Automatización de Pruebas:} Desarrollar un sistema de testing automatizado para el frontend de la aplicación y sin abandonar el testing manual para la parte de usabilidad, manteniendo un sistema híbrido que permita garantizar la calidad del producto a medida que se vayan implementando nuevas funcionalidades. 
 \end{itemize}
