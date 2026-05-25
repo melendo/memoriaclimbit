@@ -5,7 +5,7 @@ Este capítulo reúne la estrategia de verificación de la solución y la valida
 
 \section{Metodología de Validación y Perfil de Usuarios}
 
-El desarrollo de la aplicación se ha articulado bajo el paradigma del \textit{Diseño Centrado en el Usuario} (DCU), tal y como se detalló en el \textit{Capítulo 3}. Con el propósito de asegurar que \textit{ClimbIt} no solo cumpla con los requisitos técnicos funcionales, sino que también ofrezca una experiencia de usuario óptima, fluida y adaptada a las necesidades de los escaladores y los gestores de rocódromo. Para ello, se ha diseñado una estrategia de validación iterativa dividida en dos fases principales.
+El desarrollo de la aplicación se ha articulado bajo el paradigma del \textit{Diseño Centrado en el Usuario} (DCU), tal y como se detalló en el capítulo \ref{cap:metodologiaDesarrollo}. Con el propósito de asegurar que \textit{ClimbIt} no solo cumpla con los requisitos técnicos funcionales, sino que también ofrezca una experiencia de usuario óptima, fluida y adaptada a las necesidades de los escaladores y los gestores de rocódromo, se ha diseñado una estrategia de validación iterativa dividida en dos fases principales.
 
 La primera fase de validación se ejecutó tras finalizar el prototipo de la aplicación. En este punto, el objetivo principal fue evaluar si la navegación propuesta, las funcionalidades iniciales y el diseño de las interfaces cumplían con las expectativas fundamentales de los usuarios. Para ello, se optó por un enfoque cualitativo mediante entrevistas individuales semiestructuradas realizadas a través de videollamada. 
 
@@ -25,8 +25,6 @@ Para esta segunda evaluación, el tamaño de la muestra se incrementó hasta alc
     \item \textbf{Análisis cuantitativo y reducción del sesgo:} Al pasar de una evaluación cualitativa sobre el prototipo hacia una métrica empírica sobre el producto final, era indispensable contar con una muestra más amplia para reducir sesgos de los participantes, permitiendo graficar tendencias y obtener datos más fiables sobre la usabilidad del sistema.
     \item \textbf{Evolución, contraste y nuevos perfiles:} Se incluyeron en este segundo a todos los escaladores que participaron en la primera fase, actuando como un grupo de control idóneo para contrastar si las mejoras sugeridas en el prototipo se tradujeron en una mejora de la UX. A ellos se sumaron nuevos usuarios que se enfrentaban a la interfaz por primera vez y se incorporó un nuevo perfil de usuario: \textit{aquel que no ha escalado nunca}. Esto último tiene como objetivo verificar si el diseño de la aplicación y la gamificación de sus funciones pueden actuar como un elemento motivador que los incentive a iniciarse en el mundo de la escalada.
 \end{itemize}
-
-El perfil demográfico y técnico de los usuarios involucrados en ambas fases del proceso de pruebas queda sintetizado con detalle en la Tabla~\ref{tab:perfilUsuarios}.
 
 \subsubsection{Caracterización de la Muestra (Fase 1)}
 
@@ -91,8 +89,8 @@ Las sesiones se llevaron a cabo de forma individual y mediante una videollamada.
 \begin{enumerate}
     \item \textbf{Registro y autenticación:} Registrarse con una nueva cuenta en la aplicación.
     \item \textbf{Suscripción a Rocódromo:} Localizar el rocódromo \textit{``Uadiblock''} y suscribirse a él.
-    \item \textbf{Búsqueda de Ruta:} Buscar una vía específica llamada \textit{"Silence"} con un nivel de dificultad de \textit{9c}.
-    \item \textbf{Registro de actividad:} Marcar la vía como \textit{"Flash"} (Ascenso completado en 1 intento).
+    \item \textbf{Búsqueda de Ruta:} Buscar una vía específica llamada \textit{``Silence''} con un nivel de dificultad de \textit{9c}.
+    \item \textbf{Registro de actividad:} Marcar la vía como \textit{``Flash''} (Ascenso completado en 1 intento).
     \item \textbf{Cierre de sesión:} Cerrar sesión en la aplicación.
 \end{enumerate}
 
@@ -105,9 +103,9 @@ La heterogeneidad de perfiles de la muestra garantizó que las deficiencias de u
 El análisis cruzado de las anotaciones y de los documentos de resultados de las seis entrevistas individuales desveló un conjunto de fricciones de usabilidad críticas y patrones de comportamiento comunes que redefinieron el alcance del Producto Mínimo Viable (MVP). Los hallazgos más relevantes se clasifican a continuación:
 
 \begin{itemize}
-    \item \textbf{Problema crítico en el flujo de suscripción:} Representó el obstáculo más severo de la interfaz. La gran mayoría de los usuarios (incluyendo a Klaudia, Leo, Moto y Pablo) accedieron directamente al panel del rocódromo para suscribirse y descubrieron con frustración que la opción no estaba integrada dentro de dicha pantalla, obligándoles a retroceder a la portada. Además, existió una disonancia cognitiva con la iconografía: el símbolo del corazón fue interpretado unánimemente como una acción de "marcar como favorito" o dar un "me gusta"  social, en lugar de una suscripción formal (asociada por los usuarios a un modelo de pago o membresía).
+    \item \textbf{Problema crítico en el flujo de suscripción:} Representó el obstáculo más severo de la interfaz. La gran mayoría de los usuarios (incluyendo a Klaudia, Leo, Moto y Pablo) accedieron directamente al panel del rocódromo para suscribirse y descubrieron con frustración que la opción no estaba integrada dentro de dicha pantalla, obligándoles a retroceder a la portada. Además, existió una disonancia cognitiva con la iconografía: el símbolo del corazón fue interpretado unánimemente como una acción de ``marcar como favorito'' o dar un ``me gusta''s  social, en lugar de una suscripción formal (asociada por los usuarios a un modelo de pago o membresía).
     \item \textbf{Navegación y segmentación de zonas mejorable:} Al buscar una ruta concreta, varios usuarios experimentaron demoras debido a la disposición del catálogo. Al estar las rutas segmentadas por zonas, el usuario se veía obligado a inspeccionar secuencialmente cada zona si desconocía la ubicación exacta de la ruta. Como solución, los participantes sugirieron implementar un buscador global con filtros avanzados por grados de dificultad.
-    \item \textbf{Deficiencias menores y errores técnicos:} Durante el flujo de registro, se detectó la ausencia de la etiqueta técnica \texttt{autocomplete="off"} en el formulario de credenciales, lo que provocaba que los navegadores sugirieran contraseñas antiguas del sistema, penalizando la limpieza estética de la interfaz.
+    \item \textbf{Deficiencias menores y errores técnicos:} Durante el flujo de registro, se detectó la ausencia de la etiqueta técnica \texttt{autocomplete=``off''} en el formulario de credenciales, lo que provocaba que los navegadores sugirieran contraseñas antiguas del sistema, penalizando la limpieza estética de la interfaz.
 \end{itemize}
 
 En cuanto a la navegación y el diseño presentado en el prototipo, las respuestas fueron más que positivas, entre las cuales se destacó la simplicidad y consistencia del diseño, así como la intuitividad a la hora de acceder a las diferentes secciones y navegar.
@@ -118,18 +116,18 @@ En cuanto a la navegación y el diseño presentado en el prototipo, las respuest
 \begin{tabular}{lp{6cm}c}
 \hline
 \textbf{Módulo Técnico} & \textbf{Requisito Extraído del Feedback} & \textbf{Prioridad MVP} \\ \hline
-\textit{Core} / Rutas & Cambiar nomenclatura de "Pistas" a "Rutas" y añadir tipado explícito (Vía / Bloque). & Alta \\
-Navegación & Rediseño de la búsqueda dentro de zonas a través de un buscador global con filtros de grados. & Alta \\
+\textit{Core} / Rutas & Cambiar nomenclatura de ``Pistas'' a ``Rutas'' y añadir tipado explícito (Vía / Bloque). & Alta \\
+Navegación & Rediseño de la búsqueda dentro de zonas a través de un sistema filtros integrado con grados de dificultad. & Alta \\
 Suscripción & Reubicar botón de suscripción dentro del perfil del rocódromo y modificar iconografía del corazón. & Alta \\
 Estadísticas & Desglosar el progreso por dificultades específicas en lugar de métricas de completitud global. & Media \\
-Social & Visualización de amigos que han completado una ruta concreta y gestión de grupos. & Media-Alta \\
+Social & Visualización de amigos  y gestión de grupos. & Media-Alta \\
 Funcionalidad & Permitir la subida de imágenes con instrucciones (\textit{beta} o pasos clave) y notas por ruta. & Media-Baja \\ \hline
 \end{tabular}
 \caption{Matriz de requisitos sintetizados y priorizados tras la Fase 1 de entrevistas.}
 \label{tab:requisitosFase1}
 \end{table}
 
-A partir de estas conclusiones, el equipo de desarrollo llevó a cabo un proceso de priorización técnica reflejado en la Tabla~\ref{tab:requisitosFase1}. Destaca la aportación del perfil experto (Javier), quien advirtió que mostrar un porcentaje de completitud global del rocódromo resulta contraproducente y desmotivador tanto para novatos (que ven rutas inalcanzables) como para expertos (que ven bloques demasiado simples); en su lugar, se adoptó el requisito de estructurar las estadísticas del escalador segmentadas estrictamente por rangos de nivel. Asimismo, se decidió de forma unánime reestructurar el vocabulario técnico de la aplicación, sustituyendo el término "Pistas" por "Rutas" para adecuarse mejor a la jerga real de la comunidad.
+A partir de estas conclusiones, el equipo de desarrollo llevó a cabo un proceso de priorización técnica reflejado en la Tabla~\ref{tab:requisitosFase1}. Destaca la aportación del perfil experto (Javier), quien advirtió que mostrar un porcentaje de completitud global del rocódromo resulta contraproducente y desmotivador tanto para novatos (que ven rutas inalcanzables) como para expertos (que ven bloques demasiado simples); en su lugar, se adoptó el requisito de estructurar las estadísticas del escalador segmentadas estrictamente por rangos de nivel. Asimismo, se decidió de forma unánime reestructurar el vocabulario técnico de la aplicación, sustituyendo el término ``Pistas'' por ``Rutas'' para adecuarse mejor a la jerga real de la comunidad.
 
 \section{Fase 2: Validación del Producto Mínimo Viable (MVP)}
 
@@ -139,7 +137,7 @@ Una vez terminado el desarrollo y la implementación del Producto Mínimo Viable
 
 El formulario de evaluación fue concebido bajo un enfoque metodológico mixto (cuantitativo y cualitativo) y se implementó mediante una estructura condicional. El objetivo de esta estructura era bifurcar dinámicamente el itinerario de preguntas que visualiza el participante en función de su experiencia previa y su rol dentro del ecosistema de la escalada, evitando la fatiga del usuario y garantizando la recolección de datos específicos.
 
-El cuestionario comienza con una sección introductoria de control donde se garantiza el anonimato de los datos, se explica el marco del TFG en la Universidad Complutense de Madrid y se solicita el apodo dentro de la aplicación con la única finalidad de realizar un cruce de datos sin romper el anonimato. Acto seguido, se presenta la pregunta filtro crítica: \textit{"¿Has utilizado ClimbIt?"}. Si la respuesta es una negativa, se redirige al usuario a una sección del formulario sin preguntas, en la que se incluye una ruta similar a la evaluada por los usuarios de la primera fase, pero con algún detalle adicional enfocado a mostrar las nuevas funcionalidades implementadas en el MVP. Una vez completado el circuito, se continúa a la primera sección del formulario, dividido en los siguientes bloques:
+El cuestionario comienza con una sección introductoria de control donde se garantiza el anonimato de los datos, se explica el marco del TFG en la Universidad Complutense de Madrid y se solicita el apodo dentro de la aplicación con la única finalidad de realizar un cruce de datos sin romper el anonimato. Acto seguido, se presenta la pregunta filtro crítica: \textit{``¿Has utilizado ClimbIt?''}. Si la respuesta es una negativa, se redirige al usuario a una sección del formulario sin preguntas, en la que se incluye una ruta similar a la evaluada por los usuarios de la primera fase, pero con algún detalle adicional enfocado a mostrar las nuevas funcionalidades implementadas en el MVP. Una vez completado el circuito, se continúa a la primera sección del formulario, dividido en los siguientes bloques:
 
 \begin{enumerate}
     \item \textbf{Bloque de Instalación:} Se evalúa la experiencia del usuario instalando la aplicación, obteniendo también información acerca del dispositivo en el que se ha instalado, el punto desde el que se obtuvo y si experimentó algún tipo de problema durante el proceso
@@ -153,7 +151,7 @@ El cuestionario comienza con una sección introductoria de control donde se gara
 Para garantizar la fiabilidad del análisis de datos, el formulario combina dos metodologías de captura:
 
 \begin{itemize}
-    \item \textbf{Métricas Cuantitativas (Escalas de tipo Likert):} Se utilizan preguntas cerradas con respuestas graduadas en escalas Likert de 1 a 5 (donde 1 representa la valoración más negativa o \textit{"Muy Difícil"} y 5 la más positiva o \textit{"Muy Fácil"}). Estas escalas se aplican de forma sistemática para medir el grado de utilidad percibida por los escaladores sobre las pantallas, la facilidad de aprendizaje, la navegación y la probabilidad de recomendación de la aplicación.
+    \item \textbf{Métricas Cuantitativas (Escalas de tipo Likert):} Se utilizan preguntas cerradas con respuestas graduadas en escalas Likert de 1 a 5 (donde 1 representa la valoración más negativa o \textit{``Muy Difícil''} y 5 la más positiva o \textit{``Muy Fácil''}). Estas escalas se aplican de forma sistemática para medir el grado de utilidad percibida por los escaladores sobre las pantallas, la facilidad de aprendizaje, la navegación y la probabilidad de recomendación de la aplicación.
     \item \textbf{Métricas Cualitativas (Preguntas de Respuesta Libre):} Situadas al final de cada bloque, permiten al escalador expresarse sin restricciones numéricas. Su objetivo es capturar nuevas ideas de los usuarios, recomendaciones para mejorar los procesos e interfaces de ClimbIt e identificar posibles \textit{bugs} o fallos de lógica de negocio que hayan pasado desapercibidos tras el desarrollo.
 \end{itemize}
 
@@ -164,7 +162,7 @@ La evaluación del Producto Mínimo Viable (MVP) concluyó con la recopilación 
 
 \subsubsection{Acceso, Instalación y Dispositivos Utilizados}
 
-El formulario incluyó un bloque inicial destinado a evaluar el proceso de adopción tecnológica y el entorno de ejecución preferido por los encuestados. Dado que \textit{ClimbIt} ha sido desarrollada bajo la arquitectura de una \textit{Progressive Web App} (PWA), resultaba crucial analizar cómo los escaladores accedían al sistema y si el proceso de instalación (mediante la funcionalidad \textit{"Añadir a la pantalla de inicio"}) generaba fricciones frente a los flujos de las aplicaciones nativas.
+El formulario incluyó un bloque inicial destinado a evaluar el proceso de adopción tecnológica y el entorno de ejecución preferido por los encuestados. Dado que \textit{ClimbIt} ha sido desarrollada bajo la arquitectura de una \textit{Progressive Web App} (PWA), resultaba crucial analizar cómo los escaladores accedían al sistema y si el proceso de instalación (mediante la funcionalidad \textit{``Añadir a la pantalla de inicio''}) generaba fricciones frente a los flujos de las aplicaciones nativas.
 
 Los datos cuantitativos y cualitativos extraídos arrojan las siguientes conclusiones:
 
@@ -178,7 +176,7 @@ Los datos cuantitativos y cualitativos extraídos arrojan las siguientes conclus
     \label{fig:distribucionDispositivos}
     \end{figure}
 
-    \item \textbf{Puntos de Acceso:} El comportamiento de acceso a la aplicación refleja la flexibilidad inherente de la arquitectura web elegida. Un volumen importante de 14 usuarios optó por utilizar la aplicación directamente en línea a través del navegador, sin llegar a instalarla. Por otro lado, los usuarios que sí realizaron la instalación lo hicieron empleando navegadores web como puente: Safari (6 usuarios), Google Chrome (5) y Brave (3). Resulta de especial interés destacar que 7 usuarios indicaron haberla instalado desde la "Play Store", que pudieron hacerlo tras ser añadidos por petición propia a la lista de testers internos de Google Play Console al indicar personalmente que les gustaría poder instalarla como una aplicación nativa. Este dato refleja la percepción de los usuarios sobre la necesidad de una instalación formal, a pesar de que la arquitectura PWA permite un acceso directo sin instalación.
+    \item \textbf{Puntos de Acceso:} El comportamiento de acceso a la aplicación refleja la flexibilidad inherente de la arquitectura web elegida. Un volumen importante de 14 usuarios optó por utilizar la aplicación directamente en línea a través del navegador, sin llegar a instalarla. Por otro lado, los usuarios que sí realizaron la instalación lo hicieron empleando navegadores web como puente: Safari (6 usuarios), Google Chrome (5) y Brave (3). Resulta de especial interés destacar que 7 usuarios indicaron haberla instalado desde la ``Play Store'', que pudieron hacerlo tras ser añadidos por petición propia a la lista de testers internos de Google Play Console al indicar que les gustaría poder instalarla como una aplicación nativa. Este dato refleja la percepción de los usuarios sobre la necesidad de una instalación formal, a pesar de que la arquitectura PWA permite un acceso directo sin instalación.
     
     \item \textbf{Fricciones detectadas:} El proceso de instalación fue valorado como \textit{sencillo} por 27 de los 29 usuarios que decidieron instalarla en su dispositivo. El análisis cualitativo de los problemas experimentados reveló que el principal problema proviene del ecosistema de Apple, debido a las políticas restrictivas de iOS frente a las \textit{Progressive Web Apps} en comparación con el ecosistema abierto de Android.
 \end{itemize}
@@ -199,7 +197,7 @@ A partir del análisis gráfico, se detallan a continuación las valoraciones me
 \begin{itemize}
     \item \textbf{Navegación General:} La fluidez y estructura de la aplicación obtuvo una valoración media de \textbf{4,71 sobre 5}, demostrando que la estructura de navegación dentro y entre secciones a través de la barra de navegación inferior hacen a ClimbIt altamente intuitivo.
     \item \textbf{Interacción \textit{Core}:} El registro de ascensos, considerada la funcionalidad crítica de \textit{ClimbIt}, alcanzó una puntuación de \textbf{4,66 sobre 5}. Paralelamente, la facilidad para descubrir rocódromos se valoró con un sólido \textbf{4,49 sobre 5}.
-    \item \textbf{Puntos de Fricción:} La métrica más baja del bloque de usabilidad se registró en la pregunta \textit{"facilidad para localizar rutas dentro de una zona específica"}, con un \textbf{4,11 sobre 5}. Aunque sigue constituyendo un valor netamente positivo, indica una oportunidad mejora en cuanto a la optimización de la interfaz del listado de rutas de una zona.
+    \item \textbf{Puntos de Fricción:} La métrica más baja del bloque de usabilidad se registró en la pregunta \textit{``facilidad para localizar rutas dentro de una zona específica''}, con un \textbf{4,11 sobre 5}. Aunque sigue constituyendo un valor netamente positivo, indica una oportunidad mejora en cuanto a la optimización de la interfaz del listado de rutas de una zona.
     \item \textbf{Índice de Recomendación:} El grado de fidelización y recomendación de la aplicación a otros escaladores se situó en un excepcional \textbf{4,89 sobre 5}, validando el atractivo del producto en la comunidad deportiva.
 \end{itemize}
 
@@ -211,7 +209,7 @@ Respecto al diseño y la arquitectura de la información, el \textit{feedback} d
 
 En cuanto al \textit{roadmap} de funcionalidades futuras, las demandas se concentraron unánimemente en reforzar la capa de gamificación:
 \begin{enumerate}
-    \item \textbf{Ampliación del Registro Técnico:} Inclusión de un contador de "intentos" (pegues) requeridos antes de encadenar una vía y habilitar el registro múltiple de una misma ruta para sesiones de entrenamiento de volumen.
+    \item \textbf{Ampliación del Registro Técnico:} Inclusión de un contador de ``intentos'' (pegues) requeridos antes de encadenar una vía y habilitar el registro múltiple de una misma ruta para sesiones de entrenamiento de volumen.
     \item \textbf{Módulos Sociales:} Petición masiva para la creación de grupos privados de escaladores, participación en competiciones oficiales del rocódromo y obtención de logros o emblemas para personalizar el perfil.
     \item \textbf{Estadísticas Avanzadas:} Desglose más granular de las métricas, permitiendo cruzar datos por estilo de escalada y nivel.
 \end{enumerate}
@@ -222,13 +220,13 @@ La evaluación del bloque especializado para los 4 gestores de instalaciones dep
 
 Desde una perspectiva de administración operativa, los gestores aportaron los siguientes requisitos técnicos de alto valor:
 \begin{itemize}
-    \item \textbf{Panel de Gestión Masiva:} Demandan un panel administrativo que permita aplicar operaciones CRUD (Crear, Leer, Actualizar, Borrar) \textit{"en bloque"} a las rutas, mitigando el tiempo invertido en renovar catálogos grandes.
+    \item \textbf{Panel de Gestión Masiva:} Demandan un panel administrativo que permita aplicar operaciones CRUD (Crear, Leer, Actualizar, Borrar) \textit{``en bloque''} a las rutas, mitigando el tiempo invertido en renovar catálogos grandes.
     \item \textbf{Sistema de Notificaciones \textit{Push}:} Capacidad algorítmica para lanzar alertas automáticas a los usuarios suscritos cuando se equipan nuevas presas o se abren sectores de entrenamiento.
     \item \textbf{Gestión de Competiciones Internas:} Habilitar módulos para organizar ligas privadas o eventos dentro de la plataforma, actuando como un escaparate de visibilidad y \textit{marketing} para el rocódromo.
 \end{itemize}
 
 \subsubsection{Impacto en Usuarios No Escaladores}
-Por último, las respuestas obtenidas del grupo de control (10 usuarios sin experiencia previa en este deporte) validaron positivamente la hipótesis inicial de captación. En sus respuestas cualitativas, destacaron que el diseño \textit{"parece divertido"} y que la posibilidad de registrar un crecimiento personal mediante una aplicación móvil actúa como un elemento motivador que les \textit{"llama la atención"} para iniciarse en la escalada.
+Por último, las respuestas obtenidas del grupo de control (10 usuarios sin experiencia previa en este deporte) validaron positivamente la hipótesis inicial de captación. En sus respuestas cualitativas, destacaron que el diseño \textit{``parece divertido''} y que la posibilidad de registrar un crecimiento personal mediante una aplicación móvil actúa como un elemento motivador que les \textit{``llama la atención''} para iniciarse en la escalada.
 
 \section{Impacto del Feedback: Mejoras Aplicadas y Trabajo Futuro}
 
@@ -236,13 +234,13 @@ Por último, las respuestas obtenidas del grupo de control (10 usuarios sin expe
 Este apartado expone el proceso de cierre del ciclo de retroalimentación (\textit{feedback loop}), detallando cómo los resultados obtenidos tras las evaluaciones de la Fase 1 se tradujeron en cambios en el modelo de datos y rediseños de la interfaz para consolidar el Producto Mínimo Viable (MVP). Las modificaciones principales se estructuran en los siguientes bloques:
 
 \paragraph{Rediseño del Flujo de Suscripción y Corrección Semántica}
-El problema más severo identificado en el prototipo fue la imposibilidad de suscribirse a un rocódromo desde su propio perfil y la confusión generada por la iconografía del corazón. Bien es cierto que la acción de suscribirse no tiene ningún impacto real más allá de mostrar el rocódromo directamente como una especie de acceso rápido, por lo que se tomó la decisión de mantener el sistema cambiando la iconografía a una estrella, dejándolo como si fuera un marcador de favoritos, a la espera del rediseño del sistema de suscripciones. Además, para facilitar el acceso al marcaje, se integró un botón explícito de \textit{"Suscribirse"} dentro del perfil de cada rocódromo, eliminando la restricción de realizar dicha acción exclusivamente desde la \textit{card} del rocódromo en la sección \textbf{Mis Rocódromos}. 
+El problema más severo identificado en el prototipo fue la imposibilidad de suscribirse a un rocódromo desde su propio perfil y la confusión generada por la iconografía del corazón. Bien es cierto que la acción de suscribirse no tiene ningún impacto real más allá de mostrar el rocódromo directamente como una especie de acceso rápido, por lo que se tomó la decisión de mantener el sistema cambiando la iconografía a una estrella, dejándolo como si fuera un marcador de favoritos, a la espera del rediseño del sistema de suscripciones. Además, para facilitar el acceso al marcaje, se integró un botón explícito de \textit{``Suscribirse''} dentro del perfil de cada rocódromo, eliminando la restricción de realizar dicha acción exclusivamente desde la \textit{card} del rocódromo en la sección \textbf{Mis Rocódromos}. 
 
 \paragraph{Optimización del acceso a Rutas}
-La experiencia de búsqueda de la vía \textit{"Silence"} demostró que el proceso podía volverse tedioso, por lo que se implementó un sistema de filtros dinámicos para facilitar el acceso a rutas dentro de una zona concreta, limitando así el número de rutas plasmado en el mapa y el tamaño de la lista. Esto mejoró el acceso a las rutas.
+La experiencia de búsqueda de la vía \textit{``Silence''} demostró que el proceso podía volverse tedioso, por lo que se implementó un sistema de filtros dinámicos para facilitar el acceso a rutas dentro de una zona concreta, limitando así el número de rutas plasmado en el mapa y el tamaño de la lista. Esto mejoró el acceso a las rutas.
 
 \paragraph{Refactorización del Modelo de Datos y Vocabulario Técnico}
-El \textit{feedback} del perfil experto (Javier) fue enriquecedor y constructivo. Sugirió cambios en la nomenclatura para renombrar Pistas por Rutas y añadir un tipo explícito para diferenciar entre \textit{"Vía"} (escalada con cuerda) y \textit{"Bloque"} (\textit{boulder}), dado que sus escalas de dificultad pueden variar en función del centro que las implemente. Estas sugerencias llevaron a realizar cambios estructurales que afectaron tanto de la interfaz como al \textit{backend}. Se tomó la decisión de modificar las instancias de Pista a Ruta únicamente en el frontend, manteniendo el nombre Pista en el backend para acelerar el desarrollo, marcando como deuda técnica la refactorización completa de archivos, rutas y tablas de la base de datos como trabajo a futuro, ya que no afecta a la experiencia del usuario ni a la lógica de negocio, sino que simplemente se trataba de una corrección semántica para mejorar la cohesión con el lenguaje real de la comunidad de escaladores.
+El \textit{feedback} del perfil experto (Javier) fue enriquecedor y constructivo. Sugirió cambios en la nomenclatura para renombrar Pistas por Rutas y añadir un tipo explícito para diferenciar entre \textit{``Vía''} (escalada con cuerda) y \textit{``Bloque''} (\textit{boulder}), dado que sus escalas de dificultad pueden variar en función del centro que las implemente. Estas sugerencias llevaron a realizar cambios estructurales que afectaron tanto de la interfaz como al \textit{backend}. Se tomó la decisión de modificar las instancias de Pista a Ruta únicamente en el frontend, manteniendo el nombre Pista en el backend para acelerar el desarrollo, marcando como deuda técnica la refactorización completa de archivos, rutas y tablas de la base de datos como trabajo a futuro, ya que no afecta a la experiencia del usuario ni a la lógica de negocio, sino que simplemente se trataba de una corrección semántica para mejorar la cohesión con el lenguaje real de la comunidad de escaladores.
     
 \paragraph{Barras de progreso de completitud de rocódromo}
 Como punto inicial de gamificación del proyecto, se implementó una barra de progreso dentro de las zonas de un rocódromo que mostraban el porcentaje de rutas completadas totales por el escalador en dicho rocódromo. Sin embargo, gracias a la aportación del perfil experto, se llegó a la conclusión de que esa métrica de completitud global podría resultar desmotivadora tanto para perfiles novatos, que no vería un avance real al no completar rutas difíciles, como de perfiles más avanzados, que al no dedicar tiempo en completar rutas sencillas en pro de avanzar con las difíciles, tampoco verían recompensado su progreso. Por ello, se tomó una decisión intermedia: Se mantuvo la barra de progreso con una vista total de las rutas de cada zona, pero para mejorar la experiencia de todos los tipos de usuarios, se vinculó al sistema de filtros de las zonas, adaptando los porcentajes a los resultados reales obtenidos al aplicar los filtros. De esta manera, los usuarios novatos que marcaran en los filtros dificultades más sencillas verían un progreso real en la barra de progreso, mientras que los usuarios avanzados podrían marcar dificultades más altas y ver su progreso real en esas rutas. De esta manera, todos los usuarios verían un progreso real en función de sus objetivos y preferencias, sin que la presencia de rutas de dificultad opuesta les penalizara visualmente en su progreso y desarrollo.
@@ -258,7 +256,7 @@ Finalmente, se solventaron las deficiencias técnicas detectadas durante la fase
 \textbf{Componente} & \textbf{Fricción Detectada (Prototipo)} & \textbf{Solución Implementada (MVP)} \\ \hline
 Suscripción & Botón solo en portada; icono de corazón confuso. & Botón dentro del rocódromo; cambio de icono a estrella. \\ \hline
 Navegación & Ausencia de aceleradores de búsqueda. & Sistema de filtros por zonas. \\ \hline
-Modelo de Datos & Término "Pistas" genérico; Tipos de rutas no diferenciados. & Cambio a "Rutas" y añadido tipado (Vía/Bloque); \\ \hline
+Modelo de Datos & Término ``Pistas'' genérico; Tipos de rutas no diferenciados. & Cambio a ``Rutas'' y añadido tipado (Vía/Bloque); \\ \hline
 Barra de Progreso & Estadísticas de completitud globales desmotivadoras. & Barra de progreso apoyada en los filtros. \\ \hline
 Seguridad / UI & Autocompletado molesto en contraseñas. & Adopción de la etiqueta \texttt{autocomplete=``off''} en formularios. \\ \hline
 \end{tabular}
@@ -286,7 +284,7 @@ Dando respuesta a las peticiones casi unánimes de los escaladores encuestados, 
 \paragraph{Desarrollo del Módulo de Gestión Avanzado}
 Para consolidar a \textit{ClimbIt} como una herramienta atractiva y completa para la administración de rocódromos, se implementarán las funcionalidades solicitadas por los gestores de rocódromos:
 \begin{itemize}
-    \item \textbf{Panel de Gestión de Rocódromos:} Creación de un panel de control que permita aplicar operaciones CRUD \textit{"en bloque"} (crear, modificar o eliminar múltiples rutas a la vez) para agilizar la rotación constante de catálogos y presas.
+    \item \textbf{Panel de Gestión de Rocódromos:} Creación de un panel de control que permita aplicar operaciones CRUD \textit{``en bloque''} (crear, modificar o eliminar múltiples rutas a la vez) para agilizar la rotación constante de catálogos de rutas.
     \item \textbf{Comunicación:} Integración de un sistema de notificaciones \textit{push} para avisar de forma automatizada a los usuarios suscritos sobre la creación o retirada de rutas y avisos del rocódromo, como eventos.
     \item \textbf{Gestión de Eventos y Ligas:} Utilizar ClimbIt para gestionar competiciones internas (torneos o liguillas) en rocódromos y crear grupos internos para las clases dirigidas y eventos propios del rocódromo.
 \end{itemize}
