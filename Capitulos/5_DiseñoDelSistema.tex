@@ -59,8 +59,7 @@ A lo largo del desarrollo se identificaron diversas situaciones que llevaron a a
     \label{fig:diagrama_repository}
 \end{figure}
 
-\paragraph{Patrón Adapter:} El patrón Adapter es uno de los patrones estructurales clásicos introducidos originalmente por el ``Gang of Four'' (GoF) \citep{gamma1995design}. Su función es adaptar distintas interfaces para que puedan trabajar entre ellas. Para manejar los errores que pueden surgir en las diferentes capas y centralizarlos para su tratamiento, se implementó este patrón, como se puede observar en la \ref{fig:diagrama_adapter}, para lograr mantener una consistencia a la hora de tratar los distintos errores que pueden surgir durante la ejecución de la aplicación.
-
+\paragraph{Patrón Adapter:} El patrón Adapter es uno de los patrones estructurales clásicos introducidos originalmente por el ``Gang of Four'' (GoF) \citep{gamma1995design}. Su función es adaptar distintas interfaces para que puedan trabajar entre ellas. Para manejar los errores que pueden surgir en las diferentes capas y centralizarlos para su tratamiento, se implementó este patrón, como se puede observar en la figura \ref{fig:diagrama_adapter}, para lograr mantener una consistencia a la hora de tratar los distintos errores que pueden surgir durante la ejecución de la aplicación.
 
 \begin{figure}[h]
     \centering
@@ -270,7 +269,9 @@ A lo largo de esta sección se detalla el proceso de diseño de la interfaz y la
 
 \subsection{Arquitectura de la información y Flujo de Navegación}
 
-Como puede observarse en la figura \ref{fig:diagrama_flujo_climbit} o en más detalle a través del siguiente enlace\footnote{Diagrama de flujo de ClimbIt:\\ https://drive.google.com/file/d/1sS4bsYvnHnPNX0zLyQFiZeIKNnbBn6MV/view?usp=sharing}, la estructura que sigue ClimbIt es una combinación entre una estructura \textit{plana} para las vistas principales y una estructura jerárquica de árbol para las vistas secundarias que nacen de ellas. De esta forma, se garantiza un acceso rápido a todas las funcionalidades principales desde cualquier punto de la raíz de la aplicación, pero manteniendo una disposición organizada del contenido.
+La navegación principal está representada en la figura \ref{fig:menu_navegacion}.
+
+Como puede observarse en la figura \ref{fig:diagrama_flujo_climbit} o en más detalle a través del siguiente enlace\footnote{Diagrama de flujo de ClimbIt:\ https://drive.google.com/file/d/1sS4bsYvnHnPNX0zLyQFiZeIKNnbBn6MV/view?usp=sharing}, la estructura que sigue ClimbIt es una combinación entre una estructura \textit{plana} para las vistas principales y una estructura jerárquica de árbol para las vistas secundarias que nacen de ellas. De esta forma, se garantiza un acceso rápido a todas las funcionalidades principales desde cualquier punto de la raíz de la aplicación, pero manteniendo una disposición organizada del contenido.
 
 \begin{figure}[h]
     \centering
@@ -320,7 +321,7 @@ La jerarquía visual se adapta dinámicamente según la profundidad de la navega
 
     \item \textbf{Consistencia en el Control:} El \textit{header} actúa como un ancla de navegación; mientras que en el nivel principal refuerza la identidad de marca, en las subsecciones prioriza la funcionalidad mediante una flecha de retorno siempre situada en el mismo cuadrante como se muestra en la cabecera de la figura \ref{fig:detallesRuta}, proporcionando un sentido de seguridad y control al usuario profundiza dentro de la jerarquía de árbol de una sección.
      
-    \item \textbf{Ley de \cite{fitts1954information}:} Como se observa en la vista de detalle de \textbf{Ruta} \{imagen detalles de ruta\}, las acciones principales de cambio de estado (\textit{Flash, Completado, Proyecto y Desmarcar}) se han implementado como botones de gran tamaño. Al aumentar el área de contacto y situarlos en la zona central de la pantalla, se reduce el tiempo necesario para realizar la interacción y se minimiza el error de precisión, facilitando su uso incluso en situaciones de fatiga física tras la escalada.
+    \item \textbf{Ley de \cite{fitts1954information}:} Como se observa en la vista de detalle de \textbf{Ruta} (Figura~\ref{fig:detallesRuta}), las acciones principales de cambio de estado (\textit{Flash, Completado, Proyecto y Desmarcar}) se han implementado como botones de gran tamaño. Al aumentar el área de contacto y situarlos en la zona central de la pantalla, se reduce el tiempo necesario para realizar la interacción y se minimiza el error de precisión, facilitando su uso incluso en situaciones de fatiga física tras la escalada.
 \end{itemize}
 
 \subsection{Decisiones de Diseño}
@@ -329,7 +330,7 @@ En este apartado se detallan las elecciones técnicas y estéticas que dan forma
 
 \paragraph{Navegación y Estructura:} Se optó por una barra de navegación inferior (\textit{Bottom Navigation Bar}) para las secciones principales. Esta decisión responde a la necesidad de mantener las funciones de \textbf{Social}, \textbf{Mis Rocódromos} y \textbf{Perfil} siempre al alcance del pulgar, optimizando el uso de la aplicación con una sola mano y manteniendo una consistencia externa con otras aplicaciones móviles similares, reduciendo la curva de aprendizaje y la fricción de uso para el usuario. En contraste, la navegación por secciones secundarias se gestiona verticalmente para guiar al usuario a mantener el foco en la tarea específica y evitar distracciones.
 
-\paragraph{Uso de Cards:} La información de los rocódromos \ref{fig:misRocodromos} y las rutas se organiza mediante el uso de \textit{cards}. De esta manera podemos unificar los datos relevantes de cada ruta o rocódromo en unidades independientes, ayudando al usuario a procesar la información de manera fragmentada y organizada.
+\paragraph{Uso de Cards:} La información de los rocódromos (figura~\ref{fig:misRocodromos}) y las rutas se organiza mediante el uso de \textit{cards}. De esta manera podemos unificar los datos relevantes de cada ruta o rocódromo en unidades independientes, ayudando al usuario a procesar la información de manera fragmentada y organizada.
 
 \begin{figure}[h]
     \centering
@@ -358,7 +359,7 @@ En este apartado se detallan las elecciones técnicas y estéticas que dan forma
 El diseño de la interfaz de ClimbIt ha sido diseñado y evaluado bajo las 10 Heurísticas de Usabilidad de Jakob \cite{nielsen1994heuristics}, garantizando una experiencia de usuario intuitiva, previsible y eficiente. A continuación, se detallan los principios aplicados:
 
 \begin{itemize}
-    \item \textbf{Visibilidad del estado del sistema:} La aplicación informa constantemente al usuario sobre sus acciones. Como se observa en la vista de zona (\{imagen de zona\}), el uso de una \textit{progress bar} dinámica y etiquetas que proporcionan una respuesta inmediata sobre el avance del escalador, eliminando cualquier incertidumbre sobre el estado de su registro le mantiene informado y motivado a seguir interactuando con la aplicación.
+    \item \textbf{Visibilidad del estado del sistema:} La aplicación informa constantemente al usuario sobre sus acciones. Como se observa en la vista de zona (Figura~\ref{fig:interfazZona}), el uso de una \textit{progress bar} dinámica y etiquetas que proporcionan una respuesta inmediata sobre el avance del escalador, eliminando cualquier incertidumbre sobre el estado de su registro le mantiene informado y motivado a seguir interactuando con la aplicación.
     
     \item \textbf{Relación entre el sistema y el mundo real:} ClimbIt utiliza lenguaje y conceptos propios de la escalada, con términos como \textbf{Flash}, \textbf{Proyecto} o \textbf{Vía} a la hora de describir una ruta. Esto permite una conexión inmediata entre la aplicación y el mundo real, ya que la interfaz hable el mismo idioma que el escalador, propiciando una inmersión natural.
     
